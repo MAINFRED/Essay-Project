@@ -20,6 +20,7 @@ public class Spotify extends Application {
         
         Scene scene = new Scene(root);
         
+        stage.setTitle("Unknown");
         stage.setScene(scene);
         stage.show();
         
