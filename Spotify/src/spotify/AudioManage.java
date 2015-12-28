@@ -2,7 +2,6 @@
 package spotify;
 
 import com.google.code.mp3fenge.Mp3Fenge;
-import com.google.code.mp3fenge.Mp3Info;
 import java.io.File;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -13,11 +12,11 @@ import javafx.scene.media.MediaView;
  * @author Zanelli Gabriele
  */
 
-public class AudioGesture {
+public class AudioManage {
     private byte[] song;
-    private String resPath = "/Users/Gabriele/Desktop/Essay-Project/Spotify/src/resources/";
+    private String resPath = "src/resources/";
     
-    public AudioGesture() {
+    public AudioManage() {
         song = null;
     }
     
@@ -29,7 +28,7 @@ public class AudioGesture {
         playMediaFromPath(resPath+"Toxic.mp3");
     }
     
-    public void playIndex(/*Con l'indice di partenza*/) {
+    public void playIndex(int millis) {
         
     }
     
@@ -50,14 +49,6 @@ public class AudioGesture {
     
     public void cutFileAudio() {
         Mp3Fenge origin = new Mp3Fenge(new File(resPath+"Toxic.mp3"));
-//        origin.generateNewMp3ByTime(new File(resPath+"Toxic-Cut.mp3"), 5000, 10000);
-        Mp3Info ciao = origin.getMp3Info();
-        if(ciao==null)
-            System.out.println("porcodio");
-        else {
-        int min = ciao.getTrackLength();
-        int sec = ciao.getTrackLength() - (min*60);
-        System.out.println(min+":"+sec);
-        }
+        origin.generateNewMp3ByTime(new File(resPath+"Toxic-Cut.mp3"), 5000, 10000);
     }   
 }

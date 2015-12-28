@@ -16,6 +16,9 @@ public class Library {
     this.library = new HashMap<>();
     this.playlists = new ArrayList<>();
 }
-    
+   
+    public Song getSongByName(String name) {
+        return library.get(name);
+    }
     
 }

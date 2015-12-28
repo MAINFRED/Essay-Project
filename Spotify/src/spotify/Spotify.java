@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 /**
@@ -13,19 +12,15 @@ import javafx.stage.Stage;
  */
 
 public class Spotify extends Application {
-    private static MediaPlayer mediaPlayer;
+    
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
         Scene scene = new Scene(root);
-        
         stage.setScene(scene);
         stage.show();
         
-//        byte[] ciaone = AudioGesture.mp3toByteArray(new FileInputStream(new File("hello.mp3")));
-//        AudioGesture.newSong(ciaone);
-        AudioGesture AG = new AudioGesture();
+        AudioManage AG = new AudioManage();
 //        AG.play();
         AG.cutFileAudio();
     }
