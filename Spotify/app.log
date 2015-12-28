@@ -1,0 +1,5 @@
+2015-12-28 13:02:17,712 DEBUG (com.google.code.mp3fenge.Mp3Fenge:120) mp3StartIndex:163,trackLengthMs:211000,bitRate:320
+  2015-12-28 13:02:17,719 DEBUG (com.google.code.mp3fenge.Mp3Fenge:121) beginIndex:200163,endIndex:400163
+  2015-12-28 13:06:26,835 DEBUG (com.google.code.mp3fenge.Mp3Fenge:120) mp3StartIndex:163,trackLengthMs:211000,bitRate:320
+  2015-12-28 13:06:26,838 DEBUG (com.google.code.mp3fenge.Mp3Fenge:121) beginIndex:200163,endIndex:400163
+  

@@ -6,6 +6,9 @@
 package spotify;
 
 import java.io.File;
+
+import java.io.FileInputStream;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,6 +33,12 @@ public class Spotify extends Application {
         
         stage.setScene(scene);
         stage.show();
+        
+//        byte[] ciaone = AudioGesture.mp3toByteArray(new FileInputStream(new File("hello.mp3")));
+//        AudioGesture.newSong(ciaone);
+        AudioGesture AG = new AudioGesture();
+//        AG.play();
+        AG.cutFileAudio();
     }
 
     /**
