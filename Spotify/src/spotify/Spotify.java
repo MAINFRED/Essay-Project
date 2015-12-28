@@ -5,10 +5,14 @@
  */
 package spotify;
 
+import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 /**
@@ -17,7 +21,7 @@ import javafx.stage.Stage;
  * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
  */
 public class Spotify extends Application {
-    
+    private static MediaPlayer mediaPlayer;
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
@@ -32,7 +36,12 @@ public class Spotify extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
+        String pathToxic = "/Users/Andrea/Desktop/programma/Spotify/src/toxic.mp3";
+         Media media = new Media(new File(pathToxic).toURI().toString());
+mediaPlayer = new MediaPlayer(media);
+ mediaPlayer.setAutoPlay(true);
+ MediaView mediaView = new MediaView(mediaPlayer);
     }
     
 }
