@@ -1,3 +1,4 @@
+
 package spotify;
 
 import java.net.URL;
@@ -8,10 +9,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
 /**
- *
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
+
 public class FXMLDocumentController implements Initializable {
     
     @FXML

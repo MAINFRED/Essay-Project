@@ -1,9 +1,10 @@
+
 package spotify;
 
 import java.util.LinkedList;
 
 /**
- * @author Zanelli Gabriele
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 
 public class MusicPlayer {

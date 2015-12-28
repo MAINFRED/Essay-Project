@@ -2,7 +2,7 @@
 package spotify;
 
 /**
- * @author Zanelli Gabriele
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 
 public class Artist {

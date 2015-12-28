@@ -4,7 +4,7 @@ package spotify;
 import java.time.Duration;
 
 /**
- * @author Zanelli Gabriele
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 
 public class Song {
