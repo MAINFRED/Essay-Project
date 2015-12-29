@@ -9,24 +9,25 @@ import javafx.scene.media.MediaView;
 
 
 /**
+ * Manage all reproduction and settings of audio files.
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
 public class AudioManage {
-    private byte[] song;
+    private String songPath;
     private int volume;
     
     public AudioManage() {
-        this.song = null;
+        this.songPath = null;
         this.volume=70;
     }
     
-    public void newSong(byte[] song) {
-        this.song = song;
+    public void newSong(String songPath) {
+        this.songPath = songPath;
     }
     
     public void play() {
-        playMediaFromPath(Library.LOCAL_PATH+"Toxic.mp3");
+        playMediaFromPath(songPath);
     }
     
     public void playIndex(int millis) {

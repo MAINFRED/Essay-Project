@@ -1,19 +1,18 @@
 
 package spotify;
 
-import java.util.List;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
+import javafx.collections.ObservableList;
 
 /**
- * Represents a set of songs.
- * Library object contains all the songs the user decides to save, 
+ * Represents the set of all songs and playlist added and created by the user.
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
 public class Library {
-    private ObservableMap<String,Song> tracks;
-    private ObservableMap<String,Playlist> playlists;
+//    private HashMap<String,String> files;
+    private ObservableList<Song> tracks;
+    private ObservableList<Playlist> playlists;
     
     /**
      * Represents the path in which are located songs imported by the user.
@@ -21,50 +20,94 @@ public class Library {
     public static String LOCAL_PATH = "resources/local/";
     
     public Library() {
-        this.tracks = FXCollections.observableHashMap();
-        this.playlists = FXCollections.observableHashMap();
+        this.tracks = FXCollections.observableArrayList();
+        this.playlists = FXCollections.observableArrayList();
     }
     
-    public ObservableMap getLibraryPointer() {
+    /**
+     * Returns a pointer to the tracks list.
+     * @return a pointer to the tracks list.
+     */
+    public ObservableList getTracksPointer() {
         return tracks;
     }
     
-    public ObservableMap getPlaylistsPointer() {
+    /**
+     * Returns a pointer to the playlist list.
+     * @return a pointer to the playlist list.
+     */
+    public ObservableList getPlaylistsPointer() {
         return playlists;
     }
-
+    
     /**
-     * Retrieve the song by name.
-     * @param name The name of the song.
-     * @return an instance of Song.
+     * Add a new playlist.
+     * @param name Name of the new playlist.
      */
-    public Song getSongByName(String name) {
-        return tracks.get(name);
+    public void addPlaylist(String name) {
+        if(name.equals("")) 
+            name = "Senza titolo";
+        
+        int i=0, k=0;
+        for(Playlist playlist : playlists) {
+            if(playlist.getTitle().equals(name))
+                i++;
+        }
+        if(i!=k) {
+            do {
+                k=i;
+                for(Playlist playlist : playlists) {
+                    if(playlist.getTitle().equals(name+i))
+                       i++;
+                }
+            } while(i==k);
+            playlists.add(new Playlist(name+i));
+        }
+        else
+            playlists.add(new Playlist(name));
     }
     
     /**
-     * Gets the list of the playlists' names.
-     * @return A List containing playlists' names.
+     * Remove a playlist maintaining the songs copied in All Tracks/Songs.
+     * @param playlist The pointer of the playlist to remove.
      */
-    public List getPlaylistsName() {
-        return (List)playlists.keySet();
+    public void removePlaylist(Playlist playlist) {
+        playlists.remove(playlist);
     }
     
-    /**
-     * Retrieve a List containing all songs' names in the playlist.
-     * @param name Name of the playlist.
-     * @return A List containing the playlist's songs' names.
-     */
-    public List getPlaylistSongsNames(String name) {
-        return  playlists.get(name).getSongsNames();
-    }
+//    /**
+//     * Retrieve the song by name.
+//     * @param name The name of the song.
+//     * @return an instance of Song.
+//     */
+//    public Song getSongByName(String name) {
+//        return tracks.get(name);
+//    }
     
-    /**
-     * Retrieve a List containing all songs' names in the library.
-     * @return A List containing the playlist's songs' names.
-     */
-    public List getAllSongsNames() {
-        return (List)tracks.keySet();
-    }
+    
+//    /**
+//     * Gets the list of the playlists' names.
+//     * @return A List containing playlists' names.
+//     */
+//    public List getPlaylistsName() {
+//        return (List)playlists.keySet();
+//    }
+//    
+//    /**
+//     * Retrieve a List containing all songs' names in the playlist.
+//     * @param name Name of the playlist.
+//     * @return A List containing the playlist's songs' names.
+//     */
+//    public List getPlaylistSongsNames(String name) {
+//        return  playlists.get(name).getSongsNames();
+//    }
+//    
+//    /**
+//     * Retrieve a List containing all songs' names in the library.
+//     * @return A List containing the playlist's songs' names.
+//     */
+//    public List getAllSongsNames() {
+//        return (List)tracks.keySet();
+//    }
     
 }

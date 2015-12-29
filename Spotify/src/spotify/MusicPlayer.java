@@ -2,8 +2,6 @@
 package spotify;
 
 import java.util.LinkedList;
-import java.util.List;
-import javafx.collections.ObservableMap;
 
 /**
  * MusicPlayer is the interface between user and application which convert user's input and manage
@@ -14,20 +12,14 @@ import javafx.collections.ObservableMap;
 public class MusicPlayer {
     private Library library;
     private AudioManage audioManage;
-    private LinkedList<String> listenedSongs; 
-    private LinkedList<String> nextSongs;
-    private String actualSong;
+    private LinkedList<Song> listenedSongs; 
+    private LinkedList<Song> nextSongs;
+    private Song actualSong;
 //    private enum sortType{Title,Album,Artist};
     private String preferredSort;
     private boolean repeatSong;
     private boolean repeatPlaylist;
     private boolean reproduceShuffle;
-    
-    /** Initialize
-    * listenedSongs: Stack of listened songs;
-    * nextSong: Queue of next songs;
-    * prefferedSort: 
-    */
     
     public MusicPlayer() {
         library = new Library();
@@ -40,12 +32,12 @@ public class MusicPlayer {
         reproduceShuffle=false;
     }
     
-    public ObservableMap getLibraryPointer() {
-        return library.getLibraryPointer();
-    }
-    
-    public ObservableMap getPlaylistsPointer() {
-        return library.getPlaylistsPointer();
+    /**
+     * Returns a pointer to the Library.
+     * @return a pointer to the Library.
+     */
+    public Library getLibrary() {
+        return library;
     }
     
     /**
@@ -66,7 +58,7 @@ public class MusicPlayer {
      * Skip forward to the next song.
      */
     public void nextSong() {
-        String next = nextSongs.pollLast();
+        Song next = nextSongs.pollLast();
         if(next!=null) {
             playNewSong(next);
             listenedSongs.push(actualSong);
@@ -83,7 +75,7 @@ public class MusicPlayer {
         if(/*Secondi Riprodotti >10 or*/listenedSongs.isEmpty())
             audioManage.playIndex(0); 
         else {
-            String previus = listenedSongs.pop();
+            Song previus = listenedSongs.pop();
             playNewSong(previus);
             nextSongs.addLast(actualSong);
             actualSong = previus;
@@ -139,39 +131,38 @@ public class MusicPlayer {
        //Aggiornamento ordine playlist da fare o qua o in un thread separato di continuo
     }
     
-    /**
-     * Retrieve a List of the playlist's names.
-     * @return A List containing playlists' names.
-     */
-    public List getPlaylistsName(){
-        return library.getPlaylistsName();
-    }
+//    /**
+//     * Retrieve a List of the playlist's names.
+//     * @return A List containing playlists' names.
+//     */
+//    public List getPlaylistsName(){
+//        return library.getPlaylistsName();
+//    }
+//    
+//    /**
+//     * Retrieve a List containing all songs' names in the playlist.
+//     * @param name Name of the playlist.
+//     * @return A List containing the playlist's songs' names.
+//     */
+//    public List getPlaylistSongsNames(String name) {
+//        return library.getPlaylistSongsNames(name);
+//    }
+//    
+//    /**
+//     * Retrieve a List containing all songs' names in the library.
+//     * @return A List containing the playlist's songs' names.
+//     */
+//    public List getAllSongsNames() {
+//        return library.getAllSongsNames();
+//    }
     
     /**
-     * Retrieve a List containing all songs' names in the playlist.
-     * @param name Name of the playlist.
-     * @return A List containing the playlist's songs' names.
+     * Starts playing a new song. 
+     * @param newSong An istance of Song containing the new song to play.
      */
-    public List getPlaylistSongsNames(String name) {
-        return library.getPlaylistSongsNames(name);
-    }
-    
-    /**
-     * Retrieve a List containing all songs' names in the library.
-     * @return A List containing the playlist's songs' names.
-     */
-    public List getAllSongsNames() {
-        return library.getAllSongsNames();
-    }
-    
-    /**
-     * Gets the name of the song and retrieve the mp3 from the library in order to play it 
-     * @param newSong Name/Key of the song.
-     */
-    private void playNewSong(String name) {
-        Song newSong = library.getSongByName(name);
-        byte[] byteSong = new byte[10]; 
-        audioManage.newSong(byteSong);  
+    private void playNewSong(Song newSong) {
+        String path = newSong.getKey();
+        audioManage.newSong(path);  
         audioManage.play();
     }
     

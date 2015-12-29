@@ -4,6 +4,7 @@ package spotify;
 import java.time.Duration;
 
 /**
+ * Represent a single song with its information.
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
@@ -18,4 +19,38 @@ public class Song {
         this.artist=artist;
         this.duration=duration;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+    
+    
 }

@@ -10,8 +10,8 @@ import java.util.List;
  */
 
 public class Playlist {
-    private List<String> keys;
     private String title;
+    private List<Song> songs;
     
     /**
      * Creates an empty Playlist object with a title
@@ -19,19 +19,20 @@ public class Playlist {
      */
     public Playlist(String title){
         this.title = title;
-        this.keys = new ArrayList<>();
+        this.songs = new ArrayList<>();
     }
     
     /**
      * Creates a Playlist object with a title using a List object. 
      * It doesn't create a copy of the List object, it uses just a pointer.
      * @param title A String object which represents the title of the playlist
-     * @param keys A List object which containts a list of String representing names of the songs already exist in the Library
+     * @param songs A List object which containts a list of Song representing names of the songs already exist in the Library
      * @see spotify.Library#library
      */
-    public Playlist(String title, List<String> keys){
+    public Playlist(String title, List<Song> songs){
+        // MODIFICA PER COPIARE LE CANZONI MA NON LA STESSA PLAYLIST
         this.title = title;
-        this.keys = keys;
+        this.songs = songs;
     }
 
     /**
@@ -55,8 +56,14 @@ public class Playlist {
      * @return A List containing the names of the songs.
      */
     public List getSongsNames() {
-        return keys;
+        List names = new ArrayList();
+        for(Song song : songs){
+            names.add(song.getTitle());
+        }
+        return names;
     }
     
-    
+    public void addSong(Song song){
+        songs.add(song);
+    }     
 }
