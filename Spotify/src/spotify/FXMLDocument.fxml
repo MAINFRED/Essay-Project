@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<VBox minHeight="300.0" minWidth="400.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spotify.FXMLDocumentController">
    <children>
       <MenuBar>
         <menus>
@@ -27,9 +27,9 @@
           </Menu>
         </menus>
       </MenuBar>
-      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+      <BorderPane prefHeight="572.0" prefWidth="800.0">
          <bottom>
-            <HBox prefHeight="36.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <HBox maxHeight="33.0" maxWidth="800.0" prefHeight="33.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="previousButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
                   <ImageView fx:id="playButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
@@ -57,7 +57,7 @@
                      <children>
                         <Label fx:id="username" prefHeight="17.0" prefWidth="86.0" text="nome utente" textAlignment="JUSTIFY">
                            <HBox.margin>
-                              <Insets right="20.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                      </children>
@@ -71,9 +71,9 @@
             </GridPane>
          </top>
          <center>
-            <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.29797979797979796" BorderPane.alignment="CENTER">
                <items>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                  <BorderPane minHeight="200.0" minWidth="100.0" prefHeight="503.0" prefWidth="234.0">
                      <bottom>
                         <GridPane BorderPane.alignment="CENTER">
                            <columnConstraints>
@@ -114,11 +114,17 @@
                         </GridPane>
                      </bottom>
                      <center>
-                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="50.0" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label text="YOUR MUSIC" />
+                              <Label text="YOUR MUSIC">
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="20.0" />
+                                 </VBox.margin></Label>
                               <ListView fx:id="musicMenu" prefHeight="73.0" prefWidth="174.0" />
-                              <Label text="PLAYLIST" />
+                              <Label text="PLAYLIST">
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="30.0" />
+                                 </VBox.margin></Label>
                               <ListView fx:id="playlistsMenu" prefHeight="200.0" prefWidth="200.0" />
                            </children>
                         </VBox>

@@ -16,18 +16,15 @@ public class Spotify extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        Scene scene = new Scene(root);
-<<<<<<< HEAD
-=======
         
+        Scene scene = new Scene(root);
         stage.setTitle("Unknown");
->>>>>>> origin/master
         stage.setScene(scene);
         stage.show();
         
         AudioManage AG = new AudioManage();
 //        AG.play();
-        AG.cutFileAudio();
+        //AG.cutFileAudio();
     }
 
     /**
