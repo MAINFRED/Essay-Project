@@ -14,10 +14,12 @@ import javafx.scene.media.MediaView;
 
 public class AudioManage {
     private byte[] song;
-    private String resPath = "src/resources/";
+    private String resPath = "resources/local/";
+    private int volume;
     
     public AudioManage() {
-        song = null;
+        this.song = null;
+        this.volume=70;
     }
     
     public void newSong(byte[] song) {
@@ -36,8 +38,8 @@ public class AudioManage {
         
     }
     
-    public void changeVolume() {
-        
+    public void changeVolume(int volume) {
+        this.volume=volume;
     }
     
     public void playMediaFromPath(String path){

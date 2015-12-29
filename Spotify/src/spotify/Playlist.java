@@ -50,7 +50,13 @@ public class Playlist {
         this.title = title;
     }
     
-    
+    /**
+     * Retrieve the names of the songs.
+     * @return A List containing the names of the songs.
+     */
+    public List getSongsNames() {
+        return keys;
+    }
     
     
 }

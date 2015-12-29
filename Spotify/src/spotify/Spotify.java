@@ -21,10 +21,6 @@ public class Spotify extends Application {
         stage.setTitle("Unknown");
         stage.setScene(scene);
         stage.show();
-        
-        AudioManage AG = new AudioManage();
-//        AG.play();
-        //AG.cutFileAudio();
     }
 
     /**
