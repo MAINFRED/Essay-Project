@@ -3,7 +3,6 @@ package spotify;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents a set of songs.
@@ -14,6 +13,11 @@ import java.util.Set;
 public class Library {
     private HashMap<String,Song> library;
     private HashMap<String,Playlist> playlists;
+    
+    /**
+     * Represents the path in which are located songs imported by the user.
+     */
+    public static String LOCAL_PATH = "resources/local/";
     
     public Library() {
     this.library = new HashMap<>();

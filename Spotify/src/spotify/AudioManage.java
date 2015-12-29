@@ -14,7 +14,6 @@ import javafx.scene.media.MediaView;
 
 public class AudioManage {
     private byte[] song;
-    private String resPath = "resources/local/";
     private int volume;
     
     public AudioManage() {
@@ -27,7 +26,7 @@ public class AudioManage {
     }
     
     public void play() {
-        playMediaFromPath(resPath+"Toxic.mp3");
+        playMediaFromPath(Library.LOCAL_PATH+"Toxic.mp3");
     }
     
     public void playIndex(int millis) {
@@ -50,7 +49,7 @@ public class AudioManage {
     }
     
     public void cutFileAudio() {
-        Mp3Fenge origin = new Mp3Fenge(new File(resPath+"Toxic.mp3"));
-        origin.generateNewMp3ByTime(new File(resPath+"Toxic-Cut.mp3"), 5000, 10000);
+        Mp3Fenge origin = new Mp3Fenge(new File(Library.LOCAL_PATH+"Toxic.mp3"));
+        origin.generateNewMp3ByTime(new File(Library.LOCAL_PATH+"Toxic-Cut.mp3"), 5000, 10000);
     }   
 }

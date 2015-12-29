@@ -3,9 +3,13 @@ package spotify;
 import graphics.ListItem;
 import graphics.ListItemRenderer;
 import graphics.MusicMenu;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,7 +27,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import utility.Utility;
 
 /**
  * FXML Controller class of "FXMLDocument.fxml"
@@ -103,8 +109,24 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleAddSongItem(ActionEvent event) {
+        Stage stage = new Stage();
+        
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Add a new song");
+        fileChooser.setTitle("Add a song");
+        
+        File src = fileChooser.showSaveDialog(stage);
+        File dest = new File(Library.LOCAL_PATH);
+        if (src != null) 
+        {
+            try {
+                Utility.copyFile(src, dest);
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        //Da aggiungere parte che aggiunge la canzone alla library e 
+        //alla tabella grafica che è ancora da fare
     }
 
     @FXML
