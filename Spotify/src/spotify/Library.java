@@ -1,8 +1,9 @@
 
 package spotify;
 
-import java.util.HashMap;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 /**
  * Represents a set of songs.
@@ -11,8 +12,8 @@ import java.util.List;
  */
 
 public class Library {
-    private HashMap<String,Song> library;
-    private HashMap<String,Playlist> playlists;
+    private ObservableMap<String,Song> tracks;
+    private ObservableMap<String,Playlist> playlists;
     
     /**
      * Represents the path in which are located songs imported by the user.
@@ -20,17 +21,25 @@ public class Library {
     public static String LOCAL_PATH = "resources/local/";
     
     public Library() {
-    this.library = new HashMap<>();
-    this.playlists = new HashMap<>();
+        this.tracks = FXCollections.observableHashMap();
+        this.playlists = FXCollections.observableHashMap();
     }
     
+    public ObservableMap getLibraryPointer() {
+        return tracks;
+    }
+    
+    public ObservableMap getPlaylistsPointer() {
+        return playlists;
+    }
+
     /**
      * Retrieve the song by name.
      * @param name The name of the song.
      * @return an instance of Song.
      */
     public Song getSongByName(String name) {
-        return library.get(name);
+        return tracks.get(name);
     }
     
     /**
@@ -55,7 +64,7 @@ public class Library {
      * @return A List containing the playlist's songs' names.
      */
     public List getAllSongsNames() {
-        return (List)library.keySet();
+        return (List)tracks.keySet();
     }
     
 }

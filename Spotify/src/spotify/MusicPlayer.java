@@ -3,15 +3,14 @@ package spotify;
 
 import java.util.LinkedList;
 import java.util.List;
+import javafx.collections.ObservableMap;
 
 /**
+ * MusicPlayer is the interface between user and application which convert user's input and manage
+*  the library's song, played song, next songs and audio.
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
-/**
-* MusicPlayer is the interface between user and application which convert user's input and manage
-* the library's song, played song, next songs and audio.
-*/
 public class MusicPlayer {
     private Library library;
     private AudioManage audioManage;
@@ -39,6 +38,14 @@ public class MusicPlayer {
         repeatSong=false;
         repeatPlaylist=false;
         reproduceShuffle=false;
+    }
+    
+    public ObservableMap getLibraryPointer() {
+        return library.getLibraryPointer();
+    }
+    
+    public ObservableMap getPlaylistsPointer() {
+        return library.getPlaylistsPointer();
     }
     
     /**
@@ -167,4 +174,5 @@ public class MusicPlayer {
         audioManage.newSong(byteSong);  
         audioManage.play();
     }
+    
 }

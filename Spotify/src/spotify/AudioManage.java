@@ -9,7 +9,7 @@ import javafx.scene.media.MediaView;
 
 
 /**
- * @author Zanelli Gabriele
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 
 public class AudioManage {
