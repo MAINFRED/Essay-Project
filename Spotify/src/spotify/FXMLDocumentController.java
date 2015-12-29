@@ -9,10 +9,12 @@ import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextInputDialog;
@@ -29,36 +31,26 @@ import javafx.util.Callback;
 
 public class FXMLDocumentController implements Initializable {
     
+    private MusicPlayer musicPlayer = new MusicPlayer();
+    
     @FXML
-    private Label username;
+    private Label username, countUP, countDown, artist, titleSong;
     @FXML
-    private ImageView previousButton;
-    @FXML
-    private ImageView playButton;
-    @FXML
-    private ImageView nextButton;
-    @FXML
-    private Label countUP;
+    private ImageView previousButton, playButton, nextButton, shuffle, replay,
+            artwork;
     @FXML
     private ProgressBar progressBar;
-    @FXML
-    private Label countDown;
-    @FXML
-    private ImageView shuffle;
-    @FXML
-    private ImageView replay;
     @FXML
     private Slider volumeControl;
     @FXML
     private HBox newPlaylistButton;
     @FXML
-    private ImageView artwork;
-    @FXML
-    private Label artist;
-    @FXML
-    private Label titleSong;
-    @FXML
     private ListView<ListItem> musicMenu, playlistsMenu;
+    @FXML
+    private MenuItem addSongItem, newPlaylistItem, exitItem, playItem, 
+            nextSongItem, previousSongItem, volumeUpItem, volumeDownItem;
+    @FXML
+    private CheckMenuItem shuffleItem, RepeatItem;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -79,6 +71,7 @@ public class FXMLDocumentController implements Initializable {
                 return new ListItemRenderer();
             }
         });
+        
         
         //Says to playlistMenu how to render elements
         playlistsMenu.setCellFactory(new Callback<ListView<ListItem>, ListCell<ListItem>>() {

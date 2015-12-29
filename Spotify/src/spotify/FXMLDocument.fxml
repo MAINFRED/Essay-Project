@@ -12,19 +12,25 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="addSongItem" mnemonicParsing="false" text="Add song..." />
+                  <MenuItem fx:id="newPlaylistItem" mnemonicParsing="false" text="New playlist..." />
+              <MenuItem fx:id="exitItem" mnemonicParsing="false" text="Exit" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
+            <Menu mnemonicParsing="false" text="Playback">
+              <items>
+                <MenuItem fx:id="playItem" mnemonicParsing="false" text="Play" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="nextSongItem" mnemonicParsing="false" text="Next" />
+                  <MenuItem fx:id="previousSongItem" mnemonicParsing="false" text="Previous" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <CheckMenuItem fx:id="shuffleItem" mnemonicParsing="false" text="Shuffle" />
+                  <CheckMenuItem fx:id="RepeatItem" mnemonicParsing="false" text="Repeat" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="volumeUpItem" mnemonicParsing="false" text="Volume Up" />
+                  <MenuItem fx:id="volumeDownItem" mnemonicParsing="false" text="Volume Down" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <BorderPane prefHeight="572.0" prefWidth="800.0">
@@ -55,7 +61,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
-                        <Label fx:id="username" prefHeight="17.0" prefWidth="86.0" text="nome utente" textAlignment="JUSTIFY">
+                        <Label fx:id="username" prefHeight="17.0" prefWidth="86.0" text="localhost" textAlignment="JUSTIFY">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
