@@ -6,6 +6,7 @@ import graphics.MusicMenu;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 
 /**
@@ -97,5 +99,16 @@ public class FXMLDocumentController implements Initializable {
 
             }
         });
+    }
+
+    @FXML
+    private void handleAddSongItem(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Add a new song");
+    }
+
+    @FXML
+    private void handleNewPlaylistItem(ActionEvent event) {
+        
     }
 }
