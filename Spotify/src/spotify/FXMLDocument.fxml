@@ -78,7 +78,7 @@
             </GridPane>
          </top>
          <center>
-            <SplitPane dividerPositions="0.29797979797979796" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.5" BorderPane.alignment="CENTER">
                <items>
                   <BorderPane minHeight="200.0" minWidth="100.0" prefHeight="503.0" prefWidth="234.0">
                      <bottom>
@@ -121,7 +121,7 @@
                         </GridPane>
                      </bottom>
                      <center>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="50.0" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="50.0" onMouseClicked="#handleNewPlaylistButton" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                            <children>
                               <Label text="YOUR MUSIC">
                                  <VBox.margin>
@@ -137,7 +137,22 @@
                         </VBox>
                      </center>
                   </BorderPane>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <TableView fx:id="allSongsTable" prefHeight="514.0" prefWidth="395.0">
+                                <columns>
+                                  <TableColumn fx:id="songColumn" prefWidth="75.0" text="Song" />
+                                  <TableColumn fx:id="artistColumn" prefWidth="75.0" text="Artist" />
+                                    <TableColumn fx:id="albumColumn" prefWidth="75.0" text="Album" />
+                                    <TableColumn fx:id="durationColumn" prefWidth="75.0" text="Duration" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </StackPane>
                </items>
             </SplitPane>
          </center>

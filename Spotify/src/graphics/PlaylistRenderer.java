@@ -1,3 +1,4 @@
+
 package graphics;
 
 import javafx.scene.control.Label;
@@ -7,40 +8,40 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import spotify.Playlist;
 
 /**
- * Contains the way to represents graphically ListItem objects inside the ListView.
- * @see spotify.FXMLDocumentController#musicMenu
+ *
  * @author Andrea Antonioni -
  * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
  */
-public class ListItemRenderer extends ListCell<ListItem>{
+public class PlaylistRenderer extends ListCell<Playlist>{
+    private static final String urlIcon = "";
     
     @Override
-    protected void updateItem(ListItem item, boolean empty) {
+    protected void updateItem(Playlist item, boolean empty) {
         super.updateItem(item, empty);
         setGraphic(createPane());
     }
     
     private Pane createPane() {
-        ListItem item = getItem();
+        Playlist item = getItem();
         if(item == null)
             return null;
         
         HBox hboxPane= new HBox();
         
-        if(item.getUrlIcon() != null && !item.getUrlIcon().equals(""))
+        if(urlIcon != null && !urlIcon.equals(""))
         {
-            ImageView icon = new ImageView(item.getUrlIcon());
+            ImageView icon = new ImageView(urlIcon);
             hboxPane.getChildren().add(icon);
         }
 
-        Label description = new Label(item.getDescription());
+        Label description = new Label(item.getTitle());
         description.setFont(new Font("Helvetica", 14));
         description.setTextAlignment(TextAlignment.LEFT);
         hboxPane.getChildren().add(description);
         
         return hboxPane;
     }
-
 }
