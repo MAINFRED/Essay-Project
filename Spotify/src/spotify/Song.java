@@ -1,7 +1,11 @@
 
 package spotify;
 
-import java.time.Duration;
+import com.google.code.mp3fenge.Mp3Fenge;
+import com.google.code.mp3fenge.Mp3Info;
+import java.io.File;
+import java.io.FileNotFoundException;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 /**
  * Represent a single song with its information.
@@ -12,25 +16,21 @@ public class Song {
     private String title;
     private String artist; // ArrayList per successive canzoni ad autore multiplo
     private String album;
-    private Duration duration;
+    private long durationMillis; //milliseconds
     private String key; // Percorso della canzone nella cache
     
-    public Song(String title, String artist, String album, Duration duration) {
-        this.title=title;
-        this.artist=artist;
-        this.album = album;
-        this.duration=duration;
-    }
-
-    public Song(String title, Duration duration) {
-        this.title = title;
-        this.duration=duration;
-    }
-
-    public Song(String title, String artist, Duration duration) {
-        this.title = title;
-        this.artist = artist;
-        this.duration=duration;
+    public Song(File file) throws FileNotFoundException
+    {
+        Metadata metadata = new Metadata(file);
+        this.title = metadata.getTitle();
+        this.artist = metadata.getArtist();
+        this.album = metadata.getArtist();
+        
+        Mp3Fenge origin = new Mp3Fenge(file);
+        Mp3Info info = origin.getMp3Info();
+        this.durationMillis = info.getTrackLength()*1000; //moltiplicate to get milliseconds
+        
+        System.out.println(toString());
     }
     
     public String getAlbum() {
@@ -57,12 +57,8 @@ public class Song {
         this.artist = artist;
     }
 
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public String getDuration() {
+        return DurationFormatUtils.formatDuration(durationMillis, "mm:ss");
     }
 
     public String getKey() {
@@ -72,6 +68,11 @@ public class Song {
     public void setKey(String key) {
         this.key = key;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Song{" + "title=" + title + ", artist=" + artist + ", album=" + album + ", duration=" + this.getDuration() + '}';
+    }
+      
     
 }

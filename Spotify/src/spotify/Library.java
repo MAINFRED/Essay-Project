@@ -1,6 +1,8 @@
 
 package spotify;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -73,6 +75,15 @@ public class Library {
      */
     public void removePlaylist(Playlist playlist) {
         playlists.remove(playlist);
+    }
+    
+    /**
+     * Adds a new song to the library using a File object.
+     * @param file A File object which represents the song to add to the library
+     */
+    public void addSong(File file) throws FileNotFoundException
+    {
+        tracks.add(new Song(file));
     }
     
 //    /**
