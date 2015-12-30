@@ -10,16 +10,37 @@ import java.time.Duration;
 
 public class Song {
     private String title;
-    private Artist artist; // ArrayList per successive canzoni ad autore multiplo
+    private String artist; // ArrayList per successive canzoni ad autore multiplo
+    private String album;
     private Duration duration;
     private String key; // Percorso della canzone nella cache
     
-    public Song(String title, Artist artist, Duration duration) {
+    public Song(String title, String artist, String album, Duration duration) {
         this.title=title;
         this.artist=artist;
+        this.album = album;
         this.duration=duration;
     }
 
+    public Song(String title, Duration duration) {
+        this.title = title;
+        this.duration=duration;
+    }
+
+    public Song(String title, String artist, Duration duration) {
+        this.title = title;
+        this.artist = artist;
+        this.duration=duration;
+    }
+    
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+    
     public String getTitle() {
         return title;
     }
@@ -28,11 +49,11 @@ public class Song {
         this.title = title;
     }
 
-    public Artist getArtist() {
+    public String getArtist() {
         return artist;
     }
 
-    public void setArtist(Artist artist) {
+    public void setArtist(String artist) {
         this.artist = artist;
     }
 
