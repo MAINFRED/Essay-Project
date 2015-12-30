@@ -19,7 +19,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -32,6 +34,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -65,13 +69,18 @@ public class FXMLDocumentController implements Initializable {
     private ListView<Playlist> playlistsMenu;
     @FXML
     private MenuItem addSongItem, newPlaylistItem, exitItem, playItem,
-            nextSongItem, previousSongItem, volumeUpItem, volumeDownItem;
+            nextSongItem, previousSongItem, volumeUpItem, volumeDownItem,
+            renamePlaylistItem, deletePlaylistItem;
     @FXML
     private CheckMenuItem shuffleItem, RepeatItem;
     @FXML
     private TableView<Song> allSongsTable;
     @FXML
     private TableColumn<Song, String> songColumn, artistColumn, albumColumn, durationColumn;
+    @FXML
+    private AnchorPane mainPanel;
+    @FXML
+    private ContextMenu popupMenuPlaylist;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -106,8 +115,6 @@ public class FXMLDocumentController implements Initializable {
 
     private void initSongsTable() {
         allSongsTable.setItems(musicPlayer.getLibrary().getTracksPointer());
-
-        allSongsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         songColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         artistColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
@@ -156,13 +163,55 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleNewPlaylistButton(Event event) {
-        Dialog dialog = new TextInputDialog("New playlist");
-        dialog.setTitle("Add a new playlist");
+        Dialog dialog = new TextInputDialog("");
+        dialog.setHeaderText("Add a new playlist");
+        dialog.setTitle("");
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             musicPlayer.getLibrary().addPlaylist(result.get());
         }
     }
+
+    @FXML
+    private void showPopupMenuPlaylist(ContextMenuEvent event) {
+        popupMenuPlaylist.show(playlistsMenu, event.getScreenX(), event.getScreenY());
+    }
+    
+    @FXML
+    private void handleRenamePlaylist(ActionEvent event) {
+        Dialog dialog = new TextInputDialog("New playlist");
+        dialog.setHeaderText("Rename the selected playlist");
+        dialog.setTitle("");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            musicPlayer.getLibrary().renamePlaylist(playlistsMenu.getSelectionModel().getSelectedItem(), 
+                    result.get());
+            refreshPlaylistsMenu();
+        }
+    }
+    
+    @FXML
+    private void handleDeletePlaylist(ActionEvent event) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("");
+        alert.setHeaderText("Do you want to delete the selected playlist?");
+        alert.setContentText("");
+        ButtonType buttonDelete = new ButtonType("Yes");
+        ButtonType buttonNoDelete = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonDelete, buttonNoDelete);
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == buttonDelete)
+            musicPlayer.getLibrary().removePlaylist(playlistsMenu.getSelectionModel().getSelectedItem());
+    }
+    
+    private void refreshPlaylistsMenu()
+    {
+        playlistsMenu.setItems(null);
+        playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
+    }
+    
 
 }

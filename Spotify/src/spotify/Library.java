@@ -77,6 +77,12 @@ public class Library {
         playlists.remove(playlist);
     }
     
+    public void renamePlaylist(Playlist playlist, String newName){
+        for(Playlist p : playlists)
+            if(p.getTitle().equals(playlist.getTitle()))
+                p.setTitle(newName);
+    }
+    
     /**
      * Adds a new song to the library using a File object.
      * @param file A File object which represents the song to add to the library

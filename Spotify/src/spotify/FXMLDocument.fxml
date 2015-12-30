@@ -6,102 +6,90 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox minHeight="300.0" minWidth="400.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spotify.FXMLDocumentController">
+<AnchorPane fx:id="mainPanel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spotify.FXMLDocumentController">
    <children>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-                  <MenuItem fx:id="addSongItem" mnemonicParsing="false" onAction="#handleAddSongItem" text="Add song..." />
-                  <MenuItem fx:id="newPlaylistItem" mnemonicParsing="false" onAction="#handleNewPlaylistItem" text="New playlist..." />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem fx:id="exitItem" mnemonicParsing="false" text="Exit" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Playback">
-              <items>
-                <MenuItem fx:id="playItem" mnemonicParsing="false" text="Play" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="nextSongItem" mnemonicParsing="false" text="Next" />
-                  <MenuItem fx:id="previousSongItem" mnemonicParsing="false" text="Previous" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <CheckMenuItem fx:id="shuffleItem" mnemonicParsing="false" text="Shuffle" />
-                  <CheckMenuItem fx:id="RepeatItem" mnemonicParsing="false" text="Repeat" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="volumeUpItem" mnemonicParsing="false" text="Volume Up" />
-                  <MenuItem fx:id="volumeDownItem" mnemonicParsing="false" text="Volume Down" />
-              </items>
-            </Menu>
-        </menus>
-      </MenuBar>
-      <BorderPane prefHeight="572.0" prefWidth="800.0">
-         <bottom>
-            <HBox maxHeight="33.0" maxWidth="800.0" prefHeight="33.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+      <VBox minHeight="300.0" minWidth="400.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem fx:id="addSongItem" mnemonicParsing="false" onAction="#handleAddSongItem" text="Add song..." />
+                        <MenuItem fx:id="newPlaylistItem" mnemonicParsing="false" onAction="#handleNewPlaylistItem" text="New playlist..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem fx:id="exitItem" mnemonicParsing="false" text="Exit" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Playback">
+                    <items>
+                      <MenuItem fx:id="playItem" mnemonicParsing="false" text="Play" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="nextSongItem" mnemonicParsing="false" text="Next" />
+                        <MenuItem fx:id="previousSongItem" mnemonicParsing="false" text="Previous" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <CheckMenuItem fx:id="shuffleItem" mnemonicParsing="false" text="Shuffle" />
+                        <CheckMenuItem fx:id="RepeatItem" mnemonicParsing="false" text="Repeat" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="volumeUpItem" mnemonicParsing="false" text="Volume Up" />
+                        <MenuItem fx:id="volumeDownItem" mnemonicParsing="false" text="Volume Down" />
+                    </items>
+                  </Menu>
+              </menus>
+            </MenuBar>
+            <AnchorPane>
                <children>
-                  <ImageView fx:id="previousButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="playButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="nextButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="countUP" alignment="CENTER" text="00:00" />
-                  <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="205.0" progress="0.0" />
-                  <Label fx:id="countDown" text="00:00" />
-                  <ImageView fx:id="shuffle" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="replay" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <Slider fx:id="volumeControl" prefHeight="16.0" prefWidth="81.0" />
-               </children>
-            </HBox>
-         </bottom>
-         <top>
-            <GridPane BorderPane.alignment="CENTER">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
-                     <children>
-                        <Label fx:id="username" prefHeight="17.0" prefWidth="86.0" text="localhost" textAlignment="JUSTIFY">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <TextField prefHeight="10.0" prefWidth="141.0" text="Barra di ricerca" />
-                     </children>
-                  </HBox>
-               </children>
-            </GridPane>
-         </top>
-         <center>
-            <SplitPane dividerPositions="0.5" BorderPane.alignment="CENTER">
-               <items>
-                  <BorderPane minHeight="200.0" minWidth="100.0" prefHeight="503.0" prefWidth="234.0">
+                  <BorderPane prefHeight="572.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <bottom>
+                        <AnchorPane BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox fillHeight="false" layoutY="1.0" maxHeight="33.0" maxWidth="800.0" prefHeight="33.0" prefWidth="800.0" style="-fx-background-color: red;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <children>
+                                    <ImageView fx:id="previousButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="playButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="nextButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Label fx:id="countUP" alignment="CENTER" text="00:00" />
+                                    <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="205.0" progress="0.0" />
+                                    <Label fx:id="countDown" text="00:00" />
+                                    <ImageView fx:id="shuffle" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="replay" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Slider fx:id="volumeControl" prefHeight="16.0" prefWidth="81.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                     </bottom>
+                     <top>
                         <GridPane BorderPane.alignment="CENTER">
                            <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <HBox fx:id="newPlaylistButton" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label text="Nuova playlist" />
+                                    <Label fx:id="username" prefHeight="17.0" prefWidth="86.0" text="localhost" textAlignment="JUSTIFY">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
                                  </children>
                               </HBox>
-                              <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                 <left>
-                                    <ImageView fx:id="artwork" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
-                                 </left>
-                                 <center>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <TextField prefHeight="10.0" prefWidth="141.0" text="Barra di ricerca" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </GridPane>
+                     </top>
+                     <center>
+                        <SplitPane dividerPositions="0.5" prefHeight="506.0" prefWidth="800.0">
+                           <items>
+                              <BorderPane maxWidth="200.0" minHeight="200.0" minWidth="150.0" prefHeight="504.0" prefWidth="342.0">
+                                 <bottom>
                                     <GridPane BorderPane.alignment="CENTER">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -111,51 +99,88 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <Label fx:id="artist" text="nome artista" GridPane.rowIndex="1" />
-                                          <Label fx:id="titleSong" text="titolo brano" />
+                                          <HBox fx:id="newPlaylistButton" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                                                <Label text="Nuova playlist" />
+                                             </children>
+                                          </HBox>
+                                          <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                             <left>
+                                                <ImageView fx:id="artwork" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                                             </left>
+                                             <center>
+                                                <GridPane BorderPane.alignment="CENTER">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <children>
+                                                      <Label fx:id="artist" text="nome artista" GridPane.rowIndex="1" />
+                                                      <Label fx:id="titleSong" text="titolo brano" />
+                                                   </children>
+                                                </GridPane>
+                                             </center>
+                                          </BorderPane>
                                        </children>
                                     </GridPane>
+                                 </bottom>
+                                 <center>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="50.0" onMouseClicked="#handleNewPlaylistButton" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label text="YOUR MUSIC">
+                                             <VBox.margin>
+                                                <Insets left="10.0" top="20.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <ListView fx:id="musicMenu" prefHeight="73.0" prefWidth="174.0" />
+                                          <Label text="PLAYLIST">
+                                             <VBox.margin>
+                                                <Insets left="10.0" top="30.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <ListView fx:id="playlistsMenu" onContextMenuRequested="#showPopupMenuPlaylist" prefHeight="200.0" prefWidth="200.0">
+                                             <contextMenu>
+                                                <ContextMenu fx:id="popupMenuPlaylist">
+                                                  <items>
+                                                    <MenuItem fx:id="renamePlaylistItem" mnemonicParsing="false" onAction="#handleRenamePlaylist" text="Remane" />
+                                                      <MenuItem fx:id="deletePlaylistItem" mnemonicParsing="false" onAction="#handleDeletePlaylist" text="Delete" />
+                                                  </items>
+                                                </ContextMenu>
+                                             </contextMenu></ListView>
+                                       </children>
+                                    </VBox>
                                  </center>
                               </BorderPane>
-                           </children>
-                        </GridPane>
-                     </bottom>
-                     <center>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="50.0" onMouseClicked="#handleNewPlaylistButton" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label text="YOUR MUSIC">
-                                 <VBox.margin>
-                                    <Insets left="10.0" top="20.0" />
-                                 </VBox.margin></Label>
-                              <ListView fx:id="musicMenu" prefHeight="73.0" prefWidth="174.0" />
-                              <Label text="PLAYLIST">
-                                 <VBox.margin>
-                                    <Insets left="10.0" top="30.0" />
-                                 </VBox.margin></Label>
-                              <ListView fx:id="playlistsMenu" prefHeight="200.0" prefWidth="200.0" />
-                           </children>
-                        </VBox>
+                              <StackPane prefHeight="150.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <TableView fx:id="allSongsTable" minWidth="300.0" prefHeight="514.0" prefWidth="540.0">
+                                            <columns>
+                                              <TableColumn fx:id="songColumn" prefWidth="75.0" text="Song" />
+                                              <TableColumn fx:id="artistColumn" prefWidth="75.0" text="Artist" />
+                                                <TableColumn fx:id="albumColumn" prefWidth="75.0" text="Album" />
+                                                <TableColumn fx:id="durationColumn" prefWidth="75.0" text="Duration" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </StackPane>
+                           </items>
+                        </SplitPane>
                      </center>
                   </BorderPane>
-                  <StackPane prefHeight="150.0" prefWidth="200.0">
-                     <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <TableView fx:id="allSongsTable" prefHeight="514.0" prefWidth="395.0">
-                                <columns>
-                                  <TableColumn fx:id="songColumn" prefWidth="75.0" text="Song" />
-                                  <TableColumn fx:id="artistColumn" prefWidth="75.0" text="Artist" />
-                                    <TableColumn fx:id="albumColumn" prefWidth="75.0" text="Album" />
-                                    <TableColumn fx:id="durationColumn" prefWidth="75.0" text="Duration" />
-                                </columns>
-                              </TableView>
-                           </children>
-                        </VBox>
-                     </children>
-                  </StackPane>
-               </items>
-            </SplitPane>
-         </center>
-      </BorderPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
    </children>
-</VBox>
+</AnchorPane>

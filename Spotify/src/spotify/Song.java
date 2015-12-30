@@ -1,4 +1,3 @@
-
 package spotify;
 
 import com.google.code.mp3fenge.Mp3Fenge;
@@ -9,30 +8,50 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 /**
  * Represent a single song with its information.
+ *
  * @author Antonioni Andrea & Zanelli Gabriele
  */
-
 public class Song {
-    private String title;
-    private String artist; // ArrayList per successive canzoni ad autore multiplo
-    private String album;
+
+    private String title = "";
+    private String artist = ""; // ArrayList per successive canzoni ad autore multiplo
+    private String album = "";
     private long durationMillis; //milliseconds
     private String key; // Percorso della canzone nella cache
-    
-    public Song(File file) throws FileNotFoundException
-    {
+
+    public Song(File file) throws FileNotFoundException {
+
         Metadata metadata = new Metadata(file);
-        this.title = metadata.getTitle();
-        this.artist = metadata.getArtist();
-        this.album = metadata.getArtist();
-        
+
+        if (metadata.getTitle() == null) {
+            this.title = file.getName();
+        } else {
+            this.title = metadata.getTitle();
+        }
+
+        if (metadata.getArtist() == null) {
+            this.artist = "";
+        } else {
+            this.artist = metadata.getArtist();
+        }
+
+        if (metadata.getAlbum() == null) {
+            this.album = "";
+        } else {
+            this.album = metadata.getAlbum();
+        }
+
         Mp3Fenge origin = new Mp3Fenge(file);
         Mp3Info info = origin.getMp3Info();
-        this.durationMillis = info.getTrackLength()*1000; //moltiplicate to get milliseconds
         
+        if(info == null)
+            this.durationMillis = 0;
+        else this.durationMillis = info.getTrackLength() * 1000; //moltiplicate to get milliseconds
+
         System.out.println(toString());
+
     }
-    
+
     public String getAlbum() {
         return album;
     }
@@ -40,7 +59,7 @@ public class Song {
     public void setAlbum(String album) {
         this.album = album;
     }
-    
+
     public String getTitle() {
         return title;
     }
@@ -73,6 +92,5 @@ public class Song {
     public String toString() {
         return "Song{" + "title=" + title + ", artist=" + artist + ", album=" + album + ", duration=" + this.getDuration() + '}';
     }
-      
-    
+
 }
