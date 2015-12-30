@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class contains utility methods.
@@ -54,10 +57,11 @@ public class Utility {
      * @param source A File object which represents the file to be copied.
      * @param dest A File object which represents the new file copied in the new directory.
      * @throws IOException If the source path or destination path don't exist.
+     * @throws java.nio.file.FileAlreadyExistsException If the file already exists in the destination path.
      */
-    public static void copyFile(File source, File dest) throws IOException
+    public static void copyFile(File source, File dest) throws FileAlreadyExistsException, IOException
     {
-        Files.copy(source.toPath(), dest.toPath());
+        Files.copy(source.toPath(), dest.toPath()); 
     }
     
 }
