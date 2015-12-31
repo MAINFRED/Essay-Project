@@ -3,22 +3,19 @@ package graphics;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
 
 /**
  * Creates the menu on the left side called "YOUR MUSIC".
  * @author Andrea Antonioni -
  * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
  */
-public class MusicMenu {
+public class MusicMenuListItems {
+    private static ObservableList<ListItem> listItems = null;
     
-    /**
-     * Returns an ObservableList object which contains ListItems objects. 
-     * It represents items of the menu on the left side called "YOUR MUSIC".
-     * 
-     * @see spotify.FXMLDocumentController#musicMenu
-     * @return 
-     */
-    public static ObservableList<ListItem> createMusicMenu()
+    private static ObservableList<ListItem> createMenu()
     {
         String[] urlIcons = {"", "", "", ""};
         ArrayList<ListItem> items = new ArrayList<>();
@@ -31,5 +28,12 @@ public class MusicMenu {
         observableList.addAll(items);
         
         return observableList;
+    }
+    
+    public static ObservableList<ListItem> get()
+    {
+        if(listItems == null)
+            listItems = createMenu();
+        return listItems;
     }
 }
