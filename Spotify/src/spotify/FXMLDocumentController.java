@@ -43,6 +43,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -100,8 +101,17 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initLeftSideBar();
+        initPopupMenu();
+        
         allSongTable = new SongTable(musicPlayer.getLibrary().getTracksPointer());
         allSongPane.getChildren().add(allSongTable);
+        allSongTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>(){
+            @Override
+            public void handle(ContextMenuEvent event) {
+                showPopupMenuSongs(event);
+            }
+            
+        });
         
         playlistTable = new SongTable();
         playlistSongPane.getChildren().add(playlistTable);
@@ -116,6 +126,19 @@ public class FXMLDocumentController implements Initializable {
             @Override
             public ListCell<ListItem> call(ListView<ListItem> param) {
                 return new ListItemRenderer();
+            }
+        });
+        
+        musicListMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ListItem>() {
+            @Override
+            public void changed(ObservableValue<? extends ListItem> observable, ListItem oldValue, ListItem newValue) {
+                if(newValue == MusicMenuListItems.songItem)
+                {
+                    allSongPane.setVisible(true);
+                    playlistSongPane.setVisible(false);
+                }
+                
+                
             }
         });
 
@@ -133,6 +156,7 @@ public class FXMLDocumentController implements Initializable {
         playlistsMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Playlist>() {
             @Override
             public void changed(ObservableValue<? extends Playlist> observable, Playlist oldValue, Playlist newValue) {
+                
                 allSongPane.setVisible(false);
                 playlistSongPane.setVisible(true);
                 
@@ -144,6 +168,13 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+    private void initPopupMenu()
+    {
+        popupMenuSongs = new ContextMenu();
+        menuItemPlaylist = new Menu("Add to playlist");
+        popupMenuSongs.getItems().add(menuItemPlaylist);
+    }
+    
     @FXML
     private void handleAddSongItem(ActionEvent event) {
         Stage stage = new Stage();
@@ -200,24 +231,25 @@ public class FXMLDocumentController implements Initializable {
         popupMenuPlaylist.show(playlistsMenu, event.getScreenX(), event.getScreenY());
     }
     
-    /*private void showPopupMenuSongs(ContextMenuEvent event) {
+    private void showPopupMenuSongs(ContextMenuEvent event) {
         
+        menuItemPlaylist = new Menu("Add to playlist");
         for(Playlist playlist : (ObservableList<Playlist>)musicPlayer.getLibrary().getPlaylistsPointer())
         {
             MenuItem item = new MenuItem(playlist.getTitle());
             item.setOnAction(new EventHandler<ActionEvent>() {
                 @Override 
                 public void handle(ActionEvent e) {
-                    Song songSelected = allSongsTable.getSelectionModel().getSelectedItem();
+                    Song songSelected = allSongTable.getSelectionModel().getSelectedItem();
                     playlist.addSong(songSelected);
                 }
             });
             menuItemPlaylist.getItems().add(item);
         }
         
-        popupMenuSongs.show(allSongsTable, event.getScreenX(), event.getScreenY());
+        popupMenuSongs.show(allSongTable, event.getScreenX(), event.getScreenY());
             
-    }*/
+    }
     
     @FXML
     private void handleRenamePlaylist(ActionEvent event) {
@@ -252,6 +284,7 @@ public class FXMLDocumentController implements Initializable {
         playlistsMenu.setItems(null);
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
     }
+
     
 
 }

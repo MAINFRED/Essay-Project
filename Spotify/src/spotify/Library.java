@@ -78,9 +78,15 @@ public class Library {
     }
     
     public void renamePlaylist(Playlist playlist, String newName){
+        this.getPlaylist(playlist.getTitle()).setTitle(newName);
+    }
+    
+    public Playlist getPlaylist(String title)
+    {
         for(Playlist p : playlists)
-            if(p.getTitle().equals(playlist.getTitle()))
-                p.setTitle(newName);
+            if(p.getTitle().equals(title))
+                return p;
+        return null;
     }
     
     /**

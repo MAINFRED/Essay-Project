@@ -51,6 +51,10 @@ public class Playlist {
         this.title = title;
     }
     
+    public List getSongsPointer(){
+        return songs;
+    }
+    
     /**
      * Retrieve the names of the songs.
      * @return A List containing the names of the songs.
