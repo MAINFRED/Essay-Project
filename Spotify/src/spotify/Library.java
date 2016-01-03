@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
  */
 
 public class Library {
-//    private HashMap<String,String> files;
     private ObservableList<Song> tracks;
     private ObservableList<Playlist> playlists;
     
@@ -24,6 +23,8 @@ public class Library {
     public Library() {
         this.tracks = FXCollections.observableArrayList();
         this.playlists = FXCollections.observableArrayList();
+        
+        
     }
     
     /**

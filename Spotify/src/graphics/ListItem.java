@@ -1,5 +1,12 @@
 package graphics;
 
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+
 /**
  * Represents items of menus on the left side.
  * @author Andrea Antonioni -
@@ -8,6 +15,8 @@ package graphics;
 public class ListItem {
     private String urlIcon;
     private String description;
+    
+    public static final String PLAYLIST_ICON = "";
 
     /**
      * Creates a new ListItem obejct which contains a description of the item and and icon which represents the item.
@@ -42,13 +51,28 @@ public class ListItem {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    public Pane getGraphics()
+    {
+        HBox hboxPane= new HBox();
+        
+        if(this.getUrlIcon() != null && !this.getUrlIcon().equals(""))
+        {
+            ImageView icon = new ImageView(this.getUrlIcon());
+            hboxPane.getChildren().add(icon);
+        }
+
+        Label description = new Label(this.getDescription());
+        description.setFont(new Font("Helvetica", 14));
+        description.setTextAlignment(TextAlignment.LEFT);
+        hboxPane.getChildren().add(description);
+        
+        return hboxPane;
+    }
 
     @Override
     public String toString() {
         return "ListItem{" + "description=" + description + '}';
     }
-    
-    
-    
-    
+       
 }

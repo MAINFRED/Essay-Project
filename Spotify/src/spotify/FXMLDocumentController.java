@@ -1,10 +1,7 @@
 
 package spotify;
 
-import graphics.ListItem;
-import graphics.ListItemRenderer;
-import graphics.MusicMenuListItems;
-import graphics.PlaylistRenderer;
+import graphics.SideBar;
 import graphics.SongTable;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,9 +12,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -26,31 +20,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import utility.Utility;
 
 /**
@@ -74,18 +60,12 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private HBox newPlaylistButton;
     @FXML
-    private ListView<ListItem> musicListMenu;
-    @FXML
-    private ListView<Playlist> playlistsMenu;
-    @FXML
     private MenuItem addSongItem, newPlaylistItem, exitItem, playItem,
-            nextSongItem, previousSongItem, volumeUpItem, volumeDownItem,
-            renamePlaylistItem, deletePlaylistItem;
+            nextSongItem, previousSongItem, volumeUpItem, volumeDownItem;
     @FXML
     private CheckMenuItem shuffleItem, RepeatItem;
     @FXML
     private AnchorPane mainPanel;
-    @FXML
     private ContextMenu popupMenuPlaylist;
     private ContextMenu popupMenuSongs;
     private Menu menuItemPlaylist;
@@ -97,10 +77,19 @@ public class FXMLDocumentController implements Initializable {
     private Label titlePlaylist;
     
     private SongTable allSongTable, playlistTable;
+    
+    
+    
+    private static SideBar sideBar;
+    @FXML
+    private VBox vboxSideBar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initLeftSideBar();
+        
+        //init SideBar
+        sideBar = new SideBar(vboxSideBar, new PlaylistLibrary());
+        
         initPopupMenu();
         
         allSongTable = new SongTable(musicPlayer.getLibrary().getTracksPointer());
@@ -116,58 +105,7 @@ public class FXMLDocumentController implements Initializable {
         playlistTable = new SongTable();
         playlistSongPane.getChildren().add(playlistTable);
     }
-
-    private void initLeftSideBar() {
-        musicListMenu.setItems(MusicMenuListItems.get());
-
-        //Says to musicListMenu how to render elements
-        musicListMenu.setCellFactory(new Callback<ListView<ListItem>, ListCell<ListItem>>() {
-
-            @Override
-            public ListCell<ListItem> call(ListView<ListItem> param) {
-                return new ListItemRenderer();
-            }
-        });
-        
-        musicListMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ListItem>() {
-            @Override
-            public void changed(ObservableValue<? extends ListItem> observable, ListItem oldValue, ListItem newValue) {
-                if(newValue == MusicMenuListItems.songItem)
-                {
-                    allSongPane.setVisible(true);
-                    playlistSongPane.setVisible(false);
-                }
-                
-                
-            }
-        });
-
-        playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
-
-        //Says to playlistMenu how to render elements
-        playlistsMenu.setCellFactory(new Callback<ListView<Playlist>, ListCell<Playlist>>() {
-
-            @Override
-            public ListCell<Playlist> call(ListView<Playlist> param) {
-                return new PlaylistRenderer();
-            }
-        });
-        
-        playlistsMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Playlist>() {
-            @Override
-            public void changed(ObservableValue<? extends Playlist> observable, Playlist oldValue, Playlist newValue) {
-                
-                allSongPane.setVisible(false);
-                playlistSongPane.setVisible(true);
-                
-                titlePlaylist.setText(newValue.getTitle());
-                playlistTable.setItems(FXCollections.observableList(newValue.getSongsPointer()));
-                
-            }
-        });
-
-    }
-
+    
     private void initPopupMenu()
     {
         popupMenuSongs = new ContextMenu();
@@ -222,14 +160,14 @@ public class FXMLDocumentController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            musicPlayer.getLibrary().addPlaylist(result.get());
+            //musicPlayer.getLibrary().addPlaylist(result.get());
+            sideBar.getPlaylistLibrary().addPlaylist(new Playlist(result.get()));
         }
     }
 
-    @FXML
-    private void showPopupMenuPlaylist(ContextMenuEvent event) {
+    /*private void showPopupMenuPlaylist(ContextMenuEvent event) {
         popupMenuPlaylist.show(playlistsMenu, event.getScreenX(), event.getScreenY());
-    }
+    }*/
     
     private void showPopupMenuSongs(ContextMenuEvent event) {
         
@@ -251,8 +189,7 @@ public class FXMLDocumentController implements Initializable {
             
     }
     
-    @FXML
-    private void handleRenamePlaylist(ActionEvent event) {
+    /*private void handleRenamePlaylist(ActionEvent event) {
         Dialog dialog = new TextInputDialog("New playlist");
         dialog.setHeaderText("Rename the selected playlist");
         dialog.setTitle("");
@@ -265,7 +202,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    @FXML
     private void handleDeletePlaylist(ActionEvent event) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("");
@@ -283,8 +219,7 @@ public class FXMLDocumentController implements Initializable {
     private void refreshPlaylistsMenu() {
         playlistsMenu.setItems(null);
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
-    }
+    }*/
 
     
-
 }
