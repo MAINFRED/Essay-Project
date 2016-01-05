@@ -25,7 +25,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContextMenu;
@@ -41,12 +40,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.TilePane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -95,6 +90,8 @@ public class FXMLDocumentController implements Initializable {
     private Label titlePlaylist;
 
     private SongTable songsTable, playlistTable;
+    @FXML
+    private TilePane artistsPane, albumsPane;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -109,6 +106,17 @@ public class FXMLDocumentController implements Initializable {
                 showPopupMenuSongsTable(event);
             }
 
+        });
+        songsTable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                //Double click --> play a song
+                if(event.getClickCount() == 2)
+                {
+                    playSong(songsTable.getSelectionModel().getSelectedItem());
+                }
+            }
+            
         });
 
         playlistTable = new SongTable();
@@ -143,9 +151,20 @@ public class FXMLDocumentController implements Initializable {
             public void changed(ObservableValue<? extends ListItem> observable, ListItem oldValue, ListItem newValue) {
                 if(newValue == null)    //bugfix
                     return;
-                else if (newValue == MusicMenuListItems.songItem) {
+                
+                songPane.setVisible(false);
+                artistsPane.setVisible(false);
+                albumsPane.setVisible(false);
+                playlistSongPane.setVisible(false);
+                    
+                if (newValue == MusicMenuListItems.songItem) {
                     songPane.setVisible(true);
-                    playlistSongPane.setVisible(false);
+                }
+                else if(newValue == MusicMenuListItems.artistsItem) {
+                    artistsPane.setVisible(true);
+                }
+                else if(newValue == MusicMenuListItems.albumItem) {
+                    albumsPane.setVisible(true);
                 }
             }
         });
@@ -240,6 +259,7 @@ public class FXMLDocumentController implements Initializable {
                 Utility.copyFile(src, dest);
 
                 musicPlayer.getLibrary().addSong(dest);
+                
             } catch (FileAlreadyExistsException ex) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error Dialog");
@@ -341,6 +361,11 @@ public class FXMLDocumentController implements Initializable {
     private void refreshPlaylistsMenu() {
         playlistsMenu.setItems(null);
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
+    }
+    
+    private void playSong(Song song)
+    {
+        musicPlayer.playNewSong(song);
     }
 
 }

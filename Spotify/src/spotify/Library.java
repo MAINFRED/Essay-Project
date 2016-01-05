@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
  */
 
 public class Library {
-//    private HashMap<String,String> files;
     private ObservableList<Song> tracks;
     private ObservableList<Playlist> playlists;
     
@@ -102,40 +101,5 @@ public class Library {
     {
         tracks.add(new Song(file));
     }
-    
-//    /**
-//     * Retrieve the song by name.
-//     * @param name The name of the song.
-//     * @return an instance of Song.
-//     */
-//    public Song getSongByName(String name) {
-//        return tracks.get(name);
-//    }
-    
-    
-//    /**
-//     * Gets the list of the playlists' names.
-//     * @return A List containing playlists' names.
-//     */
-//    public List getPlaylistsName() {
-//        return (List)playlists.keySet();
-//    }
-//    
-//    /**
-//     * Retrieve a List containing all songs' names in the playlist.
-//     * @param name Name of the playlist.
-//     * @return A List containing the playlist's songs' names.
-//     */
-//    public List getPlaylistSongsNames(String name) {
-//        return  playlists.get(name).getSongsNames();
-//    }
-//    
-//    /**
-//     * Retrieve a List containing all songs' names in the library.
-//     * @return A List containing the playlist's songs' names.
-//     */
-//    public List getAllSongsNames() {
-//        return (List)tracks.keySet();
-//    }
     
 }

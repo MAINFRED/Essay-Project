@@ -14,6 +14,7 @@ import javafx.scene.media.MediaView;
  */
 
 public class AudioManage {
+    private MediaPlayer mediaPlayer;
     private String songPath;
     private int volume;
     
@@ -44,7 +45,7 @@ public class AudioManage {
     
     public void playMediaFromPath(String path){
         Media media = new Media(new File(path).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
         MediaView mediaView = new MediaView(mediaPlayer);
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
@@ -180,6 +181,8 @@
                               </FlowPane>
                            </top>
                         </BorderPane>
+                        <TilePane fx:id="artistsPane" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                        <TilePane fx:id="albumsPane" prefHeight="200.0" prefWidth="200.0" visible="false" />
                      </children>
                   </StackPane>
                </items>

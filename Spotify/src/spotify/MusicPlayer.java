@@ -130,38 +130,13 @@ public class MusicPlayer {
         
        //Aggiornamento ordine playlist da fare o qua o in un thread separato di continuo
     }
-    
-//    /**
-//     * Retrieve a List of the playlist's names.
-//     * @return A List containing playlists' names.
-//     */
-//    public List getPlaylistsName(){
-//        return library.getPlaylistsName();
-//    }
-//    
-//    /**
-//     * Retrieve a List containing all songs' names in the playlist.
-//     * @param name Name of the playlist.
-//     * @return A List containing the playlist's songs' names.
-//     */
-//    public List getPlaylistSongsNames(String name) {
-//        return library.getPlaylistSongsNames(name);
-//    }
-//    
-//    /**
-//     * Retrieve a List containing all songs' names in the library.
-//     * @return A List containing the playlist's songs' names.
-//     */
-//    public List getAllSongsNames() {
-//        return library.getAllSongsNames();
-//    }
-    
+     
     /**
      * Starts playing a new song. 
      * @param newSong An istance of Song containing the new song to play.
      */
-    private void playNewSong(Song newSong) {
-        String path = newSong.getKey();
+    public void playNewSong(Song newSong) {
+        String path = newSong.getPath();
         audioManage.newSong(path);  
         audioManage.play();
     }

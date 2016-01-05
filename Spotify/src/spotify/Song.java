@@ -17,7 +17,7 @@ public class Song {
     private String artist = ""; // ArrayList per successive canzoni ad autore multiplo
     private String album = "";
     private long durationMillis; //milliseconds
-    private String key; // Percorso della canzone nella cache
+    private String pathFile; // Percorso della canzone nella cache
 
     public Song(File file) throws FileNotFoundException {
 
@@ -48,6 +48,7 @@ public class Song {
             this.durationMillis = 0;
         else this.durationMillis = info.getTrackLength() * 1000; //moltiplicate to get milliseconds
 
+        this.pathFile = file.getPath();
         System.out.println(toString());
 
     }
@@ -80,17 +81,17 @@ public class Song {
         return DurationFormatUtils.formatDuration(durationMillis, "mm:ss");
     }
 
-    public String getKey() {
-        return key;
+    public String getPath() {
+        return pathFile;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setPath(String key) {
+        this.pathFile = key;
     }
 
     @Override
     public String toString() {
-        return "Song{" + "title=" + title + ", artist=" + artist + ", album=" + album + ", duration=" + this.getDuration() + '}';
+        return "Song{" + "title=" + title + ", artist=" + artist + ", album=" + album + ", duration=" + this.getDuration() + ", pathFile: " + pathFile + '}';
     }
 
 }
