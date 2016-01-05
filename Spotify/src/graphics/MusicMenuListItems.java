@@ -14,14 +14,13 @@ import javafx.collections.ObservableList;
 public class MusicMenuListItems {
     
     private static final String[] urlIcons = {"", "", "", ""};
-
+    private static ObservableList<ListItem> listItems = null;
+    
     public static final ListItem songItem = new ListItem("Songs", urlIcons[0]);
     public static final ListItem albumItem = new ListItem("Album", urlIcons[1]);
     public static final ListItem artistsItem = new ListItem("Artists", urlIcons[2]);
     public static final ListItem localFilesItem = new ListItem("Local files", urlIcons[3]);
     
-    private static ObservableList<ListItem> listItems = null;
-            
     private static ObservableList<ListItem> createMenu()
     {
         List<ListItem> items = Arrays.asList(songItem, albumItem, artistsItem, localFilesItem);

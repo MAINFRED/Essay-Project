@@ -89,6 +89,11 @@ public class Library {
         return null;
     }
     
+    public void removeSongFromPlaylist(Song song, Playlist playlist)
+    {
+        playlist.removeSong(song);
+    }
+    
     /**
      * Adds a new song to the library using a File object.
      * @param file A File object which represents the song to add to the library
