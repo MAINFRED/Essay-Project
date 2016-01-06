@@ -5,19 +5,23 @@ import graphics.ListItemRenderer;
 import graphics.MusicMenuListItems;
 import graphics.PlaylistRenderer;
 import graphics.SongTable;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -37,6 +41,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
@@ -53,7 +58,7 @@ import utility.Utility;
  *
  * @author Antonioni Andrea & Zanelli Gabriele
  */
-public class FXMLDocumentController implements Initializable {
+public class GUIController implements Initializable {
 
     private MusicPlayer musicPlayer = new MusicPlayer();
 
@@ -114,6 +119,7 @@ public class FXMLDocumentController implements Initializable {
                 if(event.getClickCount() == 2)
                 {
                     playSong(songsTable.getSelectionModel().getSelectedItem());
+                    musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem());
                 }
             }
             
@@ -252,31 +258,31 @@ public class FXMLDocumentController implements Initializable {
         fileChooser.setTitle("Add a song");
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("MP3 file", "*.mp3"));
 
-        File src = fileChooser.showOpenDialog(stage);
-        if (src != null) {
-            File dest = new File(Library.LOCAL_PATH + src.getName());
-            try {
-                Utility.copyFile(src, dest);
+        List<File> src = fileChooser.showOpenMultipleDialog(stage);
+        if (src != null) 
+            for(File file: src){
+                File dest = new File(Library.LOCAL_PATH + file.getName());
+                try {
+                    Utility.copyFile(file, dest);
 
-                musicPlayer.getLibrary().addSong(dest);
-                
-            } catch (FileAlreadyExistsException ex) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setHeaderText("Something went wrong :(");
-                alert.setContentText("The file already exists in " + Library.LOCAL_PATH + src.getName());
-                alert.showAndWait();
-            } catch (FileNotFoundException ex) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setHeaderText("Something went wrong :(");
-                alert.setContentText("There's no file here:" + dest.getAbsolutePath());
-                alert.showAndWait();
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    musicPlayer.getLibrary().addSong(dest);
+
+                } catch (FileAlreadyExistsException ex) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setHeaderText("Something went wrong :(");
+                    alert.setContentText("The file already exists in " + Library.LOCAL_PATH + file.getName());
+                    alert.showAndWait();
+                } catch (FileNotFoundException ex) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setHeaderText("Something went wrong :(");
+                    alert.setContentText("There's no file here:" + dest.getAbsolutePath());
+                    alert.showAndWait();
+                } catch (IOException ex) {
+                    Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-
-        }
     }
 
     @FXML
@@ -363,9 +369,22 @@ public class FXMLDocumentController implements Initializable {
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
     }
     
-    private void playSong(Song song)
-    {
-        musicPlayer.playNewSong(song);
+    private void playSong(Song song) {
+        titleSong.setText(song.getTitle());
+        artist.setText(song.getArtist());
+        
+        try {
+            BufferedImage bufferedImage = song.getArtwork();
+            if(bufferedImage != null)
+            {
+                BufferedImage resizedImage = Utility.resize(bufferedImage, (int) artwork.getFitWidth(), (int) artwork.getFitWidth());
+                Image image = SwingFXUtils.toFXImage(resizedImage, null);
+                artwork.setImage(image);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
 }

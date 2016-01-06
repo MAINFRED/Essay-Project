@@ -2,9 +2,19 @@ package spotify;
 
 import com.google.code.mp3fenge.Mp3Fenge;
 import com.google.code.mp3fenge.Mp3Info;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * Represent a single song with its information.
@@ -43,11 +53,12 @@ public class Song {
 
         Mp3Fenge origin = new Mp3Fenge(file);
         Mp3Info info = origin.getMp3Info();
-        
-        if(info == null)
-            this.durationMillis = 0;
-        else this.durationMillis = info.getTrackLength() * 1000; //moltiplicate to get milliseconds
 
+        if (info == null) {
+            this.durationMillis = 0;
+        } else {
+            this.durationMillis = info.getTrackLength() * 1000; //moltiplicate to get milliseconds
+        }
         this.pathFile = file.getPath();
         System.out.println(toString());
 
@@ -87,6 +98,26 @@ public class Song {
 
     public void setPath(String key) {
         this.pathFile = key;
+    }
+
+    public BufferedImage getArtwork() throws IOException {
+        try {
+            /*Leggo l'Album Artwork dai tag del file .mp3*/
+            Mp3File song = new Mp3File(getPath());
+            if (song.hasId3v2Tag()) {
+                ID3v2 id3v2tag = song.getId3v2Tag();
+                byte[] imageData = id3v2tag.getAlbumImage();
+                //converting the bytes to an image
+                BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageData));
+                return img;
+            }
+            else return null;
+        } catch (UnsupportedTagException ex) {
+            Logger.getLogger(Song.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidDataException ex) {
+            Logger.getLogger(Song.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
