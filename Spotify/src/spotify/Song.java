@@ -18,7 +18,6 @@ import javax.imageio.ImageIO;
 
 /**
  * Represent a single song with its information.
- *
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class Song {
@@ -51,6 +50,7 @@ public class Song {
             this.album = metadata.getAlbum();
         }
 
+        // Deve funzionare anche senza tag durata
         Mp3Fenge origin = new Mp3Fenge(file);
         Mp3Info info = origin.getMp3Info();
 

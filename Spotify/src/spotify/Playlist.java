@@ -3,6 +3,8 @@ package spotify;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Represents a list of songs with a title.
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class Playlist {
     private String title;
-    private List<Song> songs;
+    private ObservableList<Song> songs;
     
     /**
      * Creates an empty Playlist object with a title
@@ -19,7 +21,7 @@ public class Playlist {
      */
     public Playlist(String title){
         this.title = title;
-        this.songs = new ArrayList<>();
+        this.songs = FXCollections.observableArrayList();
     }
     
     /**
@@ -29,7 +31,7 @@ public class Playlist {
      * @param songs A List object which containts a list of Song representing names of the songs already exist in the Library
      * @see spotify.Library#library
      */
-    public Playlist(String title, List<Song> songs){
+    public Playlist(String title, ObservableList<Song> songs){
         // MODIFICA PER COPIARE LE CANZONI MA NON LA STESSA PLAYLIST
         this.title = title;
         this.songs = songs;

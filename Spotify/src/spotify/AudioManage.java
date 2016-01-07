@@ -6,6 +6,7 @@ import java.io.File;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
 
 /**
@@ -25,29 +26,43 @@ public class AudioManage {
     
     public void newSong(String songPath) {
         this.songPath = songPath;
+        Media media = new Media(new File(songPath).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        MediaView mediaView = new MediaView(mediaPlayer);
     }
     
     public void play() {
-        playMediaFromPath(songPath);
+        mediaPlayer.play();
     }
     
-    public void playIndex(int millis) {
-        
+    /**
+     * Play a song from a certain second.
+     * @param time A Duration indicating the desired start time.
+     */
+    public void playIndex(Duration time) {
+        mediaPlayer.setStartTime(time);
+        mediaPlayer.play();
     }
     
     public void pause() {
-        
+        mediaPlayer.pause();
     }
     
+    public Duration getCurrentTime() {
+        return mediaPlayer.getCurrentTime();
+    }
+    
+    public Duration getTimeLeft() {
+        return mediaPlayer.getStopTime().subtract(mediaPlayer.getCurrentTime());
+    }
+    
+    /**
+     * Change the speakers volume.
+     * @param volume An Integer indicating the value of volume from 0 to 100.
+     */
     public void changeVolume(int volume) {
         this.volume=volume;
-    }
-    
-    public void playMediaFromPath(String path){
-        Media media = new Media(new File(path).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
-        MediaView mediaView = new MediaView(mediaPlayer);
+        mediaPlayer.setVolume(volume*0.01);
     }
     
     public void cutFileAudio() {
