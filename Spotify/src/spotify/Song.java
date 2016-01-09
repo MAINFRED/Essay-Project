@@ -49,21 +49,12 @@ public class Song {
         } else {
             this.album = metadata.getAlbum();
         }
-
-        // Deve funzionare anche senza tag durata
-        Mp3Fenge origin = new Mp3Fenge(file);
-        Mp3Info info = origin.getMp3Info();
         
-        if (info == null) {
-            System.out.println("File non ha tag durata");
-            this.durationMillis = 0;
-        } else {
-            this.durationMillis = info.getTrackLength() * 1000; //moltiplicate to get milliseconds
-        }
+       this.durationMillis = metadata.getDuration();
+       
+       this.pathFile = file.getPath();
+       System.out.println(toString());
         
-        this.pathFile = file.getPath();
-        System.out.println(toString());
-
     }
 
     public String getAlbum() {
@@ -118,6 +109,8 @@ public class Song {
             Logger.getLogger(Song.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidDataException ex) {
             Logger.getLogger(Song.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(NullPointerException ex){
+            return  null;
         }
         return null;
     }
