@@ -270,7 +270,6 @@ public class GUIController implements Initializable {
        volumeDownIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeDown.svg"));
        volumeUpIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeUp.svg"));
        playlistIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "playlist.svg"));
-       searchIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "playlist gitr.svg"));
     }
 
     @FXML
