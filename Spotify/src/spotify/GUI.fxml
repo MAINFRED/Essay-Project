@@ -93,12 +93,8 @@
                      <children>
                         <StackPane>
                            <children>
-                              <ImageView fx:id="searchIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
-                                 <StackPane.margin>
-                                    <Insets left="5.0" />
-                                 </StackPane.margin>
-                              </ImageView>
                               <TextField prefHeight="10.0" prefWidth="141.0" />
+                              <ImageView fx:id="searchIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </StackPane>
                      </children>

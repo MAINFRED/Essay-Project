@@ -108,8 +108,6 @@ public class GUIController implements Initializable {
         initPopupMenu();
         initTables();
         initIcon();
-
-        
     }
 
     private void initSideBar() {
@@ -152,7 +150,6 @@ public class GUIController implements Initializable {
             public void handle(MouseEvent event) {
                 playlistsMenu.getSelectionModel().select(null);
             }
-
         });
 
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
@@ -180,7 +177,6 @@ public class GUIController implements Initializable {
 
                 titlePlaylist.setText(newValue.getTitle());
                 playlistTable.setItems(FXCollections.observableList(newValue.getSongsPointer()));
-
             }
         });
 
@@ -189,7 +185,6 @@ public class GUIController implements Initializable {
             public void handle(MouseEvent event) {
                 musicListMenu.getSelectionModel().select(null);
             }
-
         });
     }
 
@@ -232,6 +227,30 @@ public class GUIController implements Initializable {
             public void handle(ContextMenuEvent event) {
                 showPopupMenuSongsTable(event);
             }
+            
+            private void showPopupMenuSongsTable(ContextMenuEvent event) {
+                //Removes the old menu
+                popupMenuSongsTable.getItems().remove(menuItemPlaylist);
+
+                //Creates the new menu
+                menuItemPlaylist = new Menu("Add to playlist");
+                for (Playlist playlist : (ObservableList<Playlist>) musicPlayer.getLibrary().getPlaylistsPointer()) {
+                    MenuItem item = new MenuItem(playlist.getTitle());
+                    item.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            Song songSelected = songsTable.getSelectionModel().getSelectedItem();
+                            playlist.addSong(songSelected);
+                        }
+                    });
+                    menuItemPlaylist.getItems().add(item);
+                }
+
+                //Adds the new menu
+                popupMenuSongsTable.getItems().add(menuItemPlaylist);
+                popupMenuSongsTable.show(songsTable, event.getScreenX(), event.getScreenY());
+
+            }
 
         });
         songsTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -240,7 +259,8 @@ public class GUIController implements Initializable {
                 //Double click --> play a song
                 if (event.getClickCount() == 2) {
                     playSong(songsTable.getSelectionModel().getSelectedItem());
-                    //musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(), Playlist.SONGS_TABLE);
+                    musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(), 
+                            Playlist.SONGS_TABLE, musicPlayer.getLibrary().getTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
                 }
             }
 
@@ -327,30 +347,6 @@ public class GUIController implements Initializable {
     @FXML
     private void showPopupMenuPlaylist(ContextMenuEvent event) {
         popupMenuPlaylist.show(playlistsMenu, event.getScreenX(), event.getScreenY());
-    }
-
-    private void showPopupMenuSongsTable(ContextMenuEvent event) {
-        //Removes the old menu
-        popupMenuSongsTable.getItems().remove(menuItemPlaylist);
-
-        //Creates the new menu
-        menuItemPlaylist = new Menu("Add to playlist");
-        for (Playlist playlist : (ObservableList<Playlist>) musicPlayer.getLibrary().getPlaylistsPointer()) {
-            MenuItem item = new MenuItem(playlist.getTitle());
-            item.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    Song songSelected = songsTable.getSelectionModel().getSelectedItem();
-                    playlist.addSong(songSelected);
-                }
-            });
-            menuItemPlaylist.getItems().add(item);
-        }
-
-        //Adds the new menu
-        popupMenuSongsTable.getItems().add(menuItemPlaylist);
-        popupMenuSongsTable.show(songsTable, event.getScreenX(), event.getScreenY());
-
     }
 
     @FXML
@@ -448,7 +444,5 @@ public class GUIController implements Initializable {
     private void handleReplay(MouseEvent event) {
         
     }
-
-    
 
 }
