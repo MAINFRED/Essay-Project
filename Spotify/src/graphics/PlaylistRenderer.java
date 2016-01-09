@@ -8,7 +8,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import spotify.GUIController;
 import spotify.Playlist;
+import utility.Utility;
 
 /**
  *
@@ -16,7 +18,7 @@ import spotify.Playlist;
  * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
  */
 public class PlaylistRenderer extends ListCell<Playlist>{
-    private static final String urlIcon = "";
+    private static final String urlIcon = GUIController.ICON_PATH + "playlist.svg";
     
     @Override
     protected void updateItem(Playlist item, boolean empty) {
@@ -33,8 +35,12 @@ public class PlaylistRenderer extends ListCell<Playlist>{
         
         if(urlIcon != null && !urlIcon.equals(""))
         {
-            ImageView icon = new ImageView(urlIcon);
+            ImageView icon = new ImageView();
+            icon.setFitHeight(20);
+            icon.setFitWidth(20);
+            icon.setImage(Utility.loadSVGIcon(urlIcon));
             hboxPane.getChildren().add(icon);
+            hboxPane.setSpacing(10); //space between items in a HBox
         }
 
         Label description = new Label(item.getTitle());

@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import utility.Utility;
 
 /**
  * Contains the way to represents graphically ListItem objects inside the ListView.
@@ -31,8 +32,12 @@ public class ListItemRenderer extends ListCell<ListItem>{
         
         if(item.getUrlIcon() != null && !item.getUrlIcon().equals(""))
         {
-            ImageView icon = new ImageView(item.getUrlIcon());
+            ImageView icon = new ImageView();
+            icon.setFitHeight(20);
+            icon.setFitWidth(20);
+            icon.setImage(Utility.loadSVGIcon(item.getUrlIcon()));
             hboxPane.getChildren().add(icon);
+            hboxPane.setSpacing(10); //space between items in a HBox
         }
 
         Label description = new Label(item.getDescription());

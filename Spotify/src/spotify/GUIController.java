@@ -3,6 +3,7 @@ package spotify;
 import graphics.ListItem;
 import graphics.ListItemRenderer;
 import graphics.MusicMenuListItems;
+import graphics.MyTranscoder;
 import graphics.PlaylistRenderer;
 import graphics.SongTable;
 import java.awt.image.BufferedImage;
@@ -16,7 +17,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -51,6 +51,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
 import utility.Utility;
 
 /**
@@ -60,13 +62,15 @@ import utility.Utility;
  */
 public class GUIController implements Initializable {
 
+    public static final String ICON_PATH = "resources/icon/";
+
     private MusicPlayer musicPlayer = new MusicPlayer();
 
     @FXML
     private Label username, countUP, countDown, artist, titleSong;
     @FXML
     private ImageView previousButton, playButton, nextButton, shuffle, replay,
-            artwork;
+            artwork, volumeDownIcon, volumeUpIcon, playlistIcon, searchIcon;
     @FXML
     private ProgressBar progressBar;
     @FXML
@@ -102,42 +106,10 @@ public class GUIController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initSideBar();
         initPopupMenu();
+        initTables();
+        initIcon();
 
-        songsTable = new SongTable(musicPlayer.getLibrary().getTracksPointer());
-        songPane.setCenter(songsTable);
-        songsTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent event) {
-                showPopupMenuSongsTable(event);
-            }
-
-        });
-        songsTable.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                //Double click --> play a song
-                if(event.getClickCount() == 2)
-                {
-                    playSong(songsTable.getSelectionModel().getSelectedItem());
-                    musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem());
-                }
-            }
-            
-        });
-
-        playlistTable = new SongTable();
-        playlistSongPane.setCenter(playlistTable);
-        playlistTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent event) {
-                showPopupMenuPlaylistTable(event);
-            }
-
-            private void showPopupMenuPlaylistTable(ContextMenuEvent event) {
-                popupMenuPlaylistTable.show(playlistTable, event.getScreenX(), event.getScreenY());
-            }
-
-        });
+        
     }
 
     private void initSideBar() {
@@ -155,32 +127,32 @@ public class GUIController implements Initializable {
         musicListMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ListItem>() {
             @Override
             public void changed(ObservableValue<? extends ListItem> observable, ListItem oldValue, ListItem newValue) {
-                if(newValue == null)    //bugfix
+                if (newValue == null) //bugfix
+                {
                     return;
-                
+                }
+
                 songPane.setVisible(false);
                 artistsPane.setVisible(false);
                 albumsPane.setVisible(false);
                 playlistSongPane.setVisible(false);
-                    
+
                 if (newValue == MusicMenuListItems.songItem) {
                     songPane.setVisible(true);
-                }
-                else if(newValue == MusicMenuListItems.artistsItem) {
+                } else if (newValue == MusicMenuListItems.artistsItem) {
                     artistsPane.setVisible(true);
-                }
-                else if(newValue == MusicMenuListItems.albumItem) {
+                } else if (newValue == MusicMenuListItems.albumItem) {
                     albumsPane.setVisible(true);
                 }
             }
         });
-        
-        musicListMenu.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+        musicListMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 playlistsMenu.getSelectionModel().select(null);
             }
-            
+
         });
 
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
@@ -197,10 +169,12 @@ public class GUIController implements Initializable {
         playlistsMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Playlist>() {
             @Override
             public void changed(ObservableValue<? extends Playlist> observable, Playlist oldValue, Playlist newValue) {
-                
-                if(newValue == null)    //bugfix
+
+                if (newValue == null) //bugfix
+                {
                     return;
-                
+                }
+
                 songPane.setVisible(false);
                 playlistSongPane.setVisible(true);
 
@@ -209,13 +183,13 @@ public class GUIController implements Initializable {
 
             }
         });
-        
-        playlistsMenu.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+        playlistsMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 musicListMenu.getSelectionModel().select(null);
             }
-            
+
         });
     }
 
@@ -249,6 +223,55 @@ public class GUIController implements Initializable {
         popupMenuPlaylistTable.getItems().add(removeItem);
 
     }
+    
+    private void initTables() {
+        songsTable = new SongTable(musicPlayer.getLibrary().getTracksPointer());
+        songPane.setCenter(songsTable);
+        songsTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent event) {
+                showPopupMenuSongsTable(event);
+            }
+
+        });
+        songsTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                //Double click --> play a song
+                if (event.getClickCount() == 2) {
+                    playSong(songsTable.getSelectionModel().getSelectedItem());
+                    //musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(), Playlist.SONGS_TABLE);
+                }
+            }
+
+        });
+
+        playlistTable = new SongTable();
+        playlistSongPane.setCenter(playlistTable);
+        playlistTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent event) {
+                showPopupMenuPlaylistTable(event);
+            }
+
+            private void showPopupMenuPlaylistTable(ContextMenuEvent event) {
+                popupMenuPlaylistTable.show(playlistTable, event.getScreenX(), event.getScreenY());
+            }
+
+        });
+    }
+    
+    private void initIcon() {
+       previousButton.setImage(Utility.loadSVGIcon(ICON_PATH + "previous.svg"));
+       playButton.setImage(Utility.loadSVGIcon(ICON_PATH + "play.svg"));
+       nextButton.setImage(Utility.loadSVGIcon(ICON_PATH + "next.svg"));
+       shuffle.setImage(Utility.loadSVGIcon(ICON_PATH + "shuffle.svg"));
+       replay.setImage(Utility.loadSVGIcon(ICON_PATH + "repeatPlaylist.svg"));
+       volumeDownIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeDown.svg"));
+       volumeUpIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeUp.svg"));
+       playlistIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "playlist.svg"));
+       searchIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "playlist gitr.svg"));
+    }
 
     @FXML
     private void handleAddSongItem(ActionEvent event) {
@@ -259,14 +282,13 @@ public class GUIController implements Initializable {
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("MP3 file", "*.mp3"));
 
         List<File> src = fileChooser.showOpenMultipleDialog(stage);
-        if (src != null) 
-            for(File file: src){
+        if (src != null) {
+            for (File file : src) {
                 File dest = new File(Library.LOCAL_PATH + file.getName());
                 try {
                     Utility.copyFile(file, dest);
 
                     musicPlayer.getLibrary().addSong(dest);
-
                 } catch (FileAlreadyExistsException ex) {
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Error Dialog");
@@ -283,6 +305,7 @@ public class GUIController implements Initializable {
                     Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
     }
 
     @FXML
@@ -368,15 +391,14 @@ public class GUIController implements Initializable {
         playlistsMenu.setItems(null);
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
     }
-    
+
     private void playSong(Song song) {
         titleSong.setText(song.getTitle());
         artist.setText(song.getArtist());
-        
+
         try {
             BufferedImage bufferedImage = song.getArtwork();
-            if(bufferedImage != null)
-            {
+            if (bufferedImage != null) {
                 BufferedImage resizedImage = Utility.resize(bufferedImage, (int) artwork.getFitWidth(), (int) artwork.getFitWidth());
                 Image image = SwingFXUtils.toFXImage(resizedImage, null);
                 artwork.setImage(image);
@@ -384,7 +406,50 @@ public class GUIController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+    private void loadIcon(String pathIcon, ImageView imageView) {
+
+        MyTranscoder imageTranscoder = new MyTranscoder();
+
+        TranscoderInput transIn = new TranscoderInput(pathIcon);
+        try {
+            imageTranscoder.transcode(transIn, null);
+        } catch (TranscoderException ex) {
+            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Image img = SwingFXUtils.toFXImage(imageTranscoder.getImage(), null);
+        imageView.setImage(img);
+
+    }
+
+    @FXML
+    private void handlePreviousSong(MouseEvent event) {
+        musicPlayer.previusSong();
+    }
+
+    @FXML
+    private void handlePlayPause(MouseEvent event) {
         
     }
+
+    @FXML
+    private void handleNextSong(MouseEvent event) {
+        musicPlayer.nextSong();
+    }
+
+    @FXML
+    private void handleShuffled(MouseEvent event) {
+        
+    }
+
+    @FXML
+    private void handleReplay(MouseEvent event) {
+        
+    }
+
+    
 
 }

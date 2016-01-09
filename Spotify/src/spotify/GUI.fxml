@@ -41,19 +41,34 @@
    <center>
       <BorderPane prefHeight="572.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <bottom>
-            <HBox fillHeight="false" maxHeight="33.0" maxWidth="800.0" prefHeight="33.0" prefWidth="800.0">
+            <AnchorPane>
                <children>
-                  <ImageView fx:id="previousButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="playButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="nextButton" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="countUP" alignment="CENTER" text="00:00" />
-                  <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="205.0" progress="0.0" />
-                  <Label fx:id="countDown" text="00:00" />
-                  <ImageView fx:id="shuffle" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="replay" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
-                  <Slider fx:id="volumeControl" prefHeight="16.0" prefWidth="81.0" />
+                  <HBox alignment="CENTER" fillHeight="false" layoutY="1.0" maxHeight="33.0" maxWidth="800.0" prefHeight="33.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="previousButton" fitHeight="36.0" fitWidth="36.0" onMouseClicked="#handlePreviousSong" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin></ImageView>
+                        <ImageView fx:id="playButton" fitHeight="36.0" fitWidth="36.0" onMouseClicked="#handlePlayPause" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="nextButton" fitHeight="36.0" fitWidth="36.0" onMouseClicked="#handleNextSong" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="countUP" alignment="CENTER" text="00:00">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin></Label>
+                        <ProgressBar fx:id="progressBar" prefHeight="4.0" prefWidth="316.0" progress="0.0" />
+                        <Label fx:id="countDown" alignment="CENTER" text="00:00" />
+                        <ImageView fx:id="shuffle" fitHeight="36.0" fitWidth="36.0" onMouseClicked="#handleShuffled" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="replay" fitHeight="36.0" fitWidth="36.0" onMouseClicked="#handleReplay" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="volumeDownIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <Slider fx:id="volumeControl" prefHeight="16.0" prefWidth="81.0" />
+                        <ImageView fx:id="volumeUpIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin></ImageView>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+            </AnchorPane>
          </bottom>
          <top>
             <GridPane BorderPane.alignment="CENTER">
@@ -76,7 +91,16 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField prefHeight="10.0" prefWidth="141.0" text="Barra di ricerca" />
+                        <StackPane>
+                           <children>
+                              <ImageView fx:id="searchIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+                                 <StackPane.margin>
+                                    <Insets left="5.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <TextField prefHeight="10.0" prefWidth="141.0" />
+                           </children>
+                        </StackPane>
                      </children>
                   </HBox>
                </children>
@@ -98,13 +122,28 @@
                            <children>
                               <FlowPane>
                                  <children>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="newPlaylistButton" onMouseClicked="#handleNewPlaylistButton" text="New playlist" />
+                                    <ImageView fx:id="playlistIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <FlowPane.margin>
+                                          <Insets left="10.0" />
+                                       </FlowPane.margin></ImageView>
+                                    <Label fx:id="newPlaylistButton" onMouseClicked="#handleNewPlaylistButton" text="New playlist">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding></Label>
                                  </children>
+                                 <GridPane.margin>
+                                    <Insets bottom="20.0" />
+                                 </GridPane.margin>
+                                 <padding>
+                                    <Insets bottom="15.0" />
+                                 </padding>
                               </FlowPane>
                               <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <left>
-                                    <ImageView fx:id="artwork" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                                    <ImageView fx:id="artwork" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                                       <BorderPane.margin>
+                                          <Insets />
+                                       </BorderPane.margin></ImageView>
                                  </left>
                                  <center>
                                     <GridPane BorderPane.alignment="CENTER">
@@ -117,12 +156,24 @@
                                        </rowConstraints>
                                        <children>
                                           <Label fx:id="artist" text="nome artista" GridPane.rowIndex="1" />
-                                          <Label fx:id="titleSong" text="titolo brano" />
+                                          <Label fx:id="titleSong" text="titolo brano">
+                                             <font>
+                                                <Font name="System Bold" size="13.0" />
+                                             </font></Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
                                     </GridPane>
                                  </center>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
                               </BorderPane>
                            </children>
+                           <padding>
+                              <Insets bottom="10.0" />
+                           </padding>
                         </GridPane>
                      </bottom>
                      <center>
@@ -133,7 +184,7 @@
                                     <Insets left="10.0" top="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <ListView fx:id="musicListMenu" focusTraversable="false" prefHeight="73.0" prefWidth="174.0" />
+                              <ListView fx:id="musicListMenu" focusTraversable="false" prefHeight="115.0" prefWidth="200.0" />
                               <Label text="PLAYLIST">
                                  <VBox.margin>
                                     <Insets left="10.0" top="30.0" />

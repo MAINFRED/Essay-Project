@@ -1,5 +1,6 @@
 package utility;
 
+import graphics.MyTranscoder;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -11,6 +12,12 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import spotify.GUIController;
 
 /**
  * This class contains utility methods.
@@ -75,6 +82,22 @@ public class Utility {
         g2d.drawImage(image, 0, 0, width, height, null);
         g2d.dispose();
         return bi;
+    }
+    
+    public static Image loadSVGIcon(String pathIcon) {
+
+        MyTranscoder imageTranscoder = new MyTranscoder();
+
+        TranscoderInput transIn = new TranscoderInput(pathIcon);
+        try {
+            imageTranscoder.transcode(transIn, null);
+        } catch (TranscoderException ex) {
+            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Image img = SwingFXUtils.toFXImage(imageTranscoder.getImage(), null);
+        
+        return img;
     }
     
 }

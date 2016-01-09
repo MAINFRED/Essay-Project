@@ -53,12 +53,14 @@ public class Song {
         // Deve funzionare anche senza tag durata
         Mp3Fenge origin = new Mp3Fenge(file);
         Mp3Info info = origin.getMp3Info();
-
+        
         if (info == null) {
+            System.out.println("File non ha tag durata");
             this.durationMillis = 0;
         } else {
             this.durationMillis = info.getTrackLength() * 1000; //moltiplicate to get milliseconds
         }
+        
         this.pathFile = file.getPath();
         System.out.println(toString());
 

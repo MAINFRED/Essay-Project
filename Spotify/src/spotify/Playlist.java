@@ -15,6 +15,8 @@ public class Playlist {
     private String title;
     private ObservableList<Song> songs;
     
+    public static final int SONGS_TABLE = -1;
+    
     /**
      * Creates an empty Playlist object with a title
      * @param title A String object which represents the title of the playlist
