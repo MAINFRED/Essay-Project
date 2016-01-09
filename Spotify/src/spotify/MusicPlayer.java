@@ -2,6 +2,7 @@
 package spotify;
 
 import java.util.LinkedList;
+import java.util.Random;
 import javafx.collections.ObservableList;
 import javafx.util.Duration;
 
@@ -14,6 +15,7 @@ import javafx.util.Duration;
 public class MusicPlayer {
     private Library library;
     private AudioManage audioManage;
+    private Fred checkPlaybackFred;
     private LinkedList<Song> listenedSongs; 
     private LinkedList<Song> nextSongs;
     private Song actualSong;
@@ -21,18 +23,22 @@ public class MusicPlayer {
     private int playlistNumber;
     private int songNumber;
     private String preferredSort;
-    private boolean repeatSong;
-    private boolean repeatPlaylist;
+    private int repeat;
     private boolean reproduceShuffle;
+    
+    public static final int REPEAT_SINGLE_SONG=1;
+    public static final int REPEAT_PLAYLIST=0;
+    public static final int NO_REPEAT=-1;
+    
     
     public MusicPlayer() {
         library = new Library();
         audioManage = new AudioManage();
+        checkPlaybackFred = new Fred(this,audioManage);
         listenedSongs=new LinkedList<>();
         nextSongs=new LinkedList<>();
         preferredSort="Title";
-        repeatSong=false;
-        repeatPlaylist=false;
+        repeat=NO_REPEAT;
         reproduceShuffle=false;
     }
     
@@ -62,6 +68,8 @@ public class MusicPlayer {
      * Skip forward to the next song.
      */
     public void nextSong() {
+        if(repeat==REPEAT_SINGLE_SONG)
+            audioManage.playIndex(0); // Replaya la stessa canzone
         Song next = nextSongs.pollLast();
         if(next!=null) {
             playNewSong(next,playlistNumber,songNumber+1);
@@ -78,7 +86,7 @@ public class MusicPlayer {
         //If there are no previus songs or the song has started for more than 10 seconds, reproduce the same 
         // song from the beginning else reproduce the previus song.
         if(audioManage.getCurrentTime().lessThan(new Duration(10000)) || listenedSongs.isEmpty())
-            audioManage.playIndex(new Duration(0)); 
+            audioManage.playIndex(0); 
         else {
             Song previus = listenedSongs.pop();
             playNewSong(previus,playlistNumber,songNumber-1);
@@ -89,32 +97,28 @@ public class MusicPlayer {
     }
     
     /**
-     * Change repeat song preference.
-     * @param value A Boolean indicating activation of single song repeat.
+     * Change repeat preference.
+     * @param value A Static Value from MusicPlayer class indicating the repeat preferince.
      */
-    public void repeatSong(boolean value) {
-        this.repeatSong=value;
-        
-        // Decidere se mettere la stessa canzone in coda 10 volte o se
-        // Semplicemente ripetere la riproduzione
-    }
-    
-    /**
-     * Change repeat playlist preference.
-     * @param value Indicating activation of playlist repeat once terminated.
-     */
-    public void repeatPlaylist(boolean value) {
-        this.repeatPlaylist=value;
+    public void repeatPreference(int value) {
+        this.repeat=value;
     }
     
     /**
      * Change reproduce shuffle preference.
-     * @param value Indicating activation of random song playing.
+     * @param value A Booleran indicating activation of random song playing.
      */
-    public void reproduceShuffle(boolean value) {
+    public void shuffle(boolean value) {
         this.reproduceShuffle=value;
-        
-        // Aggiornamento canzoni in coda
+        generateNextSongs();
+    }
+    
+    /**
+     * Retrieve the shuffle value.
+     * @return A Boolean indicating if random song playing is activated.
+     */
+    public boolean getShuffle() {
+        return reproduceShuffle;
     }
     
     /**
@@ -149,21 +153,27 @@ public class MusicPlayer {
         String path = newSong.getPath();
         audioManage.newSong(path);  
         audioManage.play();
-        listenedSongs.clear(); 
           // Da fare in thread
         generateNextSongs();
     }
     
+    /**
+     * Generate the next ten songs for the queue.
+     */
     private void generateNextSongs() {
+        listenedSongs.clear(); 
         ObservableList currentPlaylist;
-        if(playlistNumber==-1)
+        if(playlistNumber==-1 || reproduceShuffle)
              currentPlaylist = library.getTracksPointer();
         else 
             currentPlaylist = (ObservableList)library.getPlaylistsPointer().get(playlistNumber);
         
         for(int i=1;i<=10;i++){
-            nextSongs.add((Song)currentPlaylist.get(songNumber+i));
+            if(reproduceShuffle) {
+                nextSongs.add((Song)currentPlaylist.get(new Random().nextInt(currentPlaylist.size())));
+            }
+            else
+                nextSongs.add((Song)currentPlaylist.get(songNumber+i));
         }
     }
-    
 }
