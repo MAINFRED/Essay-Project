@@ -17,7 +17,7 @@ import utility.Utility;
  * @author Andrea Antonioni -
  * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
  */
-public class PlaylistRenderer extends ListCell<Playlist>{
+public class PlaylistListItemRenderer extends ListCell<Playlist>{
     private static final String urlIcon = GUIController.ICON_PATH + "playlist.svg";
     
     @Override
