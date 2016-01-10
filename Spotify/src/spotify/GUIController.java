@@ -257,11 +257,7 @@ public class GUIController implements Initializable {
                 if (event.getClickCount() == 2) {
                     playSong(songsTable.getSelectionModel().getSelectedItem());
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(), 
-<<<<<<< HEAD
-                            Playlist.SONGS_TABLE, musicPlayer.getLibrary().getAllTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
-=======
-                           musicPlayer.getLibrary().getTracksPointer() , musicPlayer.getLibrary().getTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
->>>>>>> origin/master
+                           musicPlayer.getLibrary().getAllTracksPointer() , musicPlayer.getLibrary().getAllTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
                 }
             }
 

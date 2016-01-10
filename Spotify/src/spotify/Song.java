@@ -1,7 +1,5 @@
 package spotify;
 
-import com.google.code.mp3fenge.Mp3Fenge;
-import com.google.code.mp3fenge.Mp3Info;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
