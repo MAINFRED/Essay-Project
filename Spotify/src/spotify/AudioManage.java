@@ -17,10 +17,12 @@ import javafx.util.Duration;
 public class AudioManage {
     private MediaPlayer mediaPlayer;
     private String songPath;
+    private Duration timeIndex;
     private int volume;
     
     public AudioManage() {
         this.songPath = null;
+        timeIndex = new Duration(0);
         this.volume=70;
     }
     
@@ -56,11 +58,11 @@ public class AudioManage {
      */
     public void pause() {
         mediaPlayer.pause();
-        // Salvare l'indice di tempo attuale
+        timeIndex=mediaPlayer.getCurrentTime();
     }
     
     /**
-     * Retrieve the actual index of time of the song in playback.
+     * Retrieve the current index of time of the song in playback.
      * @return A Duration indicating the index of time in milliseconds.
      */
     public Duration getCurrentTime() {
@@ -82,6 +84,14 @@ public class AudioManage {
     public void changeVolume(int volume) {
         this.volume=volume;
         mediaPlayer.setVolume(volume*0.01);
+    }
+    
+    /**
+     * Retrieve the current volume of the speakers.
+     * @return An Integer indicating the value of volume from 0 to 100.
+     */
+    public int getVolume() {
+        return volume;
     }
     
     public void cutFileAudio() {

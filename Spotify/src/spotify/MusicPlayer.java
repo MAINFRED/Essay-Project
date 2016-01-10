@@ -16,11 +16,10 @@ public class MusicPlayer {
     private Library library;
     private AudioManage audioManage;
     private Fred checkPlaybackFred;
-    private LinkedList<Song> listenedSongs; 
-    private LinkedList<Song> nextSongs;
+      private LinkedList<Song> nextSongs;
     private Song actualSong;
 //    private enum sortType{Title,Album,Artist};
-    private int playlistNumber;
+    private ObservableList currentPlaylist;
     private int songNumber;
     private String preferredSort;
     private int repeat;
@@ -35,7 +34,6 @@ public class MusicPlayer {
         library = new Library();
         audioManage = new AudioManage();
         checkPlaybackFred = new Fred(this,audioManage);
-        listenedSongs=new LinkedList<>();
         nextSongs=new LinkedList<>();
         preferredSort="Title";
         repeat=NO_REPEAT;
@@ -69,29 +67,31 @@ public class MusicPlayer {
      */
     public void nextSong() {
         if(repeat==REPEAT_SINGLE_SONG)
-            audioManage.playIndex(0); // Replaya la stessa canzone
-        Song next = nextSongs.pollLast();
-        if(next!=null) {
-            playNewSong(next,playlistNumber,songNumber+1);
-            listenedSongs.push(actualSong);
-            actualSong=next;
-            // Aggiungere la nuova canzone alla fine del vettore
+            audioManage.playIndex(0); // If repeat single song is activated, just replay.
+        else {
+            actualSong = nextSongs.pollLast();
+            // Check if there is actually a song to play
+            if(actualSong!=null) {
+                // If the song was the last one, restard from top.
+                playNewSong(actualSong,currentPlaylist,songNumber+1%currentPlaylist.size());     
+                
+                // Aggiungere la nuova canzone alla fine del vettore
+            }
         }
     }
     
     /**
     * Skip back to the previus song.
+    * If there are no previus songs or the song has started for more than 10 seconds, reproduce the same 
+    + song from the beginning else reproduce the previus song.
     */
-    public void previusSong() { 
-        //If there are no previus songs or the song has started for more than 10 seconds, reproduce the same 
-        // song from the beginning else reproduce the previus song.
-        if(audioManage.getCurrentTime().lessThan(new Duration(10000)) || listenedSongs.isEmpty())
+    public void previusSong() {
+        if(audioManage.getCurrentTime().lessThan(new Duration(10000)) || songNumber <= 0)
             audioManage.playIndex(0); 
         else {
-            Song previus = listenedSongs.pop();
-            playNewSong(previus,playlistNumber,songNumber-1);
             nextSongs.addLast(actualSong);
-            actualSong = previus;
+            actualSong = (Song)currentPlaylist.get(songNumber-1);
+            playNewSong(actualSong,currentPlaylist,songNumber-1);
         }
         // Modificare la lista di canzoni successive
     }
@@ -110,7 +110,7 @@ public class MusicPlayer {
      */
     public void shuffle(boolean value) {
         this.reproduceShuffle=value;
-        generateNextSongs();
+        generateSongQueue();
     }
     
     /**
@@ -144,36 +144,43 @@ public class MusicPlayer {
     /**
      * Starts playing a new song. 
      * @param newSong An istance of Song containing the new song to play.
-     * @param playlistNumber The number of the playlist cointaining the song, -1 for All Tracks.
-     * @param songNumber The number of the song in the playlist once ordered.
+     * @param currentPlaylist A pointer to the playlist in which the song is.
+     * @param currentSong The number of the song in the playlist once ordered.
      */
-    public void playNewSong(Song newSong, int playlistNumber, int songNumber) {
+    public void playNewSong(Song newSong, ObservableList currentPlaylist, int currentSong) {
         // Funzione searchSong che cerca la canzone in locale ed eventualmente la richiede al server E SETTA IL PATH LOCALE
         // Settare la variabile locale a true
         String path = newSong.getPath();
         audioManage.newSong(path);  
         audioManage.play();
           // Da fare in thread
-        generateNextSongs();
+        generateSongQueue();
     }
     
     /**
      * Generate the next ten songs for the queue.
      */
-    private void generateNextSongs() {
-        listenedSongs.clear(); 
-        ObservableList currentPlaylist;
-        if(playlistNumber==-1 || reproduceShuffle)
-             currentPlaylist = library.getTracksPointer();
-        else 
-            currentPlaylist = (ObservableList)library.getPlaylistsPointer().get(playlistNumber);
-        
-        for(int i=1;i<=10;i++){
-            if(reproduceShuffle) {
+    private void generateSongQueue() {
+        nextSongs.clear();
+        // Add 10 times the actual song
+        if(repeat==REPEAT_SINGLE_SONG) {
+            for(int i=0;i<10;i++)
+                nextSongs.add(actualSong);
+        }
+        // Add 10 random songs.
+        else if(reproduceShuffle) {
+            for(int i=0;i<10;i++)
                 nextSongs.add((Song)currentPlaylist.get(new Random().nextInt(currentPlaylist.size())));
+        }
+        // Add the next 10 songs 
+        else {
+            for(int i=1;i<=10;i++){
+                // If it reaches the end and repeat playlist is on, goes to the top.
+                if(songNumber>=currentPlaylist.size() && repeat==REPEAT_PLAYLIST)
+                    nextSongs.add((Song)currentPlaylist.get(songNumber+i%currentPlaylist.size()));
+                else
+                    nextSongs.add((Song)currentPlaylist.get(songNumber+i));
             }
-            else
-                nextSongs.add((Song)currentPlaylist.get(songNumber+i));
         }
     }
 }
