@@ -147,11 +147,13 @@ public class MusicPlayer {
      * Starts playing a new song. 
      * @param newSong An istance of Song containing the new song to play.
      * @param currentPlaylist A pointer to the playlist in which the song is.
-     * @param currentSong The number of the song in the playlist once ordered.
+     * @param songNumber The number of the song in the playlist once ordered.
      */
-    public void playNewSong(Song newSong, ObservableList currentPlaylist, int currentSong) {
+    public void playNewSong(Song newSong, ObservableList currentPlaylist, int songNumber) {
         // Funzione searchSong che cerca la canzone in locale ed eventualmente la richiede al server E SETTA IL PATH LOCALE
         // Settare la variabile locale a true
+        this.currentPlaylist=currentPlaylist;
+        this.songNumber=songNumber;
         String path = newSong.getPath();
         audioManage.newSong(path);  
         audioManage.play();
@@ -178,7 +180,7 @@ public class MusicPlayer {
         else {
             for(int i=1;i<=10;i++){
                 // If it reaches the end and repeat playlist is on, goes to the top.
-                if(songNumber>=currentPlaylist.size() && repeat==REPEAT_PLAYLIST)
+                if(songNumber>=currentPlaylist.size()-1 && repeat==REPEAT_PLAYLIST)
                     nextSongs.add((Song)currentPlaylist.get(songNumber+i%currentPlaylist.size()));
                 else
                     nextSongs.add((Song)currentPlaylist.get(songNumber+i));
