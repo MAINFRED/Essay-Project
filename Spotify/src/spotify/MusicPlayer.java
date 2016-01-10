@@ -180,8 +180,11 @@ public class MusicPlayer {
         else {
             for(int i=1;i<=10;i++){
                 // If it reaches the end and repeat playlist is on, goes to the top.
-                if(songNumber>=currentPlaylist.size()-1 && repeat==REPEAT_PLAYLIST)
-                    nextSongs.add((Song)currentPlaylist.get(songNumber+i%currentPlaylist.size()));
+                if(songNumber>=currentPlaylist.size()-1)
+                    if(repeat==REPEAT_PLAYLIST)
+                        nextSongs.add((Song)currentPlaylist.get(songNumber+i%currentPlaylist.size()));
+                    else
+                        return;
                 else
                     nextSongs.add((Song)currentPlaylist.get(songNumber+i));
             }
