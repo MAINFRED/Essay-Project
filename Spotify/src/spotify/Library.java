@@ -76,10 +76,20 @@ public class Library {
         playlists.remove(playlist);
     }
     
+    /**
+     * Rename a playlist.
+     * @param playlist A pointer to the playlist whose name you want to change.
+     * @param newName The new name of the playlist.
+     */
     public void renamePlaylist(Playlist playlist, String newName){
         this.getPlaylist(playlist.getTitle()).setTitle(newName);
     }
     
+    /**
+     * Retrieve a playlist from its name.
+     * @param title The name of the playlist.
+     * @return A Pointer to the playlist.
+     */
     public Playlist getPlaylist(String title)
     {
         for(Playlist p : playlists)
@@ -88,9 +98,15 @@ public class Library {
         return null;
     }
     
+    /**
+     * Remove a song from a playlist.
+     * @param song A pointer to the song to remove.
+     * @param playlist The pointer to the playlist which countains the song.
+     */
     public void removeSongFromPlaylist(Song song, Playlist playlist)
     {
         playlist.removeSong(song);
+        allTracks.removeSong(song);
     }
     
     /**
