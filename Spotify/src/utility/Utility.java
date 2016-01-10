@@ -15,8 +15,10 @@ import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import spotify.GUIController;
 
 /**
@@ -98,6 +100,11 @@ public class Utility {
         Image img = SwingFXUtils.toFXImage(imageTranscoder.getImage(), null);
         
         return img;
+    }
+    
+    public static String getDurationAsString(Duration duration)
+    {
+       return DurationFormatUtils.formatDuration((long)duration.toMillis(), "mm:ss");
     }
     
 }

@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Duration;
 import javax.imageio.ImageIO;
 
 /**
@@ -23,7 +24,7 @@ public class Song implements Comparable<Song>{
     private String title = "";
     private String artist = ""; // ArrayList per successive canzoni ad autore multiplo
     private String album = "";
-    private long durationMillis; //milliseconds
+    private Duration duration; //milliseconds
     private String pathFile; // Percorso della canzone nella cache
 
     public Song(File file) throws FileNotFoundException {
@@ -48,7 +49,7 @@ public class Song implements Comparable<Song>{
             this.album = metadata.getAlbum();
         }
         
-       this.durationMillis = metadata.getDuration();
+       this.duration = new Duration(metadata.getDuration());
        
        this.pathFile = file.getPath();
        System.out.println(toString());
@@ -79,8 +80,12 @@ public class Song implements Comparable<Song>{
         this.artist = artist;
     }
 
-    public String getDuration() {
-        return DurationFormatUtils.formatDuration(durationMillis, "mm:ss");
+    public Duration getDuration() {
+        return duration;
+    }
+    
+    public String getDurationAsString() {
+        return DurationFormatUtils.formatDuration((long)duration.toMillis(), "mm:ss");
     }
 
     public String getPath() {
@@ -115,7 +120,7 @@ public class Song implements Comparable<Song>{
 
     @Override
     public String toString() {
-        return "Song{" + "title=" + title + ", artist=" + artist + ", album=" + album + ", duration=" + this.getDuration() + ", pathFile: " + pathFile + '}';
+        return "Song{" + "title=" + title + ", artist=" + artist + ", album=" + album + ", duration=" + this.getDurationAsString() + ", pathFile: " + pathFile + '}';
     }
 
     @Override

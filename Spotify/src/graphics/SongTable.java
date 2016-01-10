@@ -37,7 +37,7 @@ public class SongTable extends TableView<Song>{
         songColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         artistColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         albumColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("album"));
-        durationColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("duration"));
+        durationColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("durationAsString"));
     }
     
 }

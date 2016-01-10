@@ -51,6 +51,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import utility.Utility;
@@ -67,14 +68,12 @@ public class GUIController implements Initializable {
     private MusicPlayer musicPlayer = new MusicPlayer();
 
     @FXML
-    private Label username, countUP, countDown, artist, titleSong;
+    private Label username, countUP, artist, titleSong;
     @FXML
     private ImageView previousButton, playButton, nextButton, shuffle, replay,
-            artwork, volumeDownIcon, volumeUpIcon, playlistIcon, searchIcon;
+            volumeDownIcon, volumeUpIcon, playlistIcon, searchIcon, artwork;
     @FXML
-    private ProgressBar progressBar;
-    @FXML
-    private Slider volumeControl;
+    private Slider volumeControl, sliderTime;
     @FXML
     private Label newPlaylistButton;
     @FXML
@@ -108,6 +107,7 @@ public class GUIController implements Initializable {
         initPopupMenu();
         initTables();
         initIcon();
+        initPlayer();
     }
 
     private void initSideBar() {
@@ -255,7 +255,6 @@ public class GUIController implements Initializable {
             public void handle(MouseEvent event) {
                 //Double click --> play a song
                 if (event.getClickCount() == 2) {
-                    playSong(songsTable.getSelectionModel().getSelectedItem());
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(), 
                            musicPlayer.getLibrary().getAllTracksPointer() , musicPlayer.getLibrary().getAllTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
                 }
@@ -287,6 +286,22 @@ public class GUIController implements Initializable {
        volumeDownIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeDown.svg"));
        volumeUpIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeUp.svg"));
        playlistIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "playlist.svg"));
+    }
+    
+    private void initPlayer() {
+        volumeControl.valueProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                musicPlayer.changeVolume((int) volumeControl.getValue());
+            }
+        });
+        
+        sliderTime.valueProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                musicPlayer.skipTo(new Duration(sliderTime.getValue()));
+            }
+        });
     }
     
     @FXML
@@ -384,23 +399,6 @@ public class GUIController implements Initializable {
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
     }
 
-    private void playSong(Song song) {
-        titleSong.setText(song.getTitle());
-        artist.setText(song.getArtist());
-
-        try {
-            BufferedImage bufferedImage = song.getArtwork();
-            if (bufferedImage != null) {
-                BufferedImage resizedImage = Utility.resize(bufferedImage, (int) artwork.getFitWidth(), (int) artwork.getFitWidth());
-                Image image = SwingFXUtils.toFXImage(resizedImage, null);
-                artwork.setImage(image);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
     private void loadIcon(String pathIcon, ImageView imageView) {
 
         MyTranscoder imageTranscoder = new MyTranscoder();
@@ -433,11 +431,47 @@ public class GUIController implements Initializable {
 
     @FXML
     private void handleShuffled(MouseEvent event) {
-        
+        musicPlayer.shuffle(!musicPlayer.getShuffle());
+        System.out.println("Shuffle: " + musicPlayer.getShuffle());
     }
 
     @FXML
     private void handleReplay(MouseEvent event) {
+        switch(musicPlayer.getRepeatPreference())
+        {
+            case MusicPlayer.NO_REPEAT:
+                musicPlayer.repeatPreference(MusicPlayer.REPEAT_PLAYLIST);
+                break;
+            case MusicPlayer.REPEAT_PLAYLIST:
+                musicPlayer.repeatPreference(MusicPlayer.REPEAT_SINGLE_SONG);
+                break;
+            case MusicPlayer.REPEAT_SINGLE_SONG:
+                musicPlayer.repeatPreference(MusicPlayer.NO_REPEAT);
+                break;
+        }
+    }
+
+    public void setGraphics(Song song) {
+        titleSong.setText(song.getTitle());
+        artist.setText(song.getArtist()); 
+       
+        try {
+            BufferedImage bufferedImage = song.getArtwork();
+            if (bufferedImage != null) {
+                BufferedImage resizedImage = Utility.resize(bufferedImage, (int) artwork.getFitWidth(), (int) artwork.getFitWidth());
+                Image image = SwingFXUtils.toFXImage(resizedImage, null);
+                artwork.setImage(image);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        sliderTime.setValue(0);
+        countUP.setText("00:00");
+    }
+    
+    public void refreshPlayer(Duration currentTime)
+    {
         
     }
 
