@@ -20,7 +20,7 @@ import javax.imageio.ImageIO;
  * Represent a single song with its information.
  * @author Antonioni Andrea & Zanelli Gabriele
  */
-public class Song {
+public class Song implements Comparable<Song>{
 
     private String title = "";
     private String artist = ""; // ArrayList per successive canzoni ad autore multiplo
@@ -118,6 +118,11 @@ public class Song {
     @Override
     public String toString() {
         return "Song{" + "title=" + title + ", artist=" + artist + ", album=" + album + ", duration=" + this.getDuration() + ", pathFile: " + pathFile + '}';
+    }
+
+    @Override
+    public int compareTo(Song o) {
+        
     }
 
 }

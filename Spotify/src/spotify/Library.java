@@ -12,7 +12,7 @@ import javafx.collections.ObservableList;
  */
 
 public class Library {
-    private ObservableList<Song> tracks;
+    private Playlist allTracks;
     private ObservableList<Playlist> playlists;
     
     /**
@@ -21,7 +21,7 @@ public class Library {
     public static String LOCAL_PATH = "resources/local/";
     
     public Library() {
-        this.tracks = FXCollections.observableArrayList();
+        allTracks = new Playlist("All Tracks");
         this.playlists = FXCollections.observableArrayList();
     }
     
@@ -29,8 +29,8 @@ public class Library {
      * Returns a pointer to the tracks list.
      * @return a pointer to the tracks list.
      */
-    public ObservableList getTracksPointer() {
-        return tracks;
+    public ObservableList getAllTracksPointer() {
+        return (ObservableList)allTracks.getSongsPointer();
     }
     
     /**
@@ -99,7 +99,7 @@ public class Library {
      */
     public void addSong(File file) throws FileNotFoundException
     {
-        tracks.add(new Song(file));
+        allTracks.addSong(new Song(file));
     }
     
 }

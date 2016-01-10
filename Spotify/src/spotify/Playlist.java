@@ -13,9 +13,8 @@ import javafx.collections.ObservableList;
 
 public class Playlist {
     private String title;
+    private String orderedBy;
     private ObservableList<Song> songs;
-    
-    public static final int SONGS_TABLE = -1;
     
     /**
      * Creates an empty Playlist object with a title
@@ -23,6 +22,7 @@ public class Playlist {
      */
     public Playlist(String title){
         this.title = title;
+        this.orderedBy = "Title";
         this.songs = FXCollections.observableArrayList();
     }
     
@@ -77,5 +77,10 @@ public class Playlist {
     
     public void removeSong(Song song){
         songs.remove(song);
+    }
+    
+    public void orderBy(String orderType) {
+        orderedBy=orderType;
+        FXCollections.sort(songs);
     }
 }

@@ -3,6 +3,7 @@ package spotify;
 
 import java.util.LinkedList;
 import java.util.Random;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Duration;
 
@@ -16,7 +17,7 @@ public class MusicPlayer {
     private Library library;
     private AudioManage audioManage;
     private Fred checkPlaybackFred;
-      private LinkedList<Song> nextSongs;
+    private LinkedList<Song> nextSongs;
     private Song actualSong;
 //    private enum sortType{Title,Album,Artist};
     private ObservableList currentPlaylist;
@@ -35,6 +36,7 @@ public class MusicPlayer {
         audioManage = new AudioManage();
         checkPlaybackFred = new Fred(this,audioManage);
         nextSongs=new LinkedList<>();
+        currentPlaylist = FXCollections.observableArrayList();
         preferredSort="Title";
         repeat=NO_REPEAT;
         reproduceShuffle=false;

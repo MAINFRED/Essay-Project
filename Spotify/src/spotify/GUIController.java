@@ -220,7 +220,7 @@ public class GUIController implements Initializable {
     }
     
     private void initTables() {
-        songsTable = new SongTable(musicPlayer.getLibrary().getTracksPointer());
+        songsTable = new SongTable(musicPlayer.getLibrary().getAllTracksPointer());
         songPane.setCenter(songsTable);
         songsTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
@@ -260,7 +260,7 @@ public class GUIController implements Initializable {
                 if (event.getClickCount() == 2) {
                     playSong(songsTable.getSelectionModel().getSelectedItem());
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(), 
-                            Playlist.SONGS_TABLE, musicPlayer.getLibrary().getTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
+                            Playlist.SONGS_TABLE, musicPlayer.getLibrary().getAllTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
                 }
             }
 
