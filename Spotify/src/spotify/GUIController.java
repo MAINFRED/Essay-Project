@@ -4,7 +4,7 @@ import graphics.ListItem;
 import graphics.ListItemRenderer;
 import graphics.MusicMenuListItems;
 import graphics.MyTranscoder;
-import graphics.PlaylistRenderer;
+import graphics.PlaylistListItemRenderer;
 import graphics.SongTable;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -126,10 +126,8 @@ public class GUIController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends ListItem> observable, ListItem oldValue, ListItem newValue) {
                 if (newValue == null) //bugfix
-                {
                     return;
-                }
-
+                
                 songPane.setVisible(false);
                 artistsPane.setVisible(false);
                 albumsPane.setVisible(false);
@@ -158,7 +156,7 @@ public class GUIController implements Initializable {
         playlistsMenu.setCellFactory(new Callback<ListView<Playlist>, ListCell<Playlist>>() {
             @Override
             public ListCell<Playlist> call(ListView<Playlist> param) {
-                return new PlaylistRenderer();
+                return new PlaylistListItemRenderer();
             }
         });
 
@@ -216,7 +214,6 @@ public class GUIController implements Initializable {
 
         });
         popupMenuPlaylistTable.getItems().add(removeItem);
-
     }
     
     private void initTables() {
@@ -260,7 +257,11 @@ public class GUIController implements Initializable {
                 if (event.getClickCount() == 2) {
                     playSong(songsTable.getSelectionModel().getSelectedItem());
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(), 
+<<<<<<< HEAD
                             Playlist.SONGS_TABLE, musicPlayer.getLibrary().getAllTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
+=======
+                           musicPlayer.getLibrary().getTracksPointer() , musicPlayer.getLibrary().getTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
+>>>>>>> origin/master
                 }
             }
 
@@ -291,7 +292,7 @@ public class GUIController implements Initializable {
        volumeUpIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeUp.svg"));
        playlistIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "playlist.svg"));
     }
-
+    
     @FXML
     private void handleAddSongItem(ActionEvent event) {
         Stage stage = new Stage();
@@ -417,7 +418,6 @@ public class GUIController implements Initializable {
 
         Image img = SwingFXUtils.toFXImage(imageTranscoder.getImage(), null);
         imageView.setImage(img);
-
     }
 
     @FXML

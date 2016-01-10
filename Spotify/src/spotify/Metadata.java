@@ -26,6 +26,7 @@ public class Metadata {
     private static final String TITLE = "title";
     private static final String ARTIST = "xmpDM:artist";
     private static final String ALBUM = "xmpDM:album";
+    private static final String DURATION = "xmpDM:duration";
     private static final String GENRE = "xmpDM:composer";
     private static final String COMPOSER = "xmpDM:composer";
     
@@ -63,6 +64,13 @@ public class Metadata {
     public String getAlbum()
     {
         return metadata.get(ALBUM);
+    }
+    
+    public int getDuration()
+    {
+        if(metadata.get(DURATION) == null)
+            return 0;
+        return Integer.parseInt(metadata.get(DURATION).substring(0, metadata.get(DURATION).indexOf(".")));
     }
     
     public String getGenre()

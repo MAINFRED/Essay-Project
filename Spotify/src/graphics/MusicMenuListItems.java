@@ -16,7 +16,6 @@ public class MusicMenuListItems {
     private static final String[] urlIcons = {GUIController.ICON_PATH + "song.svg", 
         GUIController.ICON_PATH + "album.svg", GUIController.ICON_PATH + "artist.svg", 
         GUIController.ICON_PATH + "localFiles.svg"};
-    //private static final String[] urlIcons = {"", "", "", ""};
     private static ObservableList<ListItem> listItems = null;
     
     public static final ListItem songItem = new ListItem("Songs", urlIcons[0]);
