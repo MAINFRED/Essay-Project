@@ -5,6 +5,7 @@ import com.google.code.mp3fenge.Mp3Fenge;
 import java.io.File;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
@@ -21,8 +22,9 @@ public class AudioManage {
     private int volume;
     
     public AudioManage() {
+        this.mediaPlayer=null;
         this.songPath = null;
-        timeIndex = new Duration(0);
+        this.timeIndex = new Duration(0);
         this.volume=70;
     }
     
@@ -31,6 +33,8 @@ public class AudioManage {
      * @param songPath A String containing the path of the song in local.
      */
     public void newSong(String songPath) {
+        if(mediaPlayer!=null && mediaPlayer.getStatus()==MediaPlayer.Status.PLAYING)
+            mediaPlayer.stop();
         this.songPath = songPath;
         Media media = new Media(new File(songPath).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
@@ -46,10 +50,12 @@ public class AudioManage {
     
     /**
      * Play a song from a certain second.
-     * @param millis An Int indicating the desired start time in milliseconds.
+     * @param time A Duration indicating the desired start time.
      */
-    public void playIndex(int millis) {
-        mediaPlayer.setStartTime(new Duration(millis));
+    public void playFromIndex(Duration time) {
+        if(mediaPlayer.getStatus()==MediaPlayer.Status.PLAYING)
+            mediaPlayer.stop();
+        mediaPlayer.setStartTime(time);
         mediaPlayer.play();
     }
     
@@ -63,7 +69,7 @@ public class AudioManage {
     
     /**
      * Retrieve the current index of time of the song in playback.
-     * @return A Duration indicating the index of time in milliseconds.
+     * @return A Duration indicating the index of time.
      */
     public Duration getCurrentTime() {
         return mediaPlayer.getCurrentTime();
@@ -75,6 +81,14 @@ public class AudioManage {
      */
     public Duration getTimeLeft() {
         return mediaPlayer.getStopTime().subtract(mediaPlayer.getCurrentTime());
+    }
+    
+    /**
+     * Retrieve the status of the player.
+     * @return A MediaPlayer.Status.
+     */
+    public Status getCurrentStatus() {
+        return mediaPlayer.getStatus();
     }
     
     /**

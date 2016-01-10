@@ -79,8 +79,12 @@ public class Playlist {
         songs.remove(song);
     }
     
+    public boolean isEmpty() {
+        return songs.isEmpty();
+    }
+    
     public void orderBy(String orderType) {
         orderedBy=orderType;
-        FXCollections.sort(songs);
+//        FXCollections.sort(songs);
     }
 }

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
 /**
@@ -22,7 +23,6 @@ public class MusicPlayer {
 //    private enum sortType{Title,Album,Artist};
     private ObservableList currentPlaylist;
     private int songNumber;
-    private String preferredSort;
     private int repeat;
     private boolean reproduceShuffle;
     
@@ -37,7 +37,6 @@ public class MusicPlayer {
         checkPlaybackFred = new Fred(this,audioManage);
         nextSongs=new LinkedList<>();
         currentPlaylist = FXCollections.observableArrayList();
-        preferredSort="Title";
         repeat=NO_REPEAT;
         reproduceShuffle=false;
     }
@@ -57,6 +56,10 @@ public class MusicPlayer {
         audioManage.play();
     }
     
+    public void skipTo(Duration time) {
+        audioManage.playFromIndex(time);
+    }
+    
     /**
      * Pause the selected song.
      */
@@ -69,7 +72,7 @@ public class MusicPlayer {
      */
     public void nextSong() {
         if(repeat==REPEAT_SINGLE_SONG)
-            audioManage.playIndex(0); // If repeat single song is activated, just replay.
+            audioManage.playFromIndex(new Duration(0)); // If repeat single song is activated, just replay.
         else {
             actualSong = nextSongs.pollLast();
             // Check if there is actually a song to play
@@ -88,14 +91,16 @@ public class MusicPlayer {
     + song from the beginning else reproduce the previus song.
     */
     public void previusSong() {
-        if(audioManage.getCurrentTime().lessThan(new Duration(10000)) || songNumber <= 0)
-            audioManage.playIndex(0); 
-        else {
-            nextSongs.addLast(actualSong);
-            actualSong = (Song)currentPlaylist.get(songNumber-1);
-            playNewSong(actualSong,currentPlaylist,songNumber-1);
+        if(!currentPlaylist.isEmpty()) {
+            if(audioManage.getCurrentTime().greaterThan(new Duration(10000)) || songNumber <= 0)
+                audioManage.playFromIndex(new Duration(0)); 
+            else {
+                nextSongs.addLast(actualSong);
+                actualSong = (Song)currentPlaylist.get(songNumber-1);
+                playNewSong(actualSong,currentPlaylist,songNumber-1);
+            }
+            // Modificare la lista di canzoni successive
         }
-        // Modificare la lista di canzoni successive
     }
     
     /**
@@ -104,6 +109,10 @@ public class MusicPlayer {
      */
     public void repeatPreference(int value) {
         this.repeat=value;
+    }
+    
+    public int getRepeatPreference() {
+        return repeat;
     }
     
     /**
@@ -124,6 +133,14 @@ public class MusicPlayer {
     }
     
     /**
+     * Retrieve the status of the player.
+     * @return A MediaPlayer.Status.
+     */
+    public Status getPlayerStatus() {
+        return audioManage.getCurrentStatus();
+    }
+    
+    /**
      * Change the value of volume.
      * @param volume The value of volume.
      */
@@ -134,13 +151,12 @@ public class MusicPlayer {
     
     /**
      * Change the preferred sorting method between Title, Arist or Album.
+     * @param playlist A Pointer to the playlist that the user is sorting.
      * @param sortMethod The name of sorting method.
      */
-    public void changePreferredSort(String sortMethod){
+    public void changePreferredSort(Playlist playlist,String sortMethod){
         if("Title".equals(sortMethod) || "Artist".equals(sortMethod) || "Album".equals(sortMethod))
-            this.preferredSort=sortMethod;
-        
-       //Aggiornamento ordine playlist da fare o qua o in un thread separato di continuo
+            playlist.orderBy(sortMethod);
     }
      
     /**
@@ -180,7 +196,7 @@ public class MusicPlayer {
         else {
             for(int i=1;i<=10;i++){
                 // If it reaches the end and repeat playlist is on, goes to the top.
-                if(songNumber>=currentPlaylist.size()-1)
+                if(songNumber+i>=currentPlaylist.size())
                     if(repeat==REPEAT_PLAYLIST)
                         nextSongs.add((Song)currentPlaylist.get(songNumber+i%currentPlaylist.size()));
                     else
