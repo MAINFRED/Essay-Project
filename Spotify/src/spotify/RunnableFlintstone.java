@@ -22,7 +22,7 @@ public class RunnableFlintstone extends Thread {
     public void run(){
         try {
         while(audioManage.getTimeLeft().equals(new Duration(0)))
-            GUIController.refreshPlayer(audioManage.getCurrentTime());
+//            GUIController.refreshPlayer(audioManage.getCurrentTime());
             wait(500);
         
         musicPlayer.nextSong();

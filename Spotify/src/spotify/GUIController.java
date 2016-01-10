@@ -1,4 +1,4 @@
-package spotify;
+ package spotify;
 
 import graphics.ListItem;
 import graphics.ListItemRenderer;
@@ -437,18 +437,12 @@ public class GUIController implements Initializable {
 
     @FXML
     private void handleReplay(MouseEvent event) {
-        switch(musicPlayer.getRepeatPreference())
-        {
-            case MusicPlayer.NO_REPEAT:
-                musicPlayer.repeatPreference(MusicPlayer.REPEAT_PLAYLIST);
-                break;
-            case MusicPlayer.REPEAT_PLAYLIST:
-                musicPlayer.repeatPreference(MusicPlayer.REPEAT_SINGLE_SONG);
-                break;
-            case MusicPlayer.REPEAT_SINGLE_SONG:
-                musicPlayer.repeatPreference(MusicPlayer.NO_REPEAT);
-                break;
-        }
+        if(musicPlayer.getRepeatPreference()==MusicPlayer.repeatType.NoRepeat)
+            musicPlayer.repeatPreference(MusicPlayer.repeatType.PlaylistRepeat);
+        else if (musicPlayer.getRepeatPreference()==MusicPlayer.repeatType.PlaylistRepeat)
+            musicPlayer.repeatPreference(MusicPlayer.repeatType.SingleSongRepeat);
+        else if (musicPlayer.getRepeatPreference()==MusicPlayer.repeatType.SingleSongRepeat)
+            musicPlayer.repeatPreference(MusicPlayer.repeatType.NoRepeat);
     }
 
     public void setGraphics(Song song) {

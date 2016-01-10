@@ -25,8 +25,8 @@ public class MusicPlayer {
     private repeatType repeat;
     private boolean reproduceShuffle;
     
-    public static enum sortType{Title,Album,Artist};
-    public static enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
+    public enum sortType{Title,Album,Artist};
+    public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
     
     public MusicPlayer() {
