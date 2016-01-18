@@ -3,6 +3,7 @@ package spotify;
 
 import com.google.code.mp3fenge.Mp3Fenge;
 import java.io.File;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;

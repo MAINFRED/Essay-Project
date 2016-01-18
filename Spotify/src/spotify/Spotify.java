@@ -2,10 +2,12 @@
 package spotify;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * @author Antonioni Andrea & Zanelli Gabriele
@@ -21,6 +23,12 @@ public class Spotify extends Application {
         stage.setTitle("Unknown");
         stage.setScene(scene);
         stage.show();
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+          public void handle(WindowEvent we) {
+              MusicPlayer.close();
+          }
+      });   
     }
 
     /**

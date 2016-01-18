@@ -3,6 +3,8 @@ package spotify;
 
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.media.MediaPlayer.Status;
@@ -25,18 +27,22 @@ public class MusicPlayer {
     private repeatType repeat;
     private boolean reproduceShuffle;
     
+    private GUIController controller;
+    
     public enum sortType{Title,Album,Artist};
     public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
     
-    public MusicPlayer() {
+    public MusicPlayer(GUIController controller) {
         library = new Library();
         audioManage = new AudioManage();
-        checkPlaybackFred = new RunnableFlintstone(this,audioManage);
+        checkPlaybackFred = new RunnableFlintstone(this,audioManage, controller);
         nextSongs=new LinkedList<>();
         currentPlaylist = FXCollections.observableArrayList();
         repeat=repeatType.NoRepeat;
         reproduceShuffle=false;
+        
+        this.controller = controller;
     }
     
     /**
@@ -173,11 +179,14 @@ public class MusicPlayer {
     public void playNewSong(Song newSong, ObservableList currentPlaylist, int songNumber) {
         // Funzione searchSong che cerca la canzone in locale ed eventualmente la richiede al server E SETTA IL PATH LOCALE
         // Settare la variabile locale a true
+        actualSong = newSong;
         this.currentPlaylist=currentPlaylist;
         this.songNumber=songNumber;
         String path = newSong.getPath();
         audioManage.newSong(path);  
         audioManage.play();
+        controller.setGraphics(newSong);
+        //checkPlaybackFred.start();
           // Da fare in thread
         generateSongQueue();
     }
