@@ -46,6 +46,7 @@ public class AudioManage {
      * Starts playing the song previusly selected from the last index of time.
      */
     public void play() {
+        mediaPlayer.setVolume(volume*0.01);
         mediaPlayer.play();
     }
     
