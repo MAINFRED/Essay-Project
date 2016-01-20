@@ -3,7 +3,6 @@ package spotify;
 
 import com.google.code.mp3fenge.Mp3Fenge;
 import java.io.File;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -82,6 +81,9 @@ public class AudioManage {
      * @return A Duration indicating the time left in milliseconds.
      */
     public Duration getTimeLeft() {
+        if(mediaPlayer==null)
+            return null;
+        System.out.println("Attuale:"+mediaPlayer.getCurrentTime().toSeconds());
         return mediaPlayer.getStopTime().subtract(mediaPlayer.getCurrentTime());
     }
     

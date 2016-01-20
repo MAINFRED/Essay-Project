@@ -9,7 +9,9 @@ import graphics.SongTable;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.List;
@@ -299,13 +301,15 @@ public class GUIController implements Initializable {
                 musicPlayer.changeVolume((int) volumeControl.getValue());
             }
         });
+    
+        //DEVE FUNZIONARE IN QUALCHE MODO INCULATI ANDREA PASS
 
-        sliderTime.valueProperty().addListener(new ChangeListener<Object>() {
+        /*sliderTime.valueProperty().addListener(new ChangeListener<Object>() {
             @Override
             public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
                 musicPlayer.skipTo(new Duration(sliderTime.getValue()));
             }
-        });
+        });*/
     }
 
     @FXML
@@ -478,9 +482,27 @@ public class GUIController implements Initializable {
     }
 
     public void refreshPlayer(Duration currentTime) {
-        countUP.setText(Utility.getDurationAsString(currentTime));
+//        countUP.setText(Utility.getDurationAsString(currentTime));
         int valueSlider =(int) (currentTime.toMillis()*sliderTime.getMax()/musicPlayer.getActualSongDuration().toMillis());
         sliderTime.setValue(valueSlider);
     }
 
+//    public static void close(){
+//        ObjectOutputStream out = null;
+//            try {
+//                FileOutputStream fileOut = new FileOutputStream("state.sp");
+//                out = new ObjectOutputStream(fileOut);
+//                out.writeObject(musicPlayer);
+//                out.close();
+//                fileOut.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
+//            } finally {
+//                try {
+//                    out.close();
+//                } catch (IOException ex) {
+//                    Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//    }
 }

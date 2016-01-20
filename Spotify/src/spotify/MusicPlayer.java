@@ -1,10 +1,9 @@
 
 package spotify;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.media.MediaPlayer.Status;
@@ -16,7 +15,7 @@ import javafx.util.Duration;
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
-public class MusicPlayer {
+public class MusicPlayer implements Serializable {
     private Library library;
     private AudioManage audioManage;
     private RunnableFlintstone checkPlaybackFred;
@@ -58,7 +57,7 @@ public class MusicPlayer {
      */
     public void play() {
         audioManage.play();
-    }
+    }   
     
     /**
      * Starts playing the selected song from the selected point.
@@ -179,15 +178,14 @@ public class MusicPlayer {
     public void playNewSong(Song newSong, ObservableList currentPlaylist, int songNumber) {
         // Funzione searchSong che cerca la canzone in locale ed eventualmente la richiede al server E SETTA IL PATH LOCALE
         // Settare la variabile locale a true
-        actualSong = newSong;
+        this.actualSong = newSong;
         this.currentPlaylist=currentPlaylist;
         this.songNumber=songNumber;
         String path = newSong.getPath();
         audioManage.newSong(path);  
-        audioManage.play();
+        play();
         controller.setGraphics(newSong);
-        //checkPlaybackFred.start();
-          // Da fare in thread
+//      Da fare in thread
         generateSongQueue();
     }
     

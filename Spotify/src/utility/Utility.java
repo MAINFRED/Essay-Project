@@ -104,7 +104,9 @@ public class Utility {
     
     public static String getDurationAsString(Duration duration)
     {
-       return DurationFormatUtils.formatDuration((long)duration.toMillis(), "mm:ss");
+        if(duration.isIndefinite() || duration.isUnknown())
+            return "00:00";
+       return ""+(int)duration.toMinutes()+":"+duration.toSeconds()%60;
     }
     
 }
