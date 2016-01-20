@@ -83,7 +83,6 @@ public class AudioManage {
     public Duration getTimeLeft() {
         if(mediaPlayer==null)
             return null;
-        System.out.println("Attuale:"+mediaPlayer.getCurrentTime().toSeconds());
         return mediaPlayer.getStopTime().subtract(mediaPlayer.getCurrentTime());
     }
     

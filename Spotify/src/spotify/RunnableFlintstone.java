@@ -18,6 +18,7 @@ public class RunnableFlintstone extends Thread {
         musicPlayer=musicPlayerPointer;
         audioManage=audioManagePointer;
         this.controller = controller;
+        this.setName("RunnableFlintstone");
         start();
     }
     
@@ -32,11 +33,9 @@ public class RunnableFlintstone extends Thread {
                         System.out.println("La canzone è terminata");
                         musicPlayer.nextSong();
                     }
-                    else
-                        controller.refreshPlayer(audioManage.getCurrentTime());
-                    sleep(1500);
+                    else controller.refreshPlayer(audioManage.getCurrentTime());
                 }
-                sleep(1500);
+                sleep(500);
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(RunnableFlintstone.class.getName()).log(Level.SEVERE, null, ex);

@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -302,14 +303,13 @@ public class GUIController implements Initializable {
             }
         });
     
-        //DEVE FUNZIONARE IN QUALCHE MODO INCULATI ANDREA PASS
-
-        /*sliderTime.valueProperty().addListener(new ChangeListener<Object>() {
-            @Override
-            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-                musicPlayer.skipTo(new Duration(sliderTime.getValue()));
-            }
-        });*/
+//        sliderTime.setOnMouseClicked(new EventHandler<MouseEvent>(){
+//            @Override
+//            public void handle(MouseEvent event) {
+//                musicPlayer.skipTo(new Duration(sliderTime.getValue()*musicPlayer.getActualSongDuration().toMillis()/sliderTime.getMax()));
+//            }
+//            
+//        });
     }
 
     @FXML
@@ -482,9 +482,16 @@ public class GUIController implements Initializable {
     }
 
     public void refreshPlayer(Duration currentTime) {
-//        countUP.setText(Utility.getDurationAsString(currentTime));
-        int valueSlider =(int) (currentTime.toMillis()*sliderTime.getMax()/musicPlayer.getActualSongDuration().toMillis());
-        sliderTime.setValue(valueSlider);
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                countUP.setText(Utility.getDurationAsString(currentTime));
+                int valueSlider =(int) (currentTime.toMillis()*sliderTime.getMax()/musicPlayer.getActualSongDuration().toMillis());
+                sliderTime.setValue(valueSlider);
+            }
+            
+        });
+        
     }
 
 //    public static void close(){

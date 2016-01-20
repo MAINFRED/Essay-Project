@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -104,9 +103,9 @@ public class Utility {
     
     public static String getDurationAsString(Duration duration)
     {
-        if(duration.isIndefinite() || duration.isUnknown())
+        if(duration.isUnknown())
             return "00:00";
-       return ""+(int)duration.toMinutes()+":"+duration.toSeconds()%60;
+        return DurationFormatUtils.formatDuration((long)duration.toMillis(), "mm:ss");
     }
     
 }
