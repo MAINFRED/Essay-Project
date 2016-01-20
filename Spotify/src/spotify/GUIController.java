@@ -429,7 +429,9 @@ public class GUIController implements Initializable {
 
     @FXML
     private void handlePlayPause(MouseEvent event) {
-        if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PLAYING) {
+        if(musicPlayer.getPlayerStatus() == MediaPlayer.Status.UNKNOWN)
+            return;
+        else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PLAYING) {
             musicPlayer.pause();
             playButton.setImage(Utility.loadSVGIcon(ICON_PATH + "play.svg"));
         } else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PAUSED) {
@@ -494,22 +496,7 @@ public class GUIController implements Initializable {
         
     }
 
-//    public static void close(){
-//        ObjectOutputStream out = null;
-//            try {
-//                FileOutputStream fileOut = new FileOutputStream("state.sp");
-//                out = new ObjectOutputStream(fileOut);
-//                out.writeObject(musicPlayer);
-//                out.close();
-//                fileOut.close();
-//            } catch (IOException ex) {
-//                Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
-//            } finally {
-//                try {
-//                    out.close();
-//                } catch (IOException ex) {
-//                    Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//    }
+    public void closePlayer() {
+        musicPlayer.shutDown();
+    }
 }

@@ -26,9 +26,7 @@ public class Spotify extends Application {
         
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
           public void handle(WindowEvent we) {
-              
-//              GUIController.close();
-   
+//              GUIController.closePlayer();
           }
       });   
     }

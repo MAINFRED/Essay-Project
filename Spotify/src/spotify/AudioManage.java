@@ -46,7 +46,8 @@ public class AudioManage {
      */
     public void play() {
         mediaPlayer.setVolume(volume*0.01);
-        mediaPlayer.play();
+        if(mediaPlayer!=null)
+            mediaPlayer.play();
     }
     
     /**
@@ -91,6 +92,8 @@ public class AudioManage {
      * @return A MediaPlayer.Status.
      */
     public Status getCurrentStatus() {
+        if(mediaPlayer==null)
+            return MediaPlayer.Status.UNKNOWN;
         return mediaPlayer.getStatus();
     }
     
