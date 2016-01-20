@@ -107,6 +107,7 @@ public class GUIController implements Initializable {
         initTables();
         initIcon();
         initPlayer();
+        initMenuBar();
     }
     
     private void initSideBar() {
@@ -305,45 +306,66 @@ public class GUIController implements Initializable {
 //            
 //        });
     }
+    
+    private void initMenuBar() {
+        
+        //FILE
+        addSongItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = new Stage();
 
-    @FXML
-    private void handleAddSongItem(ActionEvent event) {
-        Stage stage = new Stage();
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Add a song");
+                fileChooser.getExtensionFilters().addAll(new ExtensionFilter("MP3 file", "*.mp3"));
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Add a song");
-        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("MP3 file", "*.mp3"));
+                List<File> src = fileChooser.showOpenMultipleDialog(stage);
+                if (src != null) {
+                    for (File file : src) {
+                        File dest = new File(Library.LOCAL_PATH + file.getName());
+                        try {
+                            Utility.copyFile(file, dest);
 
-        List<File> src = fileChooser.showOpenMultipleDialog(stage);
-        if (src != null) {
-            for (File file : src) {
-                File dest = new File(Library.LOCAL_PATH + file.getName());
-                try {
-                    Utility.copyFile(file, dest);
-
-                    musicPlayer.getLibrary().addSong(dest);
-                } catch (FileAlreadyExistsException ex) {
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error Dialog");
-                    alert.setHeaderText("Something went wrong :(");
-                    alert.setContentText("The file already exists in " + Library.LOCAL_PATH + file.getName());
-                    alert.showAndWait();
-                } catch (FileNotFoundException ex) {
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error Dialog");
-                    alert.setHeaderText("Something went wrong :(");
-                    alert.setContentText("There's no file here:" + dest.getAbsolutePath());
-                    alert.showAndWait();
-                } catch (IOException ex) {
-                    Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+                            musicPlayer.getLibrary().addSong(dest);
+                        } catch (FileAlreadyExistsException ex) {
+                            Alert alert = new Alert(AlertType.ERROR);
+                            alert.setTitle("Error Dialog");
+                            alert.setHeaderText("Something went wrong :(");
+                            alert.setContentText("The file already exists in " + Library.LOCAL_PATH + file.getName());
+                            alert.showAndWait();
+                        } catch (FileNotFoundException ex) {
+                            Alert alert = new Alert(AlertType.ERROR);
+                            alert.setTitle("Error Dialog");
+                            alert.setHeaderText("Something went wrong :(");
+                            alert.setContentText("There's no file here:" + dest.getAbsolutePath());
+                            alert.showAndWait();
+                        } catch (IOException ex) {
+                            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    @FXML
-    private void handleNewPlaylistItem(Event event) {
-        handleNewPlaylistButton(event);
+            
+        });
+        
+        newPlaylistItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                handleNewPlaylistButton(event);
+            }
+            
+        });
+        
+        exitItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                musicPlayer.saveState();
+            }
+            
+        });
+        
+        //PLAYBACK
+        
     }
 
     @FXML

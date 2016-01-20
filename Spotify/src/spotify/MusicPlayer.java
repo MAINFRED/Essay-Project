@@ -200,7 +200,7 @@ public class MusicPlayer {
         saveState();
     }
     
-    private void saveState() {
+    public void saveState() {
         ObjectOutputStream out = null;
             try {
                 out = new ObjectOutputStream(new FileOutputStream("state.sp"));
@@ -243,12 +243,12 @@ public class MusicPlayer {
                 reproduceShuffle=false;
             } catch (ClassNotFoundException | IOException ex) {
             Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-                try {
-                    in.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//        } finally {
+//                try {
+//                    in.close();
+//                } catch (IOException ex) {
+//                    Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
+//                }
             }
     }
     
