@@ -1,24 +1,14 @@
 package utility;
 
-import graphics.MyTranscoder;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
 import javafx.util.Duration;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import spotify.GUIController;
 
 /**
  * This class contains utility methods.
@@ -28,41 +18,6 @@ import spotify.GUIController;
  */
 public class Utility {
 
-    /**
-     * Sets the proxy settings for the internet connection.
-     *
-     * @param server A String which represents the server ip.
-     * @param porta A String which represents the number of the port.
-     */
-    public static void setProxy(String server, String porta) {
-        System.setProperty("proxySet", "true");
-        System.setProperty("http.proxyHost", server);
-        System.setProperty("http.proxyPort", porta);
-    }
-
-    /**
-     * Sets the proxy settings with authentication for the internet
-     * connection.
-     *
-     * @param server A String which represents the server ip.
-     * @param porta A String which represents the number of the port.
-     * @param username A String which represents the username.
-     * @param password A String which represents the password.
-     */
-    public static void setProxy(String server, String porta, String username, String password) {
-        System.setProperty("proxySet", "true");
-        System.setProperty("http.proxyHost", server);
-        System.setProperty("http.proxyPort", porta);
-
-        Authenticator.setDefault(new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-
-                return new PasswordAuthentication(username, password.toCharArray());
-            }
-        });
-    }
-    
     /**
      * Copies a source File object in a directory specified in destination File object.
      * @param source A File object which represents the file to be copied.
@@ -83,22 +38,6 @@ public class Utility {
         g2d.drawImage(image, 0, 0, width, height, null);
         g2d.dispose();
         return bi;
-    }
-    
-    public static Image loadSVGIcon(String pathIcon) {
-
-        MyTranscoder imageTranscoder = new MyTranscoder();
-
-        TranscoderInput transIn = new TranscoderInput(pathIcon);
-        try {
-            imageTranscoder.transcode(transIn, null);
-        } catch (TranscoderException ex) {
-            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Image img = SwingFXUtils.toFXImage(imageTranscoder.getImage(), null);
-        
-        return img;
     }
     
     public static String getDurationAsString(Duration duration)

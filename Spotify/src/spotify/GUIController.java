@@ -1,17 +1,15 @@
 package spotify;
 
-import graphics.ListItem;
-import graphics.ListItemRenderer;
-import graphics.MusicMenuListItems;
-import graphics.MyTranscoder;
-import graphics.PlaylistListItemRenderer;
+import graphics.menu.ListItem;
+import graphics.menu.ListItemRenderer;
+import graphics.menu.MainMenu;
+import graphics.menu.PlaylistListItemRenderer;
 import graphics.SongTable;
+import graphics.svg.SVGImage;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.List;
@@ -41,7 +39,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
@@ -56,8 +53,6 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
 import utility.Utility;
 
 /**
@@ -70,7 +65,6 @@ public class GUIController implements Initializable {
     public static final String ICON_PATH = "resources/icon/";
 
     private MusicPlayer musicPlayer = new MusicPlayer(this);
-    //public ChangeListener<Duration> timeListener;
 
     @FXML
     private Label username, countUP, artist, titleSong;
@@ -116,7 +110,7 @@ public class GUIController implements Initializable {
     }
     
     private void initSideBar() {
-        musicListMenu.setItems(MusicMenuListItems.get());
+        musicListMenu.setItems(MainMenu.get());
 
         //Says to musicListMenu how to render elements
         musicListMenu.setCellFactory(new Callback<ListView<ListItem>, ListCell<ListItem>>() {
@@ -140,11 +134,11 @@ public class GUIController implements Initializable {
                 albumsPane.setVisible(false);
                 playlistSongPane.setVisible(false);
 
-                if (newValue == MusicMenuListItems.songItem) {
+                if (newValue == MainMenu.songItem) {
                     songPane.setVisible(true);
-                } else if (newValue == MusicMenuListItems.artistsItem) {
+                } else if (newValue == MainMenu.artistsItem) {
                     artistsPane.setVisible(true);
-                } else if (newValue == MusicMenuListItems.albumItem) {
+                } else if (newValue == MainMenu.albumItem) {
                     albumsPane.setVisible(true);
                 }
             }
@@ -285,14 +279,14 @@ public class GUIController implements Initializable {
     }
 
     private void initIcon() {
-        previousButton.setImage(Utility.loadSVGIcon(ICON_PATH + "previous.svg"));
-        playButton.setImage(Utility.loadSVGIcon(ICON_PATH + "play.svg"));
-        nextButton.setImage(Utility.loadSVGIcon(ICON_PATH + "next.svg"));
-        shuffle.setImage(Utility.loadSVGIcon(ICON_PATH + "shuffle.svg"));
-        replay.setImage(Utility.loadSVGIcon(ICON_PATH + "repeatPlaylist.svg"));
-        volumeDownIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeDown.svg"));
-        volumeUpIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "volumeUp.svg"));
-        playlistIcon.setImage(Utility.loadSVGIcon(ICON_PATH + "playlist.svg"));
+        previousButton.setImage(SVGImage.loadIcon(ICON_PATH + "previous.svg"));
+        playButton.setImage(SVGImage.loadIcon(ICON_PATH + "play.svg"));
+        nextButton.setImage(SVGImage.loadIcon(ICON_PATH + "next.svg"));
+        shuffle.setImage(SVGImage.loadIcon(ICON_PATH + "shuffle.svg"));
+        replay.setImage(SVGImage.loadIcon(ICON_PATH + "repeatPlaylist.svg"));
+        volumeDownIcon.setImage(SVGImage.loadIcon(ICON_PATH + "volumeDown.svg"));
+        volumeUpIcon.setImage(SVGImage.loadIcon(ICON_PATH + "volumeUp.svg"));
+        playlistIcon.setImage(SVGImage.loadIcon(ICON_PATH + "playlist.svg"));
     }
 
     private void initPlayer() {
@@ -406,22 +400,7 @@ public class GUIController implements Initializable {
         playlistsMenu.setItems(null);
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
     }
-
-    private void loadIcon(String pathIcon, ImageView imageView) {
-
-        MyTranscoder imageTranscoder = new MyTranscoder();
-
-        TranscoderInput transIn = new TranscoderInput(pathIcon);
-        try {
-            imageTranscoder.transcode(transIn, null);
-        } catch (TranscoderException ex) {
-            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Image img = SwingFXUtils.toFXImage(imageTranscoder.getImage(), null);
-        imageView.setImage(img);
-    }
-
+    
     @FXML
     private void handlePreviousSong(MouseEvent event) {
         musicPlayer.previusSong();
@@ -433,10 +412,10 @@ public class GUIController implements Initializable {
             return;
         else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PLAYING) {
             musicPlayer.pause();
-            playButton.setImage(Utility.loadSVGIcon(ICON_PATH + "play.svg"));
+            playButton.setImage(SVGImage.loadIcon(ICON_PATH + "play.svg"));
         } else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PAUSED) {
             musicPlayer.play();
-            playButton.setImage(Utility.loadSVGIcon(ICON_PATH + "pause.svg"));
+            playButton.setImage(SVGImage.loadIcon(ICON_PATH + "pause.svg"));
         }
     }
 
@@ -463,7 +442,7 @@ public class GUIController implements Initializable {
     }
 
     public void setGraphics(Song song) {
-        playButton.setImage(Utility.loadSVGIcon(ICON_PATH + "pause.svg"));
+        playButton.setImage(SVGImage.loadIcon(ICON_PATH + "pause.svg"));
         
         titleSong.setText(song.getTitle());
         artist.setText(song.getArtist());
