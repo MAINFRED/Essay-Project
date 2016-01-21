@@ -59,7 +59,7 @@
                         <ImageView fx:id="shuffle" fitHeight="36.0" fitWidth="36.0" onMouseClicked="#handleShuffled" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="replay" fitHeight="36.0" fitWidth="36.0" onMouseClicked="#handleReplay" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="volumeDownIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <Slider fx:id="volumeControl" prefHeight="16.0" prefWidth="81.0" value="1000.0" />
+                        <Slider fx:id="volumeControl" prefHeight="16.0" prefWidth="81.0" value="100.0" />
                         <ImageView fx:id="volumeUpIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
                               <Insets right="20.0" />

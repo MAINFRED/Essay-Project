@@ -365,6 +365,47 @@ public class GUIController implements Initializable {
         });
         
         //PLAYBACK
+        playItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                handlePlayPause(event);
+            }
+            
+        });
+        
+        nextSongItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                handleNextSong(event);
+            }
+            
+        });
+                
+        previousSongItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                handlePreviousSong(event);
+            }
+            
+        });
+        
+        volumeUpItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                volumeControl.setValue(volumeControl.getValue() + 10);
+                musicPlayer.changeVolume((int) volumeControl.getValue());
+            }
+            
+        });
+                
+        volumeDownItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                volumeControl.setValue(volumeControl.getValue() - 10);
+                musicPlayer.changeVolume((int) volumeControl.getValue());
+            }
+            
+        });
         
     }
 
@@ -424,12 +465,12 @@ public class GUIController implements Initializable {
     }
     
     @FXML
-    private void handlePreviousSong(MouseEvent event) {
+    private void handlePreviousSong(Event event) {
         musicPlayer.previusSong();
     }
 
     @FXML
-    private void handlePlayPause(MouseEvent event) {
+    private void handlePlayPause(Event event) {
         if(musicPlayer.getPlayerStatus() == MediaPlayer.Status.UNKNOWN)
             return;
         else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PLAYING) {
@@ -442,7 +483,7 @@ public class GUIController implements Initializable {
     }
 
     @FXML
-    private void handleNextSong(MouseEvent event) {
+    private void handleNextSong(Event event) {
         musicPlayer.nextSong();
     }
 
