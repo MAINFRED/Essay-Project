@@ -27,19 +27,6 @@ public class Playlist {
     }
     
     /**
-     * Creates a Playlist object with a title using a List object. 
-     * It doesn't create a copy of the List object, it uses just a pointer.
-     * @param title A String object which represents the title of the playlist
-     * @param songs A List object which containts a list of Song representing names of the songs already exist in the Library
-     * @see spotify.Library#library
-     */
-    public Playlist(String title, ObservableList<Song> songs){
-        // MODIFICA PER COPIARE LE CANZONI MA NON LA STESSA PLAYLIST
-        this.title = title;
-        this.songs = songs;
-    }
-
-    /**
      * Returns a String object which represents the title of the playlist
      * @return A String object which represents the title of the playlist
      */

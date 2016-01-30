@@ -15,30 +15,52 @@ public class Library {
     private Playlist allTracks;
     private ObservableList<Playlist> playlists;
     
+    private static Library instance = null;
+    
     /**
      * Represents the path in which are located songs imported by the user.
      */
     public static String LOCAL_PATH = "resources/local/";
     
-    public Library() {
+    private Library() {
         allTracks = new Playlist("All Tracks");
         this.playlists = FXCollections.observableArrayList();
     }
     
     /**
-     * Returns a pointer to the tracks list.
-     * @return a pointer to the tracks list.
+     * Returns a reference of the Library object created by default method
+     * @return A reference of the Library object created by default method
      */
-    public ObservableList getAllTracksPointer() {
-        return (ObservableList)allTracks.getSongsPointer();
+    public static Library getInstance() {
+        if(instance == null) {
+            instance = new Library();
+        }
+        return instance;
+   }
+    
+    /**
+     * Returns a reference of the tracks list which is unmodifiable.
+     * @return a reference of the tracks list which is unmodifiable.
+     */
+    public ObservableList getAllTracks() {
+        return FXCollections.unmodifiableObservableList((ObservableList<Song>) allTracks.getSongsPointer());
     }
     
     /**
-     * Returns a pointer to the playlist list.
-     * @return a pointer to the playlist list.
+     * Returns a reference of the playlists list which is unmodifiable.
+     * @return a reference of the playlists list which is unmodifiable.
      */
     public ObservableList getPlaylistsPointer() {
-        return playlists;
+        return FXCollections.unmodifiableObservableList(playlists);
+    }
+    
+    /**
+     * Adds a new song to the library using a File object.
+     * @param file A File object which represents the song to add to the library
+     */
+    public void addSong(File file) throws FileNotFoundException
+    {
+        allTracks.addSong(new Song(file));
     }
     
     /**
@@ -47,9 +69,10 @@ public class Library {
      */
     public void addPlaylist(String name) {
         if(name.equals("")) 
-            name = "Senza titolo";
+            name = "Unknown";
         
         int i=0, k=0;
+        
         for(Playlist playlist : playlists) {
             if(playlist.getTitle().equals(name))
                 i++;
@@ -64,8 +87,7 @@ public class Library {
             } while(i==k);
             playlists.add(new Playlist(name+i));
         }
-        else
-            playlists.add(new Playlist(name));
+        else playlists.add(new Playlist(name));
     }
     
     /**
@@ -108,14 +130,5 @@ public class Library {
         playlist.removeSong(song);
         allTracks.removeSong(song);
     }
-    
-    /**
-     * Adds a new song to the library using a File object.
-     * @param file A File object which represents the song to add to the library
-     */
-    public void addSong(File file) throws FileNotFoundException
-    {
-        allTracks.addSong(new Song(file));
-    }
-    
+      
 }

@@ -39,21 +39,10 @@ public class MusicPlayer {
     public enum sortType{Title,Album,Artist};
     public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
-    
     public MusicPlayer(GUIController controller) {
         loadState();
-       
-        checkPlaybackFred = new RunnableFlintstone(this,audioManage, controller);
-        
         this.controller = controller;
-    }
-    
-    /**
-     * Returns a pointer to the Library.
-     * @return a pointer to the Library.
-     */
-    public Library getLibrary() {
-        return library;
+        checkPlaybackFred = new RunnableFlintstone(this, audioManage, controller);  
     }
     
     /**
@@ -81,6 +70,7 @@ public class MusicPlayer {
     public Duration getActualSongDuration() {
         return currentSong.getDuration();
     }
+    
     /**
      * Skip forward to the next song.
      */
@@ -131,7 +121,7 @@ public class MusicPlayer {
     
     /**
      * Change reproduce shuffle preference.
-     * @param value A Booleran indicating activation of random song playing.
+     * @param value A Boolean indicating activation of random song playing.
      */
     public void shuffle(boolean value) {
         this.reproduceShuffle=value;
@@ -193,13 +183,6 @@ public class MusicPlayer {
         generateSongQueue();
     }
     
-    /**
-     * Shut down the MusicPlayer.
-     */
-    public void shutDown() {
-        saveState();
-    }
-    
     public void saveState() {
         ObjectOutputStream out = null;
             try {
@@ -234,7 +217,7 @@ public class MusicPlayer {
                 reproduceShuffle = (boolean)in.readObject();
                 in.close();
             } catch (FileNotFoundException ex) {
-                library = new Library();
+                library = Library.getInstance();
                 audioManage = new AudioManage();
                 nextSongs=new LinkedList<>();
                 currentPlaylist = FXCollections.observableArrayList();
@@ -242,13 +225,7 @@ public class MusicPlayer {
                 repeat=repeatType.NoRepeat;
                 reproduceShuffle=false;
             } catch (ClassNotFoundException | IOException ex) {
-            Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//                try {
-//                    in.close();
-//                } catch (IOException ex) {
-//                    Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
-//                }
+                Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
     

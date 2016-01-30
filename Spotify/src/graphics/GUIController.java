@@ -4,7 +4,6 @@ import graphics.menu.ListItem;
 import graphics.menu.ListItemRenderer;
 import graphics.menu.MainMenu;
 import graphics.menu.PlaylistListItemRenderer;
-import graphics.SongTable;
 import graphics.svg.SVGImage;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -69,6 +68,7 @@ public class GUIController implements Initializable {
     public static final String ICON_PATH = "resources/icon/";
 
     private MusicPlayer musicPlayer = new MusicPlayer(this);
+    private Library library = Library.getInstance();
 
     @FXML
     private Label username, countUP, artist, titleSong;
@@ -167,7 +167,7 @@ public class GUIController implements Initializable {
     
     private void initPlaylistsMenu(){
         //Set items of playlistsMenu
-        playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
+        playlistsMenu.setItems(library.getPlaylistsPointer());
 
         //Says to playlistMenu how to render elements
         playlistsMenu.setCellFactory(new Callback<ListView<Playlist>, ListCell<Playlist>>() {
@@ -234,8 +234,8 @@ public class GUIController implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == buttonYes) {
-                    musicPlayer.getLibrary().removeSongFromPlaylist(playlistTable.getSelectionModel().getSelectedItem(),
-                            musicPlayer.getLibrary().getPlaylist(titlePlaylist.getText()));
+                    library.removeSongFromPlaylist(playlistTable.getSelectionModel().getSelectedItem(),
+                            library.getPlaylist(titlePlaylist.getText()));
                 }
             }
 
@@ -244,7 +244,7 @@ public class GUIController implements Initializable {
     }
 
     private void initTables() {
-        songsTable = new SongTable(musicPlayer.getLibrary().getAllTracksPointer());
+        songsTable = new SongTable(library.getAllTracks());
         songPane.setCenter(songsTable);
         songsTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
@@ -258,7 +258,7 @@ public class GUIController implements Initializable {
 
                 //Creates the new menu
                 menuItemPlaylist = new Menu("Add to playlist");
-                for (Playlist playlist : (ObservableList<Playlist>) musicPlayer.getLibrary().getPlaylistsPointer()) {
+                for (Playlist playlist : (ObservableList<Playlist>) library.getPlaylistsPointer()) {
                     MenuItem item = new MenuItem(playlist.getTitle());
                     item.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
@@ -283,7 +283,7 @@ public class GUIController implements Initializable {
                 //Double click --> play a song
                 if (event.getClickCount() == 2) {
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(),
-                            musicPlayer.getLibrary().getAllTracksPointer(), musicPlayer.getLibrary().getAllTracksPointer().indexOf(songsTable.getSelectionModel().getSelectedItem()));
+                            library.getAllTracks(), library.getAllTracks().indexOf(songsTable.getSelectionModel().getSelectedItem()));
                 }
             }
 
@@ -351,7 +351,7 @@ public class GUIController implements Initializable {
                         try {
                             Utility.copyFile(file, dest);
 
-                            musicPlayer.getLibrary().addSong(dest);
+                            library.addSong(dest);
                         } catch (FileAlreadyExistsException ex) {
                             Alert alert = new Alert(AlertType.ERROR);
                             alert.setTitle("Error Dialog");
@@ -443,7 +443,7 @@ public class GUIController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            musicPlayer.getLibrary().addPlaylist(result.get());
+            library.addPlaylist(result.get());
         }
     }
 
@@ -456,7 +456,7 @@ public class GUIController implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             Playlist renamed = playlistsMenu.getSelectionModel().getSelectedItem();
-            musicPlayer.getLibrary().renamePlaylist(renamed, result.get());
+            library.renamePlaylist(renamed, result.get());
             refreshPlaylistsMenu();
             titlePlaylist.setText(renamed.getTitle());
             playlistsMenu.getSelectionModel().select(renamed);
@@ -475,14 +475,14 @@ public class GUIController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonDelete) {
-            musicPlayer.getLibrary().removePlaylist(playlistsMenu.getSelectionModel().getSelectedItem());
+            library.removePlaylist(playlistsMenu.getSelectionModel().getSelectedItem());
             playlistSongPane.setVisible(false);
         }
     }
 
     private void refreshPlaylistsMenu() {
         playlistsMenu.setItems(null);
-        playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
+        playlistsMenu.setItems(library.getPlaylistsPointer());
     }
     
     //MARK: player manage
@@ -562,6 +562,6 @@ public class GUIController implements Initializable {
 
     //MARK: exit zone
     public void closePlayer() {
-        musicPlayer.shutDown();
+        musicPlayer.saveState();
     }
 }

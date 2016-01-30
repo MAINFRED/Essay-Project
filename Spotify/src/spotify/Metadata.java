@@ -18,8 +18,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class Metadata {
     private org.apache.tika.metadata.Metadata metadata;
