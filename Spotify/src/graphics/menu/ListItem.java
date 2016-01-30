@@ -2,8 +2,7 @@ package graphics.menu;
 
 /**
  * Represents items of menus on the left side.
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class ListItem {
     private String urlIcon;

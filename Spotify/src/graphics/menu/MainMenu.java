@@ -4,12 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import spotify.GUIController;
+import graphics.GUIController;
 
 /**
  * Creates the menu on the left side called "YOUR MUSIC".
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class MainMenu {
     
@@ -33,6 +32,10 @@ public class MainMenu {
         return observableList;
     }
     
+    /**
+     * Returns a reference of a pre-set ObservableList object which represents the items of the MainMenu
+     * @return An ObservableList object which represents the items of the MainMenu
+     */
     public static ObservableList<ListItem> get()
     {
         if(listItems == null)

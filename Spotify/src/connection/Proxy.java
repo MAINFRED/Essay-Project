@@ -4,9 +4,8 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
 /**
- *
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * Proxy class
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class Proxy {
     

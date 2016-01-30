@@ -12,9 +12,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 /**
  * This class contains utility methods.
- *
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class Utility {
 

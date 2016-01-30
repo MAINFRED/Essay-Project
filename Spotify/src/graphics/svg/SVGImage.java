@@ -6,12 +6,12 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
-import spotify.GUIController;
+import graphics.GUIController;
 
 /**
- * Loads
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * Loads images with ".svg" extention
+ * @see graphics.svg.MyTranscoder
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class SVGImage {
     

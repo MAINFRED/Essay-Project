@@ -12,8 +12,7 @@ import javafx.scene.text.TextAlignment;
 /**
  * Contains the way to represents graphically ListItem objects inside the ListView.
  * @see spotify.FXMLDocumentController#musicMenu
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class ListItemRenderer extends ListCell<ListItem>{
     

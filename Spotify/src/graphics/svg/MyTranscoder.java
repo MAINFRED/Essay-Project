@@ -5,9 +5,8 @@ import org.apache.batik.transcoder.*;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 
 /**
- *
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * Allows to use ".svg" images
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class MyTranscoder extends ImageTranscoder {
  

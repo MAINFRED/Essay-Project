@@ -9,14 +9,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import spotify.GUIController;
+import graphics.GUIController;
 import spotify.Playlist;
-import utility.Utility;
 
 /**
- *
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * Contains the way to represents graphically ListItem objects inside the ListView.
+ * @see spotify.Playlist
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class PlaylistListItemRenderer extends ListCell<Playlist>{
     private static final String urlIcon = GUIController.ICON_PATH + "playlist.svg";

@@ -17,7 +17,7 @@ public class Spotify extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/graphics/GUI.fxml"));
         
         Scene scene = new Scene(root);
         stage.setTitle("Unknown");

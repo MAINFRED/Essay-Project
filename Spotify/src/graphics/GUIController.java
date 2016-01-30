@@ -1,4 +1,4 @@
-package spotify;
+package graphics;
 
 import graphics.menu.ListItem;
 import graphics.menu.ListItemRenderer;
@@ -53,6 +53,10 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import spotify.Library;
+import spotify.MusicPlayer;
+import spotify.Playlist;
+import spotify.Song;
 import utility.Utility;
 
 /**
@@ -76,7 +80,7 @@ public class GUIController implements Initializable {
     @FXML
     private Label newPlaylistButton;
     @FXML
-    private ListView<ListItem> musicListMenu;
+    private ListView<ListItem> mainMenu;
     @FXML
     private ListView<Playlist> playlistsMenu;
     @FXML
@@ -100,6 +104,7 @@ public class GUIController implements Initializable {
     @FXML
     private TilePane artistsPane, albumsPane;
 
+    //MARK: init zone
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initSideBar();
@@ -111,18 +116,24 @@ public class GUIController implements Initializable {
     }
     
     private void initSideBar() {
-        musicListMenu.setItems(MainMenu.get());
+        initMainMenu();
+        initPlaylistsMenu();    
+    }
+    
+    private void initMainMenu(){
+        //Set items of mainMenu
+        mainMenu.setItems(MainMenu.get());
 
-        //Says to musicListMenu how to render elements
-        musicListMenu.setCellFactory(new Callback<ListView<ListItem>, ListCell<ListItem>>() {
+        //Says to mainMenu how to render elements
+        mainMenu.setCellFactory(new Callback<ListView<ListItem>, ListCell<ListItem>>() {
             @Override
             public ListCell<ListItem> call(ListView<ListItem> param) {
                 return new ListItemRenderer();
             }
         });
 
-        //When user select an item of musicListMenu
-        musicListMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ListItem>() {
+        //When user select an item of mainMenu
+        mainMenu.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ListItem>() {
             @Override
             public void changed(ObservableValue<? extends ListItem> observable, ListItem oldValue, ListItem newValue) {
                 if (newValue == null) //bugfix
@@ -145,13 +156,17 @@ public class GUIController implements Initializable {
             }
         });
 
-        musicListMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        //Deselect item in others menus
+        mainMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 playlistsMenu.getSelectionModel().select(null);
             }
         });
-
+    }
+    
+    private void initPlaylistsMenu(){
+        //Set items of playlistsMenu
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
 
         //Says to playlistMenu how to render elements
@@ -180,11 +195,21 @@ public class GUIController implements Initializable {
             }
         });
 
+        //Deselect item in others menus
         playlistsMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                musicListMenu.getSelectionModel().select(null);
+                mainMenu.getSelectionModel().select(null);
             }
+        });
+        
+        //Added contextMenu
+        playlistsMenu.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>(){
+            @Override
+            public void handle(ContextMenuEvent event) {
+                popupMenuPlaylist.show(playlistsMenu, event.getScreenX(), event.getScreenY());
+            }
+            
         });
     }
 
@@ -409,6 +434,7 @@ public class GUIController implements Initializable {
         
     }
 
+    //MARK: playlist manage
     @FXML
     private void handleNewPlaylistButton(Event event) {
         Dialog dialog = new TextInputDialog("");
@@ -419,11 +445,6 @@ public class GUIController implements Initializable {
         if (result.isPresent()) {
             musicPlayer.getLibrary().addPlaylist(result.get());
         }
-    }
-
-    @FXML
-    private void showPopupMenuPlaylist(ContextMenuEvent event) {
-        popupMenuPlaylist.show(playlistsMenu, event.getScreenX(), event.getScreenY());
     }
 
     @FXML
@@ -464,6 +485,7 @@ public class GUIController implements Initializable {
         playlistsMenu.setItems(musicPlayer.getLibrary().getPlaylistsPointer());
     }
     
+    //MARK: player manage
     @FXML
     private void handlePreviousSong(Event event) {
         musicPlayer.previusSong();
@@ -538,6 +560,7 @@ public class GUIController implements Initializable {
         
     }
 
+    //MARK: exit zone
     public void closePlayer() {
         musicPlayer.shutDown();
     }

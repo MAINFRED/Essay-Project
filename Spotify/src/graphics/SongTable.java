@@ -7,9 +7,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import spotify.Song;
 
 /**
- *
- * @author Andrea Antonioni -
- * <a href="mailto:andreaantonioni97@gmail.com">andreaantonioni97@gmail.com</a>
+ * Creates tables in which are viewed songs
+ * @author Antonioni Andrea & Zanelli Gabriele
  */
 public class SongTable extends TableView<Song>{
     private TableColumn<Song, String> songColumn = new TableColumn<>("Song");
@@ -17,12 +16,19 @@ public class SongTable extends TableView<Song>{
     private TableColumn<Song, String> albumColumn = new TableColumn<>("Album");
     private TableColumn<Song, String> durationColumn = new TableColumn<>("Duration");
     
+    /**
+     * Creates a table from a list of songs
+     * @param list A List containing songs
+     */
     public SongTable(ObservableList<Song> list)
     {
         initSongTable();
         this.setItems(list);
     }
     
+    /**
+     * Creates an empty table.
+     */
     public SongTable()
     {
         initSongTable();

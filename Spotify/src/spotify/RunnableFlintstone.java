@@ -1,6 +1,7 @@
 
 package spotify;
 
+import graphics.GUIController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Duration;
