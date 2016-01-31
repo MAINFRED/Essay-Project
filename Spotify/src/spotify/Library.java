@@ -3,6 +3,7 @@ package spotify;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,7 +12,7 @@ import javafx.collections.ObservableList;
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
-public class Library {
+public class Library implements Serializable{
     private Playlist allTracks;
     private ObservableList<Playlist> playlists;
     

@@ -385,6 +385,7 @@ public class GUIController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 musicPlayer.saveState();
+                System.exit(0);
             }
             
         });
@@ -445,6 +446,7 @@ public class GUIController implements Initializable {
         if (result.isPresent()) {
             library.addPlaylist(result.get());
         }
+        
     }
 
     @FXML
