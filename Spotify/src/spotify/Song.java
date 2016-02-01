@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
+import spotify.MusicPlayer.sortType;
 
 /**
  * Represent a single song with its information.
@@ -24,7 +25,8 @@ public class Song implements Comparable<Song>{
     private String title = "";
     private String artist = ""; // ArrayList per successive canzoni ad autore multiplo
     private String album = "";
-    private Duration duration; //milliseconds
+    private final Duration duration; //milliseconds
+    private byte[] cover;
     private String pathFile; // Percorso della canzone nella cache
 
     public Song(File file) throws FileNotFoundException {
@@ -49,10 +51,11 @@ public class Song implements Comparable<Song>{
             this.album = metadata.getAlbum();
         }
         
-       this.duration = new Duration(metadata.getDuration());
+        this.cover = null;
+        this.duration = new Duration(metadata.getDuration());
        
-       this.pathFile = file.getPath();
-       System.out.println(toString());
+        this.pathFile = file.getPath();
+        System.out.println(toString());
         
     }
 
@@ -124,8 +127,19 @@ public class Song implements Comparable<Song>{
     }
 
     @Override
-    public int compareTo(Song o) {
-        return 0;
+    public int compareTo(Song secondSong) {
+        // Questa variabile dovrà essere gettata dalla playlist che si sta ordinando!
+        sortType sortMethod = sortType.Title; 
+        
+        if(sortMethod == sortType.Artist)
+            return this.artist.compareTo(secondSong.artist);
+        else if(sortMethod == sortType.Album)
+            return this.album.compareTo(secondSong.album);
+        else if(sortMethod == sortType.Title)
+            return this.title.compareTo(secondSong.title);
+        else
+            System.out.println("Something Exploded when Sorting Besos");
+        return 1;
     }
 
 }

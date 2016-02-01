@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import spotify.MusicPlayer.sortType;
 
 /**
  * Represents a list of songs with a title.
@@ -13,7 +14,7 @@ import javafx.collections.ObservableList;
 
 public class Playlist {
     private String title;
-    private String orderedBy;
+    private sortType orderedBy;
     private ObservableList<Song> songs;
     
     /**
@@ -22,7 +23,7 @@ public class Playlist {
      */
     public Playlist(String title){
         this.title = title;
-        this.orderedBy = "Title";
+        this.orderedBy = sortType.Title;
         this.songs = FXCollections.observableArrayList();
     }
     
@@ -70,8 +71,8 @@ public class Playlist {
         return songs.isEmpty();
     }
     
-    public void orderBy(String orderType) {
-        orderedBy=orderType;
-//        FXCollections.sort(songs);
+    public void orderBy(sortType orderType) {
+        orderedBy = orderType;
+        FXCollections.sort(songs);
     }
 }

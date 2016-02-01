@@ -156,9 +156,8 @@ public class MusicPlayer {
      * @param playlist A Pointer to the playlist that the user is sorting.
      * @param sortMethod The name of sorting method.
      */
-    public void changePreferredSort(Playlist playlist,String sortMethod){
-        if("Title".equals(sortMethod) || "Artist".equals(sortMethod) || "Album".equals(sortMethod))
-            playlist.orderBy(sortMethod);
+    public void changePreferredSort(Playlist playlist,sortType sortMethod){
+        playlist.orderBy(sortMethod);
     }
      
     /**
