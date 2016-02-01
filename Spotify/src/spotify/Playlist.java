@@ -1,6 +1,7 @@
 
 package spotify;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -12,7 +13,7 @@ import spotify.MusicPlayer.sortType;
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
-public class Playlist {
+public class Playlist implements Serializable{
     private String title;
     private sortType orderedBy;
     private ObservableList<Song> songs;

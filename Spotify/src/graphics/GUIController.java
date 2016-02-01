@@ -50,6 +50,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import spotify.Library;
@@ -113,7 +114,20 @@ public class GUIController implements Initializable {
         initIcon();
         initPlayer();
         initMenuBar();
+        
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                ((Stage)songPane.getScene().getWindow()).setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    public void handle(WindowEvent we) {
+                        musicPlayer.saveState();
+                        System.exit(0);
+                    }
+                });
+            }
+        });   
     }
+                
     
     private void initSideBar() {
         initMainMenu();
