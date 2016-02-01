@@ -103,7 +103,7 @@ public class GUIController implements Initializable {
     private SongTable songsTable, playlistTable;
     @FXML
     private TilePane artistsPane, albumsPane;
-
+    
     //MARK: init zone
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -528,7 +528,7 @@ public class GUIController implements Initializable {
         }
     }
 
-    public void setGraphics(Song song) {
+    public void setPlayerGraphics(Song song) {
         playButton.setImage(SVGImage.loadIcon(ICON_PATH + "pause.svg"));
         
         titleSong.setText(song.getTitle());
@@ -548,18 +548,17 @@ public class GUIController implements Initializable {
         sliderTime.setValue(0);
         countUP.setText("00:00");
     }
-
-    public void refreshPlayer(Duration currentTime) {
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run() {
-                countUP.setText(Utility.getDurationAsString(currentTime));
-                int valueSlider =(int) (currentTime.toMillis()*sliderTime.getMax()/musicPlayer.getActualSongDuration().toMillis());
+    
+    public ChangeListener<Duration> getSlideTimeManager()
+    {
+        return new ChangeListener<Duration>() {
+            @Override 
+            public void changed(ObservableValue<? extends Duration> observableValue, Duration oldValue, Duration newValue) {
+                countUP.setText(Utility.getDurationAsString(newValue));
+                int valueSlider =(int) (newValue.toMillis()*sliderTime.getMax()/musicPlayer.getActualSongDuration().toMillis());
                 sliderTime.setValue(valueSlider);
             }
-            
-        });
-        
+        };
     }
 
     //MARK: exit zone

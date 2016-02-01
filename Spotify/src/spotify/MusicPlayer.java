@@ -26,7 +26,6 @@ import javafx.util.Duration;
 public class MusicPlayer {
     private Library library;
     private AudioManage audioManage;
-    private RunnableFlintstone checkPlaybackFred;
     private LinkedList<Song> nextSongs;
     private Song currentSong;
     private ObservableList currentPlaylist;
@@ -40,9 +39,8 @@ public class MusicPlayer {
     public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
     public MusicPlayer(GUIController controller) {
-        loadState();
         this.controller = controller;
-        checkPlaybackFred = new RunnableFlintstone(this, audioManage, controller);  
+        loadState();
     }
     
     /**
@@ -178,7 +176,7 @@ public class MusicPlayer {
         String path = newSong.getPath();
         audioManage.newSong(path);  
         play();
-        controller.setGraphics(newSong);
+        controller.setPlayerGraphics(newSong);
 //      Da fare in thread
         generateSongQueue();
     }
@@ -215,10 +213,11 @@ public class MusicPlayer {
                 currentSongNumber = (int)in.readObject();
                 repeat = (repeatType)in.readObject();
                 reproduceShuffle = (boolean)in.readObject();
+                
                 in.close();
             } catch (FileNotFoundException ex) {
                 library = Library.getInstance();
-                audioManage = new AudioManage();
+                audioManage = new AudioManage(controller.getSlideTimeManager());
                 nextSongs=new LinkedList<>();
                 currentPlaylist = FXCollections.observableArrayList();
                 currentSongNumber=0;
