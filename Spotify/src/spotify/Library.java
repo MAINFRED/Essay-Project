@@ -101,11 +101,30 @@ public class Library implements Serializable{
     
     /**
      * Rename a playlist.
-     * @param playlist A pointer to the playlist whose name you want to change.
+     * @param selectedPlaylist A pointer to the playlist whose name you want to change.
      * @param newName The new name of the playlist.
      */
-    public void renamePlaylist(Playlist playlist, String newName){
-        this.getPlaylist(playlist.getTitle()).setTitle(newName);
+    public void renamePlaylist(Playlist selectedPlaylist, String newName){
+        if(newName.equals("")) 
+            newName = "Senza titolo";
+        
+        int i=0, k=0;
+        for(Playlist playlist : playlists) {
+            if(playlist.getTitle().equals(newName))
+                i++;
+        }
+        if(i!=k) {
+            do {
+                k=i;
+                for(Playlist playlist : playlists) {
+                    if(playlist.getTitle().equals(newName+i))
+                       i++;
+                }
+            } while(i==k);
+            this.getPlaylist(selectedPlaylist.getTitle()).setTitle(newName+i);
+        }
+        else
+            this.getPlaylist(selectedPlaylist.getTitle()).setTitle(newName);
     }
     
     /**

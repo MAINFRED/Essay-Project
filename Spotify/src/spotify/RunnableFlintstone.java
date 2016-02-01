@@ -15,10 +15,10 @@ public class RunnableFlintstone extends Thread {
     private AudioManage audioManage;
     private GUIController controller;
     
-    public RunnableFlintstone(MusicPlayer musicPlayerPointer,AudioManage audioManagePointer, GUIController controller) {
-        musicPlayer=musicPlayerPointer;
-        audioManage=audioManagePointer;
-        this.controller = controller;
+    public RunnableFlintstone(MusicPlayer musicPlayerPointer,AudioManage audioManagePointer, GUIController controllerPointer) {
+        this.musicPlayer=musicPlayerPointer;
+        this.audioManage=audioManagePointer;
+        this.controller = controllerPointer;
         this.setName("RunnableFlintstone");
         start();
     }
