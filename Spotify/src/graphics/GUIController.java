@@ -337,13 +337,13 @@ public class GUIController implements Initializable {
             }
         });
     
-//        sliderTime.setOnMouseClicked(new EventHandler<MouseEvent>(){
-//            @Override
-//            public void handle(MouseEvent event) {
-//                musicPlayer.skipTo(new Duration(sliderTime.getValue()*musicPlayer.getActualSongDuration().toMillis()/sliderTime.getMax()));
-//            }
-//            
-//        });
+        sliderTime.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                musicPlayer.skipTo(new Duration(sliderTime.getValue()*musicPlayer.getActualSongDuration().toMillis()/sliderTime.getMax()));
+            }
+            
+        });
     }
     
     private void initMenuBar() {

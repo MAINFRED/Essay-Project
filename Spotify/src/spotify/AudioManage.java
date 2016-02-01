@@ -62,10 +62,11 @@ public class AudioManage {
      * @param time A Duration indicating the desired start time.
      */
     public void playFromIndex(Duration time) {
-        if(mediaPlayer.getStatus()==MediaPlayer.Status.PLAYING)
+        /*if(mediaPlayer.getStatus()==MediaPlayer.Status.PLAYING)
             mediaPlayer.stop();
         mediaPlayer.setStartTime(time);
-        mediaPlayer.play();
+        mediaPlayer.play();*/
+        mediaPlayer.seek(time);
     }
     
     /**
