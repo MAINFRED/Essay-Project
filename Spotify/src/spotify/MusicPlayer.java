@@ -2,6 +2,7 @@
 package spotify;
 
 import graphics.GUIController;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -35,6 +36,7 @@ public class MusicPlayer {
     
     private GUIController controller;
     
+    private static final String STATE_FILE = "state.sp";
     public enum sortType{Title,Album,Artist};
     public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
@@ -183,7 +185,7 @@ public class MusicPlayer {
     public void saveState() {
         ObjectOutputStream out = null;
             try {
-                out = new ObjectOutputStream(new FileOutputStream("state.sp"));
+                out = new ObjectOutputStream(new FileOutputStream(STATE_FILE));
                 out.writeObject(library);
                 out.writeObject(currentSong);
                 out.writeObject(currentPlaylist);
@@ -196,6 +198,7 @@ public class MusicPlayer {
             } finally {
                 try {
                     out.close();
+                    (new File(STATE_FILE)).delete();
                 } catch (IOException ex) {
                     Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
                 }

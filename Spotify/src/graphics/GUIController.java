@@ -43,6 +43,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
@@ -128,7 +129,6 @@ public class GUIController implements Initializable {
         });   
     }
                 
-    
     private void initSideBar() {
         initMainMenu();
         initPlaylistsMenu();    
