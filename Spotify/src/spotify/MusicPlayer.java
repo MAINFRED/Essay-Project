@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -186,9 +187,9 @@ public class MusicPlayer {
         ObjectOutputStream out = null;
             try {
                 out = new ObjectOutputStream(new FileOutputStream(STATE_FILE));
-                out.writeObject(library);
+                library.writeObject(out);
                 out.writeObject(currentSong);
-                out.writeObject(currentPlaylist);
+                out.writeObject(new ArrayList(currentPlaylist));
                 out.writeObject(currentSongNumber);
                 out.writeObject(repeat);
                 out.writeObject(reproduceShuffle);
@@ -198,7 +199,6 @@ public class MusicPlayer {
             } finally {
                 try {
                     out.close();
-                    (new File(STATE_FILE)).delete();
                 } catch (IOException ex) {
                     Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -209,13 +209,14 @@ public class MusicPlayer {
         ObjectInputStream in = null;
             try {
                 in = new ObjectInputStream(new FileInputStream("state.sp"));
-                library = (Library)in.readObject();
+                library = Library.getInstance(in);
                 currentSong = (Song)in.readObject();
-                currentPlaylist = (ObservableList)in.readObject();
+                currentPlaylist = FXCollections.observableArrayList((ArrayList)in.readObject());
                 currentSongNumber = (int)in.readObject();
                 repeat = (repeatType)in.readObject();
                 reproduceShuffle = (boolean)in.readObject();
-                
+                audioManage = new AudioManage(controller.getSlideTimeManager());
+                nextSongs=new LinkedList<>();
                 in.close();
             } catch (FileNotFoundException ex) {
                 library = Library.getInstance();

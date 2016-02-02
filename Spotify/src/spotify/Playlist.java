@@ -1,6 +1,9 @@
 
 package spotify;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,18 @@ public class Playlist implements Serializable{
         this.title = title;
         this.orderedBy = sortType.Title;
         this.songs = FXCollections.observableArrayList();
+    }
+    
+    /**
+     * 
+     * @param stream
+     * @throws IOException
+     * @throws ClassNotFoundException 
+     */
+    public Playlist(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        title = (String)stream.readObject();
+        orderedBy = (sortType)stream.readObject();
+        songs = FXCollections.observableArrayList((ArrayList)stream.readObject());
     }
     
     /**
@@ -75,5 +90,11 @@ public class Playlist implements Serializable{
     public void orderBy(sortType orderType) {
         orderedBy = orderType;
         FXCollections.sort(songs);
+    }
+    
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+        stream.writeObject(title);
+        stream.writeObject(orderedBy);
+        stream.writeObject(new ArrayList(songs));
     }
 }

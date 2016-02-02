@@ -10,6 +10,7 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Duration;
@@ -20,7 +21,7 @@ import spotify.MusicPlayer.sortType;
  * Represent a single song with its information.
  * @author Antonioni Andrea & Zanelli Gabriele
  */
-public class Song implements Comparable<Song>{
+public class Song implements Comparable<Song>, Serializable{
 
     private String title = "";
     private String artist = ""; // ArrayList per successive canzoni ad autore multiplo
