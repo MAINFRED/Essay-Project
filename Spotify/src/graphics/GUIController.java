@@ -43,8 +43,10 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.media.MediaPlayer;
@@ -105,7 +107,7 @@ public class GUIController implements Initializable {
     private SongTable songsTable, playlistTable;
     @FXML
     private TilePane artistsPane, albumsPane;
-    
+
     //MARK: init zone
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -115,26 +117,26 @@ public class GUIController implements Initializable {
         initIcon();
         initPlayer();
         initMenuBar();
-        
-        Platform.runLater(new Runnable(){
+
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                ((Stage)songPane.getScene().getWindow()).setOnCloseRequest(new EventHandler<WindowEvent>() {
+                ((Stage) songPane.getScene().getWindow()).setOnCloseRequest(new EventHandler<WindowEvent>() {
                     public void handle(WindowEvent we) {
                         musicPlayer.saveState();
                         System.exit(0);
                     }
                 });
             }
-        });   
+        });
     }
-                
+
     private void initSideBar() {
         initMainMenu();
-        initPlaylistsMenu();    
+        initPlaylistsMenu();
     }
-    
-    private void initMainMenu(){
+
+    private void initMainMenu() {
         //Set items of mainMenu
         mainMenu.setItems(MainMenu.get());
 
@@ -178,8 +180,8 @@ public class GUIController implements Initializable {
             }
         });
     }
-    
-    private void initPlaylistsMenu(){
+
+    private void initPlaylistsMenu() {
         //Set items of playlistsMenu
         playlistsMenu.setItems(library.getPlaylistsPointer());
 
@@ -216,14 +218,14 @@ public class GUIController implements Initializable {
                 mainMenu.getSelectionModel().select(null);
             }
         });
-        
+
         //Added contextMenu
-        playlistsMenu.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>(){
+        playlistsMenu.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
             public void handle(ContextMenuEvent event) {
                 popupMenuPlaylist.show(playlistsMenu, event.getScreenX(), event.getScreenY());
             }
-            
+
         });
     }
 
@@ -330,26 +332,83 @@ public class GUIController implements Initializable {
     }
 
     private void initPlayer() {
+
+        previousButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                previousSongButton();
+            }
+
+        });
+
+        nextButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                nextSongButton();
+            }
+
+        });
+
+        playButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                playPauseButton();
+            }
+
+        });
+
+        shuffle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                shuffledButton();
+            }
+
+        });
+
+        replay.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                replayButton();
+            }
+
+        });
+
         volumeControl.valueProperty().addListener(new ChangeListener<Object>() {
             @Override
             public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
                 musicPlayer.changeVolume((int) volumeControl.getValue());
             }
         });
-    
-        sliderTime.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+        sliderTime.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                musicPlayer.skipTo(new Duration(sliderTime.getValue()*musicPlayer.getActualSongDuration().toMillis()/sliderTime.getMax()));
+                musicPlayer.skipTo(new Duration(sliderTime.getValue() * musicPlayer.getActualSongDuration().toMillis() / sliderTime.getMax()));
             }
-            
+
+        });
+
+        sliderTime.setOnDragDetected(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                System.out.println("Drag detected");
+                playPauseButton();
+            }
+        });
+
+        sliderTime.setOnDragDropped(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                System.out.println("Drop detected");
+                playPauseButton();
+            }
         });
     }
-    
+
     private void initMenuBar() {
-        
+
         //FILE
-        addSongItem.setOnAction(new EventHandler<ActionEvent>(){
+        addSongItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Stage stage = new Stage();
@@ -384,69 +443,69 @@ public class GUIController implements Initializable {
                     }
                 }
             }
-            
+
         });
-        
-        newPlaylistItem.setOnAction(new EventHandler<ActionEvent>(){
+
+        newPlaylistItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 handleNewPlaylistButton(event);
             }
-            
+
         });
-        
-        exitItem.setOnAction(new EventHandler<ActionEvent>(){
+
+        exitItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 musicPlayer.saveState();
                 System.exit(0);
             }
-            
+
         });
-        
+
         //PLAYBACK
-        playItem.setOnAction(new EventHandler<ActionEvent>(){
+        playItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 handlePlayPause(event);
             }
-            
+
         });
-        
-        nextSongItem.setOnAction(new EventHandler<ActionEvent>(){
+
+        nextSongItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 handleNextSong(event);
             }
-            
+
         });
-                
-        previousSongItem.setOnAction(new EventHandler<ActionEvent>(){
+
+        previousSongItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 handlePreviousSong(event);
             }
-            
+
         });
-        
-        volumeUpItem.setOnAction(new EventHandler<ActionEvent>(){
+
+        volumeUpItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 volumeControl.setValue(volumeControl.getValue() + 10);
                 musicPlayer.changeVolume((int) volumeControl.getValue());
             }
-            
+
         });
-                
-        volumeDownItem.setOnAction(new EventHandler<ActionEvent>(){
+
+        volumeDownItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 volumeControl.setValue(volumeControl.getValue() - 10);
                 musicPlayer.changeVolume((int) volumeControl.getValue());
             }
-            
+
         });
-        
+
     }
 
     //MARK: playlist manage
@@ -460,7 +519,7 @@ public class GUIController implements Initializable {
         if (result.isPresent()) {
             library.addPlaylist(result.get());
         }
-        
+
     }
 
     @FXML
@@ -500,8 +559,43 @@ public class GUIController implements Initializable {
         playlistsMenu.setItems(null);
         playlistsMenu.setItems(library.getPlaylistsPointer());
     }
-    
+
     //MARK: player manage
+    private void previousSongButton() {
+        musicPlayer.previusSong();
+    }
+
+    private void playPauseButton() {
+        if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.UNKNOWN) {
+            return;
+        } else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PLAYING) {
+            musicPlayer.pause();
+            playButton.setImage(SVGImage.loadIcon(ICON_PATH + "play.svg"));
+        } else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PAUSED) {
+            musicPlayer.play();
+            playButton.setImage(SVGImage.loadIcon(ICON_PATH + "pause.svg"));
+        }
+    }
+
+    private void nextSongButton() {
+        musicPlayer.nextSong();
+    }
+
+    private void shuffledButton() {
+        musicPlayer.shuffle(!musicPlayer.getShuffle());
+        System.out.println("Shuffle: " + musicPlayer.getShuffle());
+    }
+
+    private void replayButton() {
+        if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.NoRepeat) {
+            musicPlayer.repeatPreference(MusicPlayer.repeatType.PlaylistRepeat);
+        } else if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.PlaylistRepeat) {
+            musicPlayer.repeatPreference(MusicPlayer.repeatType.SingleSongRepeat);
+        } else if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.SingleSongRepeat) {
+            musicPlayer.repeatPreference(MusicPlayer.repeatType.NoRepeat);
+        }
+    }
+
     @FXML
     private void handlePreviousSong(Event event) {
         musicPlayer.previusSong();
@@ -509,9 +603,9 @@ public class GUIController implements Initializable {
 
     @FXML
     private void handlePlayPause(Event event) {
-        if(musicPlayer.getPlayerStatus() == MediaPlayer.Status.UNKNOWN)
+        if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.UNKNOWN) {
             return;
-        else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PLAYING) {
+        } else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PLAYING) {
             musicPlayer.pause();
             playButton.setImage(SVGImage.loadIcon(ICON_PATH + "play.svg"));
         } else if (musicPlayer.getPlayerStatus() == MediaPlayer.Status.PAUSED) {
@@ -544,7 +638,7 @@ public class GUIController implements Initializable {
 
     public void setPlayerGraphics(Song song) {
         playButton.setImage(SVGImage.loadIcon(ICON_PATH + "pause.svg"));
-        
+
         titleSong.setText(song.getTitle());
         artist.setText(song.getArtist());
 
@@ -562,14 +656,13 @@ public class GUIController implements Initializable {
         sliderTime.setValue(0);
         countUP.setText("00:00");
     }
-    
-    public ChangeListener<Duration> getSlideTimeManager()
-    {
+
+    public ChangeListener<Duration> getSlideTimeManager() {
         return new ChangeListener<Duration>() {
-            @Override 
+            @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration oldValue, Duration newValue) {
                 countUP.setText(Utility.getDurationAsString(newValue));
-                int valueSlider =(int) (newValue.toMillis()*sliderTime.getMax()/musicPlayer.getActualSongDuration().toMillis());
+                int valueSlider = (int) (newValue.toMillis() * sliderTime.getMax() / musicPlayer.getActualSongDuration().toMillis());
                 sliderTime.setValue(valueSlider);
             }
         };
