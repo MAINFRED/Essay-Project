@@ -180,7 +180,20 @@ public class Library implements Serializable {
      */
     public void removeSongFromPlaylist(Song song, Playlist playlist) {
         playlist.removeSong(song);
-        allTracks.removeSong(song);
+        if(playlist==allTracks) {
+            for(Playlist current:playlists){
+               current.removeSong(song);
+            }
+        }
+        else {
+            boolean otherInstance = false;
+            for(Playlist current:playlists){
+                if(current.contains(song))
+                    otherInstance=true;
+            }
+            if(!otherInstance)
+                allTracks.removeSong(song);
+        }
     }
 
     public void writeObject(ObjectOutputStream stream) throws IOException {

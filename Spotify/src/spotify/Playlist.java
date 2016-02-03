@@ -79,8 +79,12 @@ public class Playlist implements Serializable{
         songs.add(song);
     }    
     
-    public void removeSong(Song song){
-        songs.remove(song);
+    public boolean removeSong(Song song){
+        return songs.remove(song);
+    }
+    
+    public boolean contains(Song song) {
+        return songs.contains(song);
     }
     
     public boolean isEmpty() {
