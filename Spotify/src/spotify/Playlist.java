@@ -50,7 +50,19 @@ public class Playlist implements Serializable{
     public String getTitle() {
         return title;
     }
+    
+    /**
+     * Returns the number of the song contained in the playlist.
+     * @return An int indicating representing the number of song containted in the playlist.
+     */
+    public int size() {
+        return songs.size();
+    }
 
+    public Song getSong(int songNumber) {
+        return songs.get(songNumber);
+    }
+    
     /**
      * Sets the title of the playlist.
      * @param title A String object which represents the title of the playlist

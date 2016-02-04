@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import spotify.MusicPlayer.sortType;
 
 /**
  * Represents the set of all songs and playlist added and created by the user.
@@ -38,7 +39,6 @@ public class Library implements Serializable {
     }
     /**
      * Returns a reference of the Library object created by default method
-     *
      * @return A reference of the Library object created by default method
      */
     public static Library getInstance() {
@@ -57,7 +57,6 @@ public class Library implements Serializable {
 
     /**
      * Returns a reference of the tracks list which is unmodifiable.
-     *
      * @return a reference of the tracks list which is unmodifiable.
      */
     public ObservableList getAllTracks() {
@@ -66,7 +65,6 @@ public class Library implements Serializable {
 
     /**
      * Returns a reference of the playlists list which is unmodifiable.
-     *
      * @return a reference of the playlists list which is unmodifiable.
      */
     public ObservableList getPlaylistsPointer() {
@@ -75,7 +73,6 @@ public class Library implements Serializable {
 
     /**
      * Adds a new song to the library using a File object.
-     *
      * @param file A File object which represents the song to add to the library
      * @throws java.io.FileNotFoundException
      */
@@ -85,7 +82,6 @@ public class Library implements Serializable {
 
     /**
      * Add a new playlist.
-     *
      * @param name Name of the new playlist.
      */
     public void addPlaylist(String name) {
@@ -117,7 +113,6 @@ public class Library implements Serializable {
 
     /**
      * Remove a playlist maintaining the songs copied in All Tracks/Songs.
-     *
      * @param playlist The pointer of the playlist to remove.
      */
     public void removePlaylist(Playlist playlist) {
@@ -126,7 +121,6 @@ public class Library implements Serializable {
 
     /**
      * Rename a playlist.
-     *
      * @param selectedPlaylist A pointer to the playlist whose name you want to
      * change.
      * @param newName The new name of the playlist.
@@ -159,7 +153,6 @@ public class Library implements Serializable {
 
     /**
      * Retrieve a playlist from its name.
-     *
      * @param title The name of the playlist.
      * @return A Pointer to the playlist.
      */
@@ -174,7 +167,6 @@ public class Library implements Serializable {
 
     /**
      * Remove a song from a playlist.
-     *
      * @param song A pointer to the song to remove.
      * @param playlist The pointer to the playlist which countains the song.
      */
@@ -195,10 +187,29 @@ public class Library implements Serializable {
                 allTracks.removeSong(song);
         }
     }
+    
+     // Utilizzabile solo da music player
+    public Playlist retrievePlaylist(int playlistNumber){
+        if(playlistNumber<0)
+            return allTracks;
+        else if(playlistNumber<playlists.size())
+            return playlists.get(playlistNumber);
+        else {
+            System.out.println("Invalid playlist number");
+            return null;
+        }  
+    }
 
     public void writeObject(ObjectOutputStream stream) throws IOException {
         allTracks.writeObject(stream);
         stream.writeObject(new ArrayList(playlists));
+    }
+    
+    public void orderPlaylistBy(int playlistNumber,sortType sortMethod) {
+        if(retrievePlaylist(playlistNumber)==null)
+            System.out.println("Invalid playlist");
+        else
+            retrievePlaylist(playlistNumber).orderBy(sortMethod);
     }
 
 }

@@ -2,7 +2,6 @@
 package spotify;
 
 import graphics.GUIController;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,7 +29,7 @@ public class MusicPlayer {
     private AudioManage audioManage;
     private LinkedList<Song> nextSongs;
     private Song currentSong;
-    private ObservableList currentPlaylist;
+    private Playlist currentPlaylist;
     private int currentSongNumber;
     private repeatType repeat;
     private boolean reproduceShuffle;
@@ -101,7 +100,7 @@ public class MusicPlayer {
                 audioManage.playFromIndex(new Duration(0)); 
             else {
                 nextSongs.addLast(currentSong);
-                currentSong = (Song)currentPlaylist.get(currentSongNumber-1);
+                currentSong = (Song)currentPlaylist.getSong(currentSongNumber-1);
                 playNewSong(currentSong,currentPlaylist,currentSongNumber-1);
             }
             // Modificare la lista di canzoni successive
@@ -152,28 +151,32 @@ public class MusicPlayer {
     public void changeVolume(int volume) {
         if(volume>=0 & volume <=100)
             audioManage.changeVolume(volume);
+        else
+            System.out.println("Invalid volume range");
     }
     
     /**
      * Change the preferred sorting method between Title, Arist or Album.
-     * @param playlist A Pointer to the playlist that the user is sorting.
+     * @param playlistNumber An int indicating the playlist, negative for All Tracks, positive for
+     * the playlist number.
      * @param sortMethod The name of sorting method.
      */
-    public void changePreferredSort(Playlist playlist,sortType sortMethod){
-        playlist.orderBy(sortMethod);
+    public void changePreferredSort(int playlistNumber,sortType sortMethod){
+        library.orderPlaylistBy(playlistNumber,sortMethod);
     }
      
     /**
      * Starts playing a new song. 
      * @param newSong An istance of Song containing the new song to play.
-     * @param currentPlaylist A pointer to the playlist in which the song is.
+     * @param playlistNumber An int indicating the playlist that contains the song, negative for
+     * All Tracks, positive for the playlist number.
      * @param songNumber The number of the song in the playlist once ordered.
      */
-    public void playNewSong(Song newSong, ObservableList currentPlaylist, int songNumber) {
-        // Funzione searchSong che cerca la canzone in locale ed eventualmente la richiede al server E SETTA IL PATH LOCALE
-        // Settare la variabile locale a true
+    public void playNewSong(Song newSong, int playlistNumber, int songNumber) {
+        // Funzione searchSong che cerca la canzone in locale ed eventualmente la richiede al server 
+        // E SETTA IL PATH LOCALE, Settare la variabile locale a true
         this.currentSong = newSong;
-        this.currentPlaylist=currentPlaylist;
+        this.currentPlaylist= library.retrievePlaylist(playlistNumber);
         this.currentSongNumber=songNumber;
         String path = newSong.getPath();
         audioManage.newSong(path);  
@@ -183,13 +186,45 @@ public class MusicPlayer {
         generateSongQueue();
     }
     
+    private void playNewSong(Song newSong, Playlist currentPlaylist, int songNumber) {
+        // Equivalente della sopra, da utilizzare privatamente con riferimento ad una playlist
+        this.currentSong = newSong;
+        this.currentPlaylist= currentPlaylist; // Non so manco se serva
+        this.currentSongNumber=songNumber;
+        String path = newSong.getPath();
+        audioManage.newSong(path);  
+        play();
+        controller.setPlayerGraphics(newSong);
+//      Da fare in thread
+        generateSongQueue();
+    }
+    
+    /**
+     * Returns a reference of the tracks list which is unmodifiable.
+     * @return a reference of the tracks list which is unmodifiable.
+     */
+    public ObservableList getAllTracks() {
+        return library.getAllTracks();
+    }
+
+    /**
+     * Returns a reference of the playlists list which is unmodifiable.
+     * @return a reference of the playlists list which is unmodifiable.
+     */
+    public ObservableList getPlaylistsPointer() {
+        return library.getPlaylistsPointer();
+    }
+    
+    /**
+     * Saves the current state of the player in a file.
+     */
     public void saveState() {
         ObjectOutputStream out = null;
             try {
                 out = new ObjectOutputStream(new FileOutputStream(STATE_FILE));
                 library.writeObject(out);
                 out.writeObject(currentSong);
-                out.writeObject(new ArrayList(currentPlaylist));
+                out.writeObject(currentPlaylist);
                 out.writeObject(currentSongNumber);
                 out.writeObject(repeat);
                 out.writeObject(reproduceShuffle);
@@ -205,13 +240,16 @@ public class MusicPlayer {
             }
     }
     
+    /**
+     * Reasume the last state con the player from a file.
+     */
     private void loadState() {
         ObjectInputStream in = null;
             try {
                 in = new ObjectInputStream(new FileInputStream("state.sp"));
                 library = Library.getInstance(in);
                 currentSong = (Song)in.readObject();
-                currentPlaylist = FXCollections.observableArrayList((ArrayList)in.readObject());
+                currentPlaylist = (Playlist)in.readObject();
                 currentSongNumber = (int)in.readObject();
                 repeat = (repeatType)in.readObject();
                 reproduceShuffle = (boolean)in.readObject();
@@ -222,7 +260,7 @@ public class MusicPlayer {
                 library = Library.getInstance();
                 audioManage = new AudioManage(controller.getSlideTimeManager());
                 nextSongs=new LinkedList<>();
-                currentPlaylist = FXCollections.observableArrayList();
+                currentPlaylist = library.retrievePlaylist(-1);
                 currentSongNumber=0;
                 repeat=repeatType.NoRepeat;
                 reproduceShuffle=false;
@@ -244,7 +282,7 @@ public class MusicPlayer {
         // Add 10 random songs.
         else if(reproduceShuffle) {
             for(int i=0;i<10;i++)
-                nextSongs.add((Song)currentPlaylist.get(new Random().nextInt(currentPlaylist.size())));
+                nextSongs.add(currentPlaylist.getSong(new Random().nextInt(currentPlaylist.size())));
         }
         // Add the next 10 songs 
         else {
@@ -252,12 +290,13 @@ public class MusicPlayer {
                 // If it reaches the end and repeat playlist is on, goes to the top.
                 if(currentSongNumber+i>=currentPlaylist.size())
                     if(repeat==repeatType.PlaylistRepeat)
-                        nextSongs.add((Song)currentPlaylist.get(currentSongNumber+i%currentPlaylist.size()));
+                        nextSongs.add(currentPlaylist.getSong(currentSongNumber+i%currentPlaylist.size()));
                     else
                         return;
                 else
-                    nextSongs.add((Song)currentPlaylist.get(currentSongNumber+i));
+                    nextSongs.add(currentPlaylist.getSong(currentSongNumber+i));
             }
         }
     }
+    
 }

@@ -20,7 +20,7 @@ import javafx.util.Duration;
 public class AudioManage {
     private MediaPlayer mediaPlayer;
     private String songPath;
-    private Duration timeIndex;
+    private Duration timePauseIndex;
     private int volume;
     
     private ChangeListener<Duration> slideTimeChangeListener;
@@ -28,7 +28,7 @@ public class AudioManage {
     public AudioManage(ChangeListener<Duration> slideTimeChangeListener) {
         this.mediaPlayer=null;
         this.songPath = null;
-        this.timeIndex = new Duration(0);
+        this.timePauseIndex = new Duration(0);
         this.volume=70;
         
         this.slideTimeChangeListener = slideTimeChangeListener;
@@ -62,11 +62,12 @@ public class AudioManage {
      * @param time A Duration indicating the desired start time.
      */
     public void playFromIndex(Duration time) {
-        /*if(mediaPlayer.getStatus()==MediaPlayer.Status.PLAYING)
-            mediaPlayer.stop();
-        mediaPlayer.setStartTime(time);
-        mediaPlayer.play();*/
-        mediaPlayer.seek(time);
+        if(mediaPlayer.getStatus()==MediaPlayer.Status.STOPPED) {
+            timePauseIndex=time;
+            mediaPlayer.setStartTime(time);
+        }
+        else
+            mediaPlayer.seek(time);
     }
     
     /**
@@ -74,7 +75,7 @@ public class AudioManage {
      */
     public void pause() {
         mediaPlayer.pause();
-        timeIndex=mediaPlayer.getCurrentTime();
+        timePauseIndex=mediaPlayer.getCurrentTime();
     }
     
     /**
