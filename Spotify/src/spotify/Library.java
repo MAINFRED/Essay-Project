@@ -22,6 +22,7 @@ public class Library implements Serializable {
     private ObservableList<Playlist> playlists;
 
     private static Library instance = null;
+    public static final int ALL_TRACKS_NUMBER = -1;
 
     /**
      * Represents the path in which are located songs imported by the user.
@@ -188,9 +189,9 @@ public class Library implements Serializable {
         }
     }
     
-     // Utilizzabile solo da music player
+    // Utilizzabile solo da music player
     public Playlist retrievePlaylist(int playlistNumber){
-        if(playlistNumber<0)
+        if(playlistNumber == Library.ALL_TRACKS_NUMBER)
             return allTracks;
         else if(playlistNumber<playlists.size())
             return playlists.get(playlistNumber);
@@ -211,5 +212,4 @@ public class Library implements Serializable {
         else
             retrievePlaylist(playlistNumber).orderBy(sortMethod);
     }
-
 }

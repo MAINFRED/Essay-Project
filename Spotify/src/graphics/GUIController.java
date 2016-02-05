@@ -43,10 +43,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.media.MediaPlayer;
@@ -299,7 +296,7 @@ public class GUIController implements Initializable {
                 //Double click --> play a song
                 if (event.getClickCount() == 2) {
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(),
-                            library.getAllTracks(), library.getAllTracks().indexOf(songsTable.getSelectionModel().getSelectedItem()));
+                            Library.ALL_TRACKS_NUMBER, library.getAllTracks().indexOf(songsTable.getSelectionModel().getSelectedItem()));
                 }
             }
 

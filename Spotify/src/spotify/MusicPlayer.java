@@ -8,12 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
@@ -37,6 +35,7 @@ public class MusicPlayer {
     private GUIController controller;
     
     private static final String STATE_FILE = "state.sp";
+    
     public enum sortType{Title,Album,Artist};
     public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
@@ -241,7 +240,7 @@ public class MusicPlayer {
     }
     
     /**
-     * Reasume the last state con the player from a file.
+     * Resume the last state con the player from a file.
      */
     private void loadState() {
         ObjectInputStream in = null;
