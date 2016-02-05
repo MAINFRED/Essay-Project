@@ -2,6 +2,7 @@
 package spotify;
 
 import graphics.GUIController;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,12 +18,12 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
 /**
- * MusicPlayer is the interface between user and application which convert user's input and manage
-*  the library's song, played song, next songs and audio.
+ * MusicSupporter is the interface between user and application which convert user's input and manage
+  the library's song, played song, next songs and audio.
  * @author Antonioni Andrea & Zanelli Gabriele
  */
 
-public class MusicPlayer {
+public class MusicSupporter {
     private Library library;
     private AudioManage audioManage;
     private LinkedList<Song> nextSongs;
@@ -39,7 +40,7 @@ public class MusicPlayer {
     public enum sortType{Title,Album,Artist};
     public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
-    public MusicPlayer(GUIController controller) {
+    public MusicSupporter(GUIController controller) {
         this.controller = controller;
         loadState();
     }
@@ -108,7 +109,7 @@ public class MusicPlayer {
     
     /**
      * Change repeat preference.
-     * @param value A Static Value from MusicPlayer class indicating the repeat preferince.
+     * @param value A Static Value from MusicSupporter class indicating the repeat preferince.
      */
     public void repeatPreference(repeatType value) {
         this.repeat=value;
@@ -229,12 +230,12 @@ public class MusicPlayer {
                 out.writeObject(reproduceShuffle);
                 out.close();
             } catch (IOException ex) {
-                Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MusicSupporter.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
                     out.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MusicSupporter.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
     }
@@ -264,7 +265,7 @@ public class MusicPlayer {
                 repeat=repeatType.NoRepeat;
                 reproduceShuffle=false;
             } catch (ClassNotFoundException | IOException ex) {
-                Logger.getLogger(MusicPlayer.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MusicSupporter.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
     
@@ -296,6 +297,32 @@ public class MusicPlayer {
                     nextSongs.add(currentPlaylist.getSong(currentSongNumber+i));
             }
         }
+    }
+    
+    public void addPlaylist(String name)
+    {
+        library.addPlaylist(name);
+    }
+    
+    public void removePlaylist(Playlist playlist)
+    {
+        library.removePlaylist(playlist);
+    }
+    
+    public void renamePlaylist(Playlist playlist, String newName)
+    {
+        library.renamePlaylist(playlist, newName);
+    }
+    
+    public void addSong(File file) throws FileNotFoundException {
+        
+        library.addSong(file);
+        
+    }
+    
+    public void removeSongFromPlaylist(Song song, Playlist playlist)
+    {
+        library.removeSongFromPlaylist(song, playlist);
     }
     
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import spotify.MusicPlayer.sortType;
+import spotify.MusicSupporter.sortType;
 
 /**
  * Represents the set of all songs and playlist added and created by the user.

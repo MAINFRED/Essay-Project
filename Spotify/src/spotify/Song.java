@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
-import spotify.MusicPlayer.sortType;
+import spotify.MusicSupporter.sortType;
 
 /**
  * Represent a single song with its information.

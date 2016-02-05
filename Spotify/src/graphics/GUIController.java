@@ -54,7 +54,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import spotify.Library;
-import spotify.MusicPlayer;
+import spotify.MusicSupporter;
 import spotify.Playlist;
 import spotify.Song;
 import utility.Utility;
@@ -68,8 +68,7 @@ public class GUIController implements Initializable {
 
     public static final String ICON_PATH = "resources/icon/";
 
-    private MusicPlayer musicPlayer = new MusicPlayer(this);
-    private Library library = Library.getInstance();
+    private MusicSupporter musicPlayer = new MusicSupporter(this);
 
     @FXML
     private Label username, countUP, artist, titleSong;
@@ -105,7 +104,7 @@ public class GUIController implements Initializable {
     @FXML
     private TilePane artistsPane, albumsPane;
 
-    //MARK: init zone
+    // MARK: init zone
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initSideBar();
@@ -180,7 +179,7 @@ public class GUIController implements Initializable {
 
     private void initPlaylistsMenu() {
         //Set items of playlistsMenu
-        playlistsMenu.setItems(library.getPlaylistsPointer());
+        playlistsMenu.setItems(musicPlayer.getPlaylistsPointer());
 
         //Says to playlistMenu how to render elements
         playlistsMenu.setCellFactory(new Callback<ListView<Playlist>, ListCell<Playlist>>() {
@@ -247,8 +246,8 @@ public class GUIController implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == buttonYes) {
-                    library.removeSongFromPlaylist(playlistTable.getSelectionModel().getSelectedItem(),
-                            library.getPlaylist(titlePlaylist.getText()));
+                    musicPlayer.removeSongFromPlaylist(playlistTable.getSelectionModel().getSelectedItem(), 
+                            playlistsMenu.getSelectionModel().getSelectedItem());
                 }
             }
 
@@ -257,7 +256,7 @@ public class GUIController implements Initializable {
     }
 
     private void initTables() {
-        songsTable = new SongTable(library.getAllTracks());
+        songsTable = new SongTable(musicPlayer.getAllTracks());
         songPane.setCenter(songsTable);
         songsTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
@@ -271,7 +270,7 @@ public class GUIController implements Initializable {
 
                 //Creates the new menu
                 menuItemPlaylist = new Menu("Add to playlist");
-                for (Playlist playlist : (ObservableList<Playlist>) library.getPlaylistsPointer()) {
+                for (Playlist playlist : (ObservableList<Playlist>) musicPlayer.getPlaylistsPointer()) {
                     MenuItem item = new MenuItem(playlist.getTitle());
                     item.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
@@ -296,7 +295,7 @@ public class GUIController implements Initializable {
                 //Double click --> play a song
                 if (event.getClickCount() == 2) {
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(),
-                            Library.ALL_TRACKS_NUMBER, library.getAllTracks().indexOf(songsTable.getSelectionModel().getSelectedItem()));
+                            Library.ALL_TRACKS_NUMBER, musicPlayer.getAllTracks().indexOf(songsTable.getSelectionModel().getSelectedItem()));
                 }
             }
 
@@ -421,7 +420,7 @@ public class GUIController implements Initializable {
                         try {
                             Utility.copyFile(file, dest);
 
-                            library.addSong(dest);
+                            musicPlayer.addSong(dest);
                         } catch (FileAlreadyExistsException ex) {
                             Alert alert = new Alert(AlertType.ERROR);
                             alert.setTitle("Error Dialog");
@@ -505,7 +504,7 @@ public class GUIController implements Initializable {
 
     }
 
-    //MARK: playlist manage
+    // MARK: playlist manage
     @FXML
     private void handleNewPlaylistButton(Event event) {
         Dialog dialog = new TextInputDialog("");
@@ -514,7 +513,7 @@ public class GUIController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            library.addPlaylist(result.get());
+            musicPlayer.addPlaylist(result.get());
         }
 
     }
@@ -528,7 +527,7 @@ public class GUIController implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             Playlist renamed = playlistsMenu.getSelectionModel().getSelectedItem();
-            library.renamePlaylist(renamed, result.get());
+            musicPlayer.renamePlaylist(renamed, result.get());
             refreshPlaylistsMenu();
             titlePlaylist.setText(renamed.getTitle());
             playlistsMenu.getSelectionModel().select(renamed);
@@ -547,14 +546,14 @@ public class GUIController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonDelete) {
-            library.removePlaylist(playlistsMenu.getSelectionModel().getSelectedItem());
+            musicPlayer.removePlaylist(playlistsMenu.getSelectionModel().getSelectedItem());
             playlistSongPane.setVisible(false);
         }
     }
 
     private void refreshPlaylistsMenu() {
         playlistsMenu.setItems(null);
-        playlistsMenu.setItems(library.getPlaylistsPointer());
+        playlistsMenu.setItems(musicPlayer.getPlaylistsPointer());
     }
 
     //MARK: player manage
@@ -584,12 +583,12 @@ public class GUIController implements Initializable {
     }
 
     private void replayButton() {
-        if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.NoRepeat) {
-            musicPlayer.repeatPreference(MusicPlayer.repeatType.PlaylistRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.PlaylistRepeat) {
-            musicPlayer.repeatPreference(MusicPlayer.repeatType.SingleSongRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.SingleSongRepeat) {
-            musicPlayer.repeatPreference(MusicPlayer.repeatType.NoRepeat);
+        if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.NoRepeat) {
+            musicPlayer.repeatPreference(MusicSupporter.repeatType.PlaylistRepeat);
+        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.PlaylistRepeat) {
+            musicPlayer.repeatPreference(MusicSupporter.repeatType.SingleSongRepeat);
+        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.SingleSongRepeat) {
+            musicPlayer.repeatPreference(MusicSupporter.repeatType.NoRepeat);
         }
     }
 
@@ -624,12 +623,12 @@ public class GUIController implements Initializable {
 
     @FXML
     private void handleReplay(MouseEvent event) {
-        if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.NoRepeat) {
-            musicPlayer.repeatPreference(MusicPlayer.repeatType.PlaylistRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.PlaylistRepeat) {
-            musicPlayer.repeatPreference(MusicPlayer.repeatType.SingleSongRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicPlayer.repeatType.SingleSongRepeat) {
-            musicPlayer.repeatPreference(MusicPlayer.repeatType.NoRepeat);
+        if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.NoRepeat) {
+            musicPlayer.repeatPreference(MusicSupporter.repeatType.PlaylistRepeat);
+        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.PlaylistRepeat) {
+            musicPlayer.repeatPreference(MusicSupporter.repeatType.SingleSongRepeat);
+        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.SingleSongRepeat) {
+            musicPlayer.repeatPreference(MusicSupporter.repeatType.NoRepeat);
         }
     }
 

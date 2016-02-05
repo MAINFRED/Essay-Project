@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import spotify.MusicPlayer.sortType;
+import spotify.MusicSupporter.sortType;
 
 /**
  * Represents a list of songs with a title.
