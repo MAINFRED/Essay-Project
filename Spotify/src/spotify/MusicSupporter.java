@@ -223,8 +223,8 @@ public class MusicSupporter {
             try {
                 out = new ObjectOutputStream(new FileOutputStream(STATE_FILE));
                 library.writeObject(out);
-                out.writeObject(currentSong);
-                out.writeObject(currentPlaylist);
+                out.writeObject(currentSong);  
+                currentPlaylist.writeObject(out);
                 out.writeObject(currentSongNumber);
                 out.writeObject(repeat);
                 out.writeObject(reproduceShuffle);
@@ -249,7 +249,7 @@ public class MusicSupporter {
                 in = new ObjectInputStream(new FileInputStream("state.sp"));
                 library = Library.getInstance(in);
                 currentSong = (Song)in.readObject();
-                currentPlaylist = (Playlist)in.readObject();
+                currentPlaylist = new Playlist(in);
                 currentSongNumber = (int)in.readObject();
                 repeat = (repeatType)in.readObject();
                 reproduceShuffle = (boolean)in.readObject();

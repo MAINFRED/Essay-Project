@@ -66,19 +66,22 @@ import utility.Utility;
  */
 public class GUIController implements Initializable {
 
+    /**
+     * A String object which represents the path of the icons
+     */
     public static final String ICON_PATH = "resources/icon/";
 
+    // MARK: MusicPlayer
     private MusicSupporter musicPlayer = new MusicSupporter(this);
-
+    
+    // MARK: Graphics attributes
     @FXML
-    private Label username, countUP, artist, titleSong;
+    private Label username, countUP, artist, titleSong, newPlaylistButton, titlePlaylist;
     @FXML
     private ImageView previousButton, playButton, nextButton, shuffle, replay,
             volumeDownIcon, volumeUpIcon, playlistIcon, searchIcon, artwork;
     @FXML
     private Slider volumeControl, sliderTime;
-    @FXML
-    private Label newPlaylistButton;
     @FXML
     private ListView<ListItem> mainMenu;
     @FXML
@@ -94,17 +97,12 @@ public class GUIController implements Initializable {
     private ContextMenu popupMenuSongsTable, popupMenuPlaylistTable;
     private Menu menuItemPlaylist;
     @FXML
-    private BorderPane songPane;
-    @FXML
-    private BorderPane playlistSongPane;
-    @FXML
-    private Label titlePlaylist;
-
+    private BorderPane songPane, playlistSongPane;
     private SongTable songsTable, playlistTable;
     @FXML
     private TilePane artistsPane, albumsPane;
 
-    // MARK: init zone
+    // MARK: Init zone
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initSideBar();
@@ -504,7 +502,7 @@ public class GUIController implements Initializable {
 
     }
 
-    // MARK: playlist manage
+    // MARK: Playlist manage
     @FXML
     private void handleNewPlaylistButton(Event event) {
         Dialog dialog = new TextInputDialog("");
@@ -556,7 +554,7 @@ public class GUIController implements Initializable {
         playlistsMenu.setItems(musicPlayer.getPlaylistsPointer());
     }
 
-    //MARK: player manage
+    //MARK: Player manage
     private void previousSongButton() {
         musicPlayer.previusSong();
     }
@@ -664,7 +662,7 @@ public class GUIController implements Initializable {
         };
     }
 
-    //MARK: exit zone
+    // MARK: Exit zone
     public void closePlayer() {
         musicPlayer.saveState();
     }
