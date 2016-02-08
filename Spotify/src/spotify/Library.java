@@ -60,7 +60,7 @@ public class Library implements Serializable {
      * Returns a reference of the tracks list which is unmodifiable.
      * @return a reference of the tracks list which is unmodifiable.
      */
-    public ObservableList getAllTracks() {
+    public ObservableList<Song> getAllTracks() {
         return FXCollections.unmodifiableObservableList((ObservableList<Song>) allTracks.getSongsPointer());
     }
 
@@ -68,7 +68,7 @@ public class Library implements Serializable {
      * Returns a reference of the playlists list which is unmodifiable.
      * @return a reference of the playlists list which is unmodifiable.
      */
-    public ObservableList getPlaylistsPointer() {
+    public ObservableList<Playlist> getPlaylistsPointer() {
         return FXCollections.unmodifiableObservableList(playlists);
     }
 
@@ -110,6 +110,17 @@ public class Library implements Serializable {
         } else {
             playlists.add(new Playlist(name));
         }
+    }
+    
+    /**
+     * Removes a song from all playlists and All Tracks
+     * @param song A song objcted which will be romoved
+     */
+    public void removeSong(Song song) {
+        allTracks.removeSong(song);
+        
+        for(Playlist playlist : playlists)
+            removeSongFromPlaylist(song, playlist);
     }
 
     /**

@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
+import utility.Utility;
 
 /**
  * MusicSupporter is the interface between user and application which convert user's input and manage
@@ -40,10 +41,18 @@ public class MusicSupporter {
     public enum sortType{Title,Album,Artist};
     public enum repeatType{SingleSongRepeat,PlaylistRepeat,NoRepeat}
     
+    // MARK: Contructor
+    
+    /**
+     * Creates a new MusicSupporter object
+     * @param controller A GUIController object
+     */
     public MusicSupporter(GUIController controller) {
         this.controller = controller;
         loadState();
     }
+    
+    // MARK: Player methods
     
     /**
      * Starts playing the selected song.
@@ -256,6 +265,8 @@ public class MusicSupporter {
                 audioManage = new AudioManage(controller.getSlideTimeManager());
                 nextSongs=new LinkedList<>();
                 in.close();
+                
+                checkLocalSongs(true);
             } catch (FileNotFoundException ex) {
                 library = Library.getInstance();
                 audioManage = new AudioManage(controller.getSlideTimeManager());
@@ -264,9 +275,40 @@ public class MusicSupporter {
                 currentSongNumber=0;
                 repeat=repeatType.NoRepeat;
                 reproduceShuffle=false;
+                
+                checkLocalSongs(false);
             } catch (ClassNotFoundException | IOException ex) {
                 Logger.getLogger(MusicSupporter.class.getName()).log(Level.SEVERE, null, ex);
             }
+    }
+    
+    private void checkLocalSongs(boolean loaded) {
+        if(loaded)
+        {
+            for (int i=0; i<library.getAllTracks().size(); i++)
+            {
+                if(!(new File(library.getAllTracks().get(i).getPath()).isFile()))
+                    library.removeSong(library.getAllTracks().get(i));
+            }
+        }
+        else{
+            File folder = new File(Library.LOCAL_PATH);
+            File[] listOfFiles = folder.listFiles();
+            
+            for(File file : listOfFiles)
+            {
+                File dest = new File(Library.LOCAL_PATH + file.getName());
+                if(file.isFile())
+                {
+                    try {
+                        Utility.copyFile(file, dest);
+                        addSong(dest);
+                    } catch (IOException ex) {
+                        Logger.getLogger(MusicSupporter.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
+                }
+            }
+        }
     }
     
     /**
