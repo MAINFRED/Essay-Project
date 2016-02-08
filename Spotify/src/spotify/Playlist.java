@@ -63,6 +63,11 @@ public class Playlist implements Serializable{
         return songs.get(songNumber);
     }
     
+    public int indexOfSong(Song song)
+    {
+        return songs.indexOf(song);
+    }
+    
     /**
      * Sets the title of the playlist.
      * @param title A String object which represents the title of the playlist

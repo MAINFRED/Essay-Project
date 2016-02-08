@@ -261,7 +261,6 @@ public class GUIController implements Initializable {
         songPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(final DragEvent event) {
-                System.out.println("An object is dragging over the songPane");
                 mouseDragOver(event);
             }
         });
@@ -269,7 +268,6 @@ public class GUIController implements Initializable {
         songPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(final DragEvent event) {
-                System.out.println("An object is dragging over the songPane");
                 mouseDragDropped(event);
             }
         });
@@ -317,7 +315,7 @@ public class GUIController implements Initializable {
                 //Double click --> play a song
                 if (event.getClickCount() == 2) {
                     musicPlayer.playNewSong(songsTable.getSelectionModel().getSelectedItem(),
-                            Library.ALL_TRACKS_NUMBER, musicPlayer.getAllTracks().indexOf(songsTable.getSelectionModel().getSelectedItem()));
+                            Library.ALL_TRACKS_NUMBER);
                 }
             }
 
@@ -406,22 +404,19 @@ public class GUIController implements Initializable {
 
         });
 
-        sliderTime.setOnDragDetected(new EventHandler<MouseEvent>() {
+        sliderTime.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void handle(MouseEvent event) {
-                System.out.println("Drag detected");
-                playPauseButton();
+            public void changed(
+                    ObservableValue<? extends Boolean> observableValue,
+                    Boolean wasChanging, Boolean changing) {
+                
+                if (changing) {
+                    playPauseButton();
+                } else {
+                    playPauseButton();
+                }
             }
         });
-
-        sliderTime.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                System.out.println("Drop detected");
-                playPauseButton();
-            }
-        });
-
     }
 
     private void initMenuBar() {
@@ -579,17 +574,17 @@ public class GUIController implements Initializable {
     }
 
     private void shuffledButton() {
-        musicPlayer.shuffle(!musicPlayer.getShuffle());
+        musicPlayer.setShuffle(!musicPlayer.getShuffle());
         System.out.println("Shuffle: " + musicPlayer.getShuffle());
     }
 
     private void replayButton() {
-        if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.NoRepeat) {
-            musicPlayer.repeatPreference(MusicSupporter.repeatType.PlaylistRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.PlaylistRepeat) {
-            musicPlayer.repeatPreference(MusicSupporter.repeatType.SingleSongRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.SingleSongRepeat) {
-            musicPlayer.repeatPreference(MusicSupporter.repeatType.NoRepeat);
+        if (musicPlayer.getReplayPreference() == MusicSupporter.replayType.NoReplay) {
+            musicPlayer.setReplayPreference(MusicSupporter.replayType.PlaylistReplay);
+        } else if (musicPlayer.getReplayPreference() == MusicSupporter.replayType.PlaylistReplay) {
+            musicPlayer.setReplayPreference(MusicSupporter.replayType.SingleSongReplay);
+        } else if (musicPlayer.getReplayPreference() == MusicSupporter.replayType.SingleSongReplay) {
+            musicPlayer.setReplayPreference(MusicSupporter.replayType.NoReplay);
         }
     }
 
@@ -618,18 +613,18 @@ public class GUIController implements Initializable {
 
     @FXML
     private void handleShuffled(MouseEvent event) {
-        musicPlayer.shuffle(!musicPlayer.getShuffle());
+        musicPlayer.setShuffle(!musicPlayer.getShuffle());
         System.out.println("Shuffle: " + musicPlayer.getShuffle());
     }
 
     @FXML
     private void handleReplay(MouseEvent event) {
-        if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.NoRepeat) {
-            musicPlayer.repeatPreference(MusicSupporter.repeatType.PlaylistRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.PlaylistRepeat) {
-            musicPlayer.repeatPreference(MusicSupporter.repeatType.SingleSongRepeat);
-        } else if (musicPlayer.getRepeatPreference() == MusicSupporter.repeatType.SingleSongRepeat) {
-            musicPlayer.repeatPreference(MusicSupporter.repeatType.NoRepeat);
+        if (musicPlayer.getReplayPreference() == MusicSupporter.replayType.NoReplay) {
+            musicPlayer.setReplayPreference(MusicSupporter.replayType.PlaylistReplay);
+        } else if (musicPlayer.getReplayPreference() == MusicSupporter.replayType.PlaylistReplay) {
+            musicPlayer.setReplayPreference(MusicSupporter.replayType.SingleSongReplay);
+        } else if (musicPlayer.getReplayPreference() == MusicSupporter.replayType.SingleSongReplay) {
+            musicPlayer.setReplayPreference(MusicSupporter.replayType.NoReplay);
         }
     }
 

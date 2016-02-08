@@ -2,7 +2,6 @@
 package spotify;
 
 import com.google.code.mp3fenge.Mp3Fenge;
-import graphics.GUIController;
 import java.io.File;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.media.Media;
@@ -10,7 +9,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
-
 
 /**
  * Manage all reproduction and settings of audio files.
@@ -23,15 +21,15 @@ public class AudioManage {
     private Duration timePauseIndex;
     private int volume;
     
-    private ChangeListener<Duration> slideTimeChangeListener;
+    private ChangeListener<Duration> sliderTimeChangeListener;
     
-    public AudioManage(ChangeListener<Duration> slideTimeChangeListener) {
+    public AudioManage(ChangeListener<Duration> sliderTimeChangeListener) {
         this.mediaPlayer=null;
         this.songPath = null;
         this.timePauseIndex = new Duration(0);
         this.volume=70;
         
-        this.slideTimeChangeListener = slideTimeChangeListener;
+        this.sliderTimeChangeListener = sliderTimeChangeListener;
     }
     
     /**
@@ -44,7 +42,7 @@ public class AudioManage {
         this.songPath = songPath;
         Media media = new Media(new File(songPath).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.currentTimeProperty().addListener(slideTimeChangeListener);
+        mediaPlayer.currentTimeProperty().addListener(sliderTimeChangeListener);
         MediaView mediaView = new MediaView(mediaPlayer);
     }
     

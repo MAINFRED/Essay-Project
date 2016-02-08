@@ -217,7 +217,7 @@ public class Library implements Serializable {
         stream.writeObject(new ArrayList(playlists));
     }
     
-    public void orderPlaylistBy(int playlistNumber,sortType sortMethod) {
+    public void orderPlaylistBy(int playlistNumber, sortType sortMethod) {
         if(retrievePlaylist(playlistNumber)==null)
             System.out.println("Invalid playlist");
         else
