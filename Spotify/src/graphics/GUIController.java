@@ -43,7 +43,10 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.media.MediaPlayer;
@@ -73,7 +76,7 @@ public class GUIController implements Initializable {
 
     // MARK: MusicPlayer
     private MusicSupporter musicPlayer = new MusicSupporter(this);
-    
+
     // MARK: Graphics attributes
     @FXML
     private Label username, countUP, artist, titleSong, newPlaylistButton, titlePlaylist;
@@ -107,11 +110,12 @@ public class GUIController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initSideBar();
         initPopupMenu();
-        initTables();
+        initCentralPane();
         initIcon();
         initPlayer();
         initMenuBar();
 
+        //Saves MusicSupporter
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -244,13 +248,33 @@ public class GUIController implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == buttonYes) {
-                    musicPlayer.removeSongFromPlaylist(playlistTable.getSelectionModel().getSelectedItem(), 
+                    musicPlayer.removeSongFromPlaylist(playlistTable.getSelectionModel().getSelectedItem(),
                             playlistsMenu.getSelectionModel().getSelectedItem());
                 }
             }
 
         });
         popupMenuPlaylistTable.getItems().add(removeItem);
+    }
+    
+    private void initCentralPane() {
+        songPane.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(final DragEvent event) {
+                System.out.println("An object is dragging over the songPane");
+                mouseDragOver(event);
+            }
+        });
+
+        songPane.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(final DragEvent event) {
+                System.out.println("An object is dragging over the songPane");
+                mouseDragDropped(event);
+            }
+        });
+        
+        initTables();
     }
 
     private void initTables() {
@@ -382,26 +406,27 @@ public class GUIController implements Initializable {
 
         });
 
-        sliderTime.setOnDragDetected(new EventHandler() {
+        sliderTime.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(Event event) {
+            public void handle(MouseEvent event) {
                 System.out.println("Drag detected");
                 playPauseButton();
             }
         });
 
-        sliderTime.setOnDragDropped(new EventHandler() {
+        sliderTime.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
-            public void handle(Event event) {
+            public void handle(DragEvent event) {
                 System.out.println("Drop detected");
                 playPauseButton();
             }
         });
+
     }
 
     private void initMenuBar() {
 
-        //FILE
+        // FILE
         addSongItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -414,30 +439,10 @@ public class GUIController implements Initializable {
                 List<File> src = fileChooser.showOpenMultipleDialog(stage);
                 if (src != null) {
                     for (File file : src) {
-                        File dest = new File(Library.LOCAL_PATH + file.getName());
-                        try {
-                            Utility.copyFile(file, dest);
-
-                            musicPlayer.addSong(dest);
-                        } catch (FileAlreadyExistsException ex) {
-                            Alert alert = new Alert(AlertType.ERROR);
-                            alert.setTitle("Error Dialog");
-                            alert.setHeaderText("Something went wrong :(");
-                            alert.setContentText("The file already exists in " + Library.LOCAL_PATH + file.getName());
-                            alert.showAndWait();
-                        } catch (FileNotFoundException ex) {
-                            Alert alert = new Alert(AlertType.ERROR);
-                            alert.setTitle("Error Dialog");
-                            alert.setHeaderText("Something went wrong :(");
-                            alert.setContentText("There's no file here:" + dest.getAbsolutePath());
-                            alert.showAndWait();
-                        } catch (IOException ex) {
-                            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        addSong(file);
                     }
                 }
             }
-
         });
 
         newPlaylistItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -451,13 +456,12 @@ public class GUIController implements Initializable {
         exitItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                musicPlayer.saveState();
-                System.exit(0);
+                closePlayer();
             }
 
         });
 
-        //PLAYBACK
+        // PLAYBACK
         playItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -499,7 +503,6 @@ public class GUIController implements Initializable {
             }
 
         });
-
     }
 
     // MARK: Playlist manage
@@ -666,4 +669,68 @@ public class GUIController implements Initializable {
     public void closePlayer() {
         musicPlayer.saveState();
     }
+
+    // MARK: Drag&drop
+    private  void mouseDragOver(final DragEvent e) {
+        final Dragboard db = e.getDragboard();
+ 
+        final boolean isAccepted = db.getFiles().get(0).getName().toLowerCase().endsWith(".mp3");
+ 
+        if (db.hasFiles()) {
+            if (isAccepted) {
+                songPane.setStyle("-fx-border-color: red;"
+              + "-fx-border-width: 5;"
+              + "-fx-background-color: #C6C6C6;"
+              + "-fx-border-style: solid;");
+                e.acceptTransferModes(TransferMode.COPY);
+            }
+        } else {
+            e.consume();
+        }
+    }
+    
+    private void mouseDragDropped(final DragEvent e) {
+        final Dragboard db = e.getDragboard();
+        boolean success = false;
+        if (db.hasFiles()) {
+            success = true;
+            // Only get the first file from the list
+            final File file = db.getFiles().get(0);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(file.getAbsolutePath());
+                    addSong(file);
+                    songPane.setStyle("");
+                }
+            });
+        }
+        e.setDropCompleted(success);
+        e.consume();
+    }
+    
+    // MARK: Song
+    private void addSong(File file) {
+        File dest = new File(Library.LOCAL_PATH + file.getName());
+        
+        try {
+            Utility.copyFile(file, dest);
+            musicPlayer.addSong(dest);
+        } catch (FileAlreadyExistsException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Something went wrong :(");
+            alert.setContentText("The file already exists in " + Library.LOCAL_PATH + file.getName());
+            alert.showAndWait();
+        } catch (FileNotFoundException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Something went wrong :(");
+            alert.setContentText("There's no file here: " + file.getAbsolutePath());
+            alert.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
